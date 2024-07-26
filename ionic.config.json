@@ -1,0 +1,7 @@
+{
+  "name": "JycApp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
