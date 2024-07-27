@@ -22,6 +22,7 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { LoginInfo } from 'src/app/interfaces/usuario';
 
 @Component({
   selector: 'app-login',
@@ -50,8 +51,8 @@ export class LoginPage {
   router = inject(Router);
 
   loginForm = new FormGroup({
-    usuario: new FormControl('', [Validators.required]),
-    password: new FormControl('', [Validators.required]),
+    dni: new FormControl<number | null>(null, [Validators.required]),
+    password: new FormControl<string | null>(null, [Validators.required]),
   });
 
   login() {
