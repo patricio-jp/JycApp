@@ -19,5 +19,10 @@ export interface Cliente {
   telefonos?: Telefono[];
   saldo?: number;
   observaciones?: string;
-  estado?: EstadoCliente;
+  estado: EstadoCliente;
+}
+
+export interface ClienteAPIResponse {
+  data: Cliente[];
+  count: number;
 }

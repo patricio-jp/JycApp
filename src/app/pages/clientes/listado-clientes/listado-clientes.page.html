@@ -1,13 +1,95 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>listadoClientes</ion-title>
+    <ion-title>Listado de clientes</ion-title>
   </ion-toolbar>
 </ion-header>
-
+<ion-loading [isOpen]="loadingSignal()" message="Cargando..." duration="3000"></ion-loading>
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">listadoClientes</ion-title>
+      <ion-title size="large">Listado</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div class="relative overflow-hidden">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:pace-x-4 p-4">
+      <div class="w-full md-w-1/2">
+        <form class="flex items-center">
+          <ion-searchbar inputmode="search" animated="true" autocomplete="false"
+            showClearButton="focus"></ion-searchbar>
+        </form>
+      </div>
+      <div
+        class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+        <ion-button routerLink="../nuevo">
+          <ion-icon slot="start" name="person-add-outline"></ion-icon>
+          Nuevo Cliente
+        </ion-button>
+      </div>
+    </div>
+
+    <div class="relative overflow-x-auto">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">
+              ID
+            </th>
+            <th scope="col" class="px-4 py-3">
+              DNI
+            </th>
+            <th scope="col" class="px-4 py-3 min-w-44">
+              Apellido y Nombre
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Fecha de Nacimiento
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Saldo
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Observaciones
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Estado
+            </th>
+            <th scope="col" class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody id="clientesBody">
+          @for (cliente of listadoClientes(); track cliente.id) {
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700"
+            [id]="'cliente' + cliente.id + 'Info'">
+            <td class="px-4 py-3">{{cliente.id}}</td>
+            <td class="px-4 py-3">{{cliente.dni}}</td>
+            <td class="px-4 py-3">{{cliente.apellido + ', ' + cliente.nombre}}</td>
+            <td class="px-4 py-3">{{cliente.fechaNacimiento | date}}</td>
+            <td class="px-4 py-3">{{cliente.saldo | currency}}</td>
+            <td class="px-4 py-3">{{cliente.observaciones}}</td>
+            <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td>
+            <td class="px-2 py-3">
+              <button (click)="toggleDetails(cliente.id)" data-accordion-icon class="w-3 h-3 rotate-180">
+                <ion-icon icon="chevron-up"></ion-icon>
+              </button>
+            </td>
+          </tr>
+          <tr [id]="'cliente' + cliente.id + 'Detalle'" class="clientDetail hidden">
+            <td colspan="8" class="p-4">
+              <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
+                <h4 class="font-bold mb-2">Detalles del cliente</h4>
+                <p><strong>Teléfonos:</strong> {{cliente.telefonos?.join(', ')}}</p>
+                <p><strong>Direcciones:</strong></p>
+                <ul>
+                  @for (domicilio of cliente.domicilios; track $index) {
+                  <li>{{domicilio.direccion}}, {{domicilio.barrio}}, {{domicilio.localidad}}</li>
+                  }
+                </ul>
+                <p><strong>Observaciones:</strong> {{cliente.observaciones}}</p>
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ion-content>

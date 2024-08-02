@@ -12,39 +12,47 @@ export const routes: Routes = [
       import('./pages/login/login.page').then((m) => m.LoginPage),
   },
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
-  },
-  {
-    path: 'clientes',
+    path: 'dashboard',
     loadComponent: () =>
-      import('./pages/clientes/clientes.page').then((m) => m.ClientesPage),
+      import('./layout/layout.component').then((m) => m.LayoutComponent),
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
+        loadComponent: () =>
+          import('./pages/home/home.page').then((m) => m.HomePage),
       },
       {
-        path: 'dashboard',
+        path: 'clientes',
         loadComponent: () =>
-          import(
-            './pages/clientes/clientes-dashboard/clientes-dashboard.page'
-          ).then((m) => m.ClientesDashboardPage),
-      },
-      {
-        path: 'listado',
-        loadComponent: () =>
-          import(
-            './pages/clientes/listado-clientes/listado-clientes.page'
-          ).then((m) => m.ListadoClientesPage),
-      },
-      {
-        path: 'nuevo',
-        loadComponent: () =>
-          import('./pages/clientes/nuevo-cliente/nuevo-cliente.page').then(
-            (m) => m.NuevoClientePage
-          ),
+          import('./pages/clientes/clientes.page').then((m) => m.ClientesPage),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/clientes/clientes-dashboard/clientes-dashboard.page'
+              ).then((m) => m.ClientesDashboardPage),
+          },
+          {
+            path: 'listado',
+            loadComponent: () =>
+              import(
+                './pages/clientes/listado-clientes/listado-clientes.page'
+              ).then((m) => m.ListadoClientesPage),
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () =>
+              import('./pages/clientes/nuevo-cliente/nuevo-cliente.page').then(
+                (m) => m.NuevoClientePage
+              ),
+          },
+        ],
       },
     ],
   },

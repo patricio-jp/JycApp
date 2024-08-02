@@ -12,12 +12,13 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonRouterOutlet,
 } from '@ionic/angular/standalone';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: 'home.page.html',
-  styleUrls: ['home.page.scss'],
+  selector: 'app-layout',
+  templateUrl: 'layout.component.html',
+  styleUrls: ['layout.component.scss'],
   standalone: true,
   imports: [
     IonLabel,
@@ -32,8 +33,9 @@ import {
     IonButtons,
     IonMenuButton,
     RouterLink,
+    IonRouterOutlet,
   ],
 })
-export class HomePage {
+export class LayoutComponent {
   constructor() {}
 }

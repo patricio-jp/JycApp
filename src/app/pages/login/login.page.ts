@@ -56,6 +56,6 @@ export class LoginPage {
   });
 
   login() {
-    this.router.navigate(['/home']);
+    this.router.navigate(['/dashboard']);
   }
 }
