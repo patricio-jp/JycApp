@@ -63,7 +63,7 @@
             <td class="px-4 py-3">{{cliente.dni}}</td>
             <td class="px-4 py-3">{{cliente.apellido + ', ' + cliente.nombre}}</td>
             <td class="px-4 py-3">{{cliente.fechaNacimiento | date}}</td>
-            <td class="px-4 py-3">{{cliente.saldo | currency}}</td>
+            <td class="px-4 py-3">{{cliente.saldo | currency: 'ARS'}}</td>
             <td class="px-4 py-3">{{cliente.observaciones}}</td>
             <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td>
             <td class="px-2 py-3">

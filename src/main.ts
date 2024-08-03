@@ -13,6 +13,11 @@ import {
 import { routes } from './app/app.routes';
 import { AppComponent } from './app/app.component';
 import { provideHttpClient } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localeArg from '@angular/common/locales/es-AR';
+//import {} from '@angular/common/locales/es-419';
+
+registerLocaleData(localeArg);
 
 bootstrapApplication(AppComponent, {
   providers: [

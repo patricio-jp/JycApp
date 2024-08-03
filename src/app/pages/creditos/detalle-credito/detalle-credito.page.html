@@ -23,7 +23,7 @@
         <p><span class="font-bold">Fecha Inicio: </span>{{credito.fechaInicio | date}}</p>
         <p><span class="font-bold">Cant. de cuotas: </span>{{credito.cantidadCuotas}}</p>
         <p><span class="font-bold">Período: </span>{{periodos[credito.periodo]}}</p>
-        <p><span class="font-bold">Monto cuota: </span>{{credito.montoCuota | currency}}</p>
+        <p><span class="font-bold">Monto cuota: </span>{{credito.montoCuota | currency: 'ARS'}}</p>
         <p><span class="font-bold">Fecha Últ. Pago: </span>{{credito.fechaUltimoPago | date}}</p>
         <p><span class="font-bold">Estado: </span>{{estadosCreditos[credito.estado]}}</p>
       </div>
@@ -47,9 +47,9 @@
             <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               <td class="px-4 py-3">{{cuota.cuotaNro}}</td>
               <td class="px-4 py-3">{{cuota.fechaVencimiento | date}}</td>
-              <td class="px-4 py-3">{{cuota.montoCuota | currency}}</td>
+              <td class="px-4 py-3">{{cuota.montoCuota | currency: 'ARS'}}</td>
               <td class="px-4 py-3">{{estadosCuota[cuota.estado]}}</td>
-              <td class="px-4 py-3">{{cuota.montoPagado | currency}}</td>
+              <td class="px-4 py-3">{{cuota.montoPagado | currency: 'ARS'}}</td>
               <td class="px-4 py-3">{{cuota.fechaPago | date}}</td>
               <td class="px-4 py-3"></td>
             </tr>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, LOCALE_ID, OnInit } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
 import { initFlowbite } from 'flowbite';
 import {
@@ -14,6 +14,7 @@ import { fab } from '@fortawesome/free-brands-svg-icons';
   templateUrl: 'app.component.html',
   standalone: true,
   imports: [IonApp, IonRouterOutlet, FontAwesomeModule],
+  providers: [{ provide: LOCALE_ID, useValue: 'es-AR' }],
 })
 export class AppComponent implements OnInit {
   iconsLibrary = inject(FaIconLibrary);

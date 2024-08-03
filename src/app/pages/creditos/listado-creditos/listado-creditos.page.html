@@ -51,7 +51,7 @@
             <td class="px-4 py-3">{{credito.fechaInicio | date}}</td>
             <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>
             <td class="px-4 py-3">{{periodos[credito.periodo]}}</td>
-            <td class="px-4 py-3">{{credito.montoCuota | currency}}</td>
+            <td class="px-4 py-3">{{credito.montoCuota | currency: 'ARS' }}</td>
             <td class="px-4 py-3">{{credito.fechaUltimoPago | date}}</td>
             <td class="px-4 py-3">{{estadosCreditos[credito.estado]}}</td>
             <td class="p-2">
