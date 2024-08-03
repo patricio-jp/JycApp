@@ -6,17 +6,17 @@ import {
   IonTabBar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { barChartOutline, personAddOutline, listOutline } from 'ionicons/icons';
+import { barChartOutline, walletOutline, listOutline } from 'ionicons/icons';
 
 @Component({
-  selector: 'app-clientes',
-  templateUrl: './clientes.page.html',
-  styleUrls: ['./clientes.page.scss'],
+  selector: 'app-creditos',
+  templateUrl: './creditos.page.html',
+  styleUrls: ['./creditos.page.scss'],
   standalone: true,
   imports: [IonTabBar, IonTabButton, IonIcon, IonTabs],
 })
-export class ClientesPage {
+export class CreditosPage {
   constructor() {
-    addIcons({ barChartOutline, personAddOutline, listOutline });
+    addIcons({ barChartOutline, walletOutline, listOutline });
   }
 }

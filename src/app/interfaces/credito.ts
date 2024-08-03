@@ -19,6 +19,7 @@ export interface Credito {
   id_venta?: number;
   venta?: Venta;
   fechaInicio: Date;
+  fechaUltimoPago?: Date;
   anticipo?: number;
   cantidadCuotas: number;
   montoCuota: number;
@@ -45,4 +46,9 @@ interface Cuota {
   montoPagado: number;
   estado: EstadoCuota;
   observaciones?: string;
+}
+
+export interface CreditoAPIResponse {
+  data: Credito[];
+  count: number;
 }

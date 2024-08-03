@@ -54,6 +54,46 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'creditos',
+        loadComponent: () =>
+          import('./pages/creditos/creditos.page').then((m) => m.CreditosPage),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/creditos/creditos-dashboard/creditos-dashboard.page'
+              ).then((m) => m.CreditosDashboardPage),
+          },
+          {
+            path: 'listado',
+            loadComponent: () =>
+              import(
+                './pages/creditos/listado-creditos/listado-creditos.page'
+              ).then((m) => m.ListadoCreditosPage),
+          },
+          {
+            path: 'cargar-pago',
+            loadComponent: () =>
+              import('./pages/creditos/cargar-pago/cargar-pago.page').then(
+                (m) => m.CargarPagoPage
+              ),
+          },
+          {
+            path: 'detalle/:id',
+            loadComponent: () =>
+              import(
+                './pages/creditos/detalle-credito/detalle-credito.page'
+              ).then((m) => m.DetalleCreditoPage),
+          },
+        ],
+      },
     ],
   },
 ];

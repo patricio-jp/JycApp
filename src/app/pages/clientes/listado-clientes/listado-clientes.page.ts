@@ -12,13 +12,7 @@ import {
   IonTitle,
   IonToolbar,
   IonLoading,
-  LoadingController,
   IonSpinner,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonAccordionGroup,
-  IonAccordion,
   IonSearchbar,
   IonButton,
   IonIcon,
@@ -40,9 +34,6 @@ import { chevronUp } from 'ionicons/icons';
     IonIcon,
     IonButton,
     IonSearchbar,
-    IonAccordion,
-    IonAccordionGroup,
-    IonLabel,
     IonSpinner,
     IonContent,
     IonHeader,
@@ -50,8 +41,6 @@ import { chevronUp } from 'ionicons/icons';
     IonToolbar,
     IonLoading,
     CommonModule,
-    IonList,
-    IonItem,
     RouterLink,
   ],
 })
@@ -61,7 +50,6 @@ export class ListadoClientesPage implements OnInit, AfterViewChecked {
   }
 
   private clientesService = inject(ClientesService);
-  private loadingCtrl = inject(LoadingController);
 
   dataClientes = computed(() => this.clientesService.dataClientes());
   listadoClientes = computed(() => this.clientesService.listadoClientes());

@@ -1,0 +1,63 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Detalle</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <!-- <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Detalle</ion-title>
+    </ion-toolbar>
+  </ion-header> -->
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Detalle</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      @if (credito) {
+      <div class="space-y-2">
+        <p><span class="font-bold">Crédito N°: </span>{{credito.venta?.comprobante}}</p>
+        <p><span class="font-bold">Cliente: </span>{{credito.venta?.cliente?.apellido + ", " +
+          credito.venta?.cliente?.nombre}}</p>
+        <p><span class="font-bold">Fecha Inicio: </span>{{credito.fechaInicio | date}}</p>
+        <p><span class="font-bold">Cant. de cuotas: </span>{{credito.cantidadCuotas}}</p>
+        <p><span class="font-bold">Período: </span>{{periodos[credito.periodo]}}</p>
+        <p><span class="font-bold">Monto cuota: </span>{{credito.montoCuota | currency}}</p>
+        <p><span class="font-bold">Fecha Últ. Pago: </span>{{credito.fechaUltimoPago | date}}</p>
+        <p><span class="font-bold">Estado: </span>{{estadosCreditos[credito.estado]}}</p>
+      </div>
+      <hr class="my-4">
+      <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+          <thead
+            class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+              <th class="px-4 py-3">Cuota N°</th>
+              <th class="px-4 py-3">Fecha Venc.</th>
+              <th class="px-4 py-3">Monto</th>
+              <th class="px-4 py-3">Estado</th>
+              <th class="px-4 py-3">Monto Pagado</th>
+              <th class="px-4 py-3">Fecha Pago</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody class="text-center">
+            @for (cuota of credito.cuotas; track cuota.id) {
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+              <td class="px-4 py-3">{{cuota.cuotaNro}}</td>
+              <td class="px-4 py-3">{{cuota.fechaVencimiento | date}}</td>
+              <td class="px-4 py-3">{{cuota.montoCuota | currency}}</td>
+              <td class="px-4 py-3">{{estadosCuota[cuota.estado]}}</td>
+              <td class="px-4 py-3">{{cuota.montoPagado | currency}}</td>
+              <td class="px-4 py-3">{{cuota.fechaPago | date}}</td>
+              <td class="px-4 py-3"></td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      }
+    </ion-card-content>
+  </ion-card>
+</ion-content>
