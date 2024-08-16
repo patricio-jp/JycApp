@@ -11,7 +11,7 @@ export class CreditosService {
 
   private httpClient = inject(HttpClient);
 
-  private apiEndpoint = 'http://192.168.200.105:3000/creditos/';
+  private apiEndpoint = 'http://192.168.200.200:3000/creditos/';
 
   dataCreditos = signal<CreditoAPIResponse>({
     count: 0,

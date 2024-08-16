@@ -1,3 +1,4 @@
+import { Cliente } from './cliente';
 import { Domicilio } from './domicilio';
 import { Telefono } from './telefono';
 
@@ -19,7 +20,11 @@ export interface Usuario {
   telefonos?: Telefono[];
   fechaInicio: Date;
   rol: Rol;
+  comision?: number;
+  saldo?: number;
   observaciones?: string;
+  clientesAsociados?: Cliente[];
+  clientesACobrar?: Cliente[];
 }
 
 export interface LoginInfo {

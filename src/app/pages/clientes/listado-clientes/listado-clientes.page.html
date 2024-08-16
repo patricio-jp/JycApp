@@ -76,11 +76,19 @@
             <td colspan="8" class="p-4">
               <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
                 <h4 class="font-bold mb-2">Detalles del cliente</h4>
-                <p><strong>Teléfonos:</strong> {{cliente.telefonos?.join(', ')}}</p>
-                <p><strong>Direcciones:</strong></p>
+                <p>
+                  <strong>Teléfonos:</strong>
+                <ul>
+                  @for (telefono of cliente.telefonos; track $index) {
+                  <li>{{telefono.telefono}}</li>
+                  }
+                </ul>
+                <p>
+                  <strong>Domicilios:</strong>
                 <ul>
                   @for (domicilio of cliente.domicilios; track $index) {
-                  <li>{{domicilio.direccion}}, {{domicilio.barrio}}, {{domicilio.localidad}}</li>
+                  <li>Dirección: {{domicilio.direccion}}, Barrio: {{domicilio.barrio}}, Localidad:
+                    {{domicilio.localidad}}</li>
                   }
                 </ul>
                 <p><strong>Observaciones:</strong> {{cliente.observaciones}}</p>

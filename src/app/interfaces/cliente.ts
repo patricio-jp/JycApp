@@ -1,5 +1,8 @@
 import { Domicilio } from './domicilio';
+import { Venta } from './operaciones';
 import { Telefono } from './telefono';
+import { Usuario } from './usuario';
+import { Zona } from './zona';
 
 export enum EstadoCliente {
   AConfirmar, // Nuevo cliente
@@ -17,9 +20,17 @@ export interface Cliente {
   fechaNacimiento?: Date;
   domicilios?: Domicilio[];
   telefonos?: Telefono[];
+  vendedorAsociado?: Usuario;
+  id_vendedorAsociado?: number;
+  vendedorAsociadoHasta?: Date;
+  cobradorAsociado?: Usuario;
+  id_cobradorAsociado?: number;
+  zona?: Zona;
+  id_zona: number;
   saldo?: number;
   observaciones?: string;
   estado: EstadoCliente;
+  ventas?: Venta[];
 }
 
 export interface ClienteAPIResponse {

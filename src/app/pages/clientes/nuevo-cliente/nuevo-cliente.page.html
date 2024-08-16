@@ -1,13 +1,106 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>nuevoCliente</ion-title>
+    <ion-title>Nuevo Cliente</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">nuevoCliente</ion-title>
+      <ion-title size="large">Nuevo Cliente</ion-title>
     </ion-toolbar>
   </ion-header>
+  <form [formGroup]="nuevoCliente" class="p-4 grid gap-4 lg:grid-cols-2">
+    <div>
+      <ion-input type="number" label="DNI" required labelPlacement="floating" fill="solid" formControlName="dni"
+        class="bg-transparent rounded-lg"></ion-input>
+    </div>
+    <div>
+      <ion-input type="text" label="Nombre" required labelPlacement="floating" fill="solid" formControlName="nombre"
+        class="bg-transparent rounded-lg"></ion-input>
+    </div>
+    <div>
+      <ion-input type="text" label="Apellido" labelPlacement="floating" fill="solid" formControlName="apellido"
+        class="bg-transparent rounded-lg"></ion-input>
+    </div>
+    <div>
+      <ion-label>Fecha de Nacimiento</ion-label>
+      <ion-datetime-button datetime="fechaNac"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true">
+        <ng-template>
+          <ion-datetime id="fechaNac" displayFormat="DD/MM/YYYY" label="Fecha de Nacimiento" fill="solid"
+            formControlName="fechaNacimiento" class="" presentation="date"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="lg:col-span-2">
+      <ion-label position="floating" class="font-bold">Teléfonos <ion-button class="ml-3 mb-3"
+          (click)="addTelefono()">Agregar
+          Teléfono</ion-button></ion-label>
+      <div formArrayName="telefonos" class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4">
+        <div *ngFor="let telefono of telefonos.controls; let i = index" [formGroupName]="i">
+          <div class="flex space-x-3 items-center">
+            <ion-input type="text" label="Teléfono" labelPlacement="floating" fill="solid" formControlName="telefono"
+              class="bg-transparent rounded-lg"></ion-input>
+            <div>
+              <ion-button color="danger" shape="round" (click)="telefonos.removeAt(i)">
+                <ion-icon slot="icon-only" class="text-xl" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="lg:col-span-2">
+      <ion-label position="floating" class="font-bold">Domicilios <ion-button class="ml-3 mb-3"
+          (click)="addDomicilio()">Agregar
+          Domicilio</ion-button></ion-label>
+      <div formArrayName="domicilios" class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4">
+        <div *ngFor="let domicilio of domicilios.controls; let i = index" [formGroupName]="i">
+          <ion-label>Domicilio {{i + 1}}:</ion-label>
+          <div class="flex space-x-3 items-center">
+            <div class="flex flex-col space-y-4 w-full">
+              <ion-input type="text" label="Dirección" labelPlacement="floating" fill="solid"
+                formControlName="direccion" class="bg-transparent rounded-lg"></ion-input>
+              <ion-input type="text" label="Barrio" labelPlacement="floating" fill="solid" formControlName="barrio"
+                class="bg-transparent rounded-lg"></ion-input>
+              <ion-input type="text" label="Localidad" labelPlacement="floating" fill="solid"
+                formControlName="localidad" class="bg-transparent rounded-lg"></ion-input>
+            </div>
+            <div>
+              <ion-button color="danger" shape="round" (click)="domicilios.removeAt(i)">
+                <ion-icon slot="icon-only" class="text-xl" name="trash-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div>
+      <ion-select label="Zona" labelPlacement="floating" fill="solid" formControlName="id_zona"
+        class="border rounded-lg">
+        <ion-select-option [value]="1">Zona 1</ion-select-option>
+        <ion-select-option [value]="2">Zona 2</ion-select-option>
+      </ion-select>
+    </div>
+    <div>
+      <ion-select label="Estado" labelPlacement="floating" fill="solid" formControlName="estado"
+        class="border rounded-lg">
+        <ion-select-option [value]="0">A Confirmar</ion-select-option>
+        <ion-select-option [value]="1">Inactivo</ion-select-option>
+        <ion-select-option [value]="2">Activo</ion-select-option>
+        <ion-select-option [value]="3">Con Deuda</ion-select-option>
+        <ion-select-option [value]="4">Incobrable</ion-select-option>
+      </ion-select>
+    </div>
+    <div class="lg:col-span-2">
+      <ion-textarea label="Observaciones" labelPlacement="floating" fill="solid" formControlName="observaciones"
+        class="bg-transparent rounded-lg border"></ion-textarea>
+    </div>
+    <ion-button expand="block" (click)="guardarCliente()">Guardar Cliente</ion-button>
+    <ion-button expand="block" fill="outline" (click)="resetForm()">Limpiar</ion-button>
+  </form>
 </ion-content>

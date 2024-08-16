@@ -11,7 +11,7 @@ export class ClientesService {
 
   private httpClient = inject(HttpClient);
 
-  private apiEndpoint = 'http://192.168.200.105:3000/clientes/';
+  private apiEndpoint = 'http://192.168.200.200:3000/clientes/';
 
   dataClientes = signal<ClienteAPIResponse>({
     count: 0,
