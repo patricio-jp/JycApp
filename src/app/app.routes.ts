@@ -94,6 +94,107 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'ventas',
+        loadComponent: () =>
+          import('./pages/ventas/ventas.page').then((m) => m.VentasPage),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/ventas/ventas-dashboard/ventas-dashboard.page'
+              ).then((m) => m.VentasDashboardPage),
+          },
+          {
+            path: 'listado',
+            loadComponent: () =>
+              import('./pages/ventas/listado-ventas/listado-ventas.page').then(
+                (m) => m.ListadoVentasPage
+              ),
+          },
+          {
+            path: 'nueva',
+            loadComponent: () =>
+              import('./pages/ventas/nueva-venta/nueva-venta.page').then(
+                (m) => m.NuevaVentaPage
+              ),
+          },
+        ],
+      },
+      {
+        path: 'productos',
+        loadComponent: () =>
+          import('./pages/productos/productos.page').then(
+            (m) => m.ProductosPage
+          ),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/productos/productos-dashboard/productos-dashboard.page'
+              ).then((m) => m.ProductosDashboardPage),
+          },
+          {
+            path: 'inventario',
+            loadComponent: () =>
+              import('./pages/productos/inventario/inventario.page').then(
+                (m) => m.InventarioPage
+              ),
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () =>
+              import(
+                './pages/productos/nuevo-producto/nuevo-producto.page'
+              ).then((m) => m.NuevoProductoPage),
+          },
+        ],
+      },
+      {
+        path: 'usuarios',
+        loadComponent: () =>
+          import('./pages/usuarios/usuarios.page').then((m) => m.UsuariosPage),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/usuarios/usuarios-dashboard/usuarios-dashboard.page'
+              ).then((m) => m.UsuariosDashboardPage),
+          },
+          {
+            path: 'listado',
+            loadComponent: () =>
+              import(
+                './pages/usuarios/listado-usuarios/listado-usuarios.page'
+              ).then((m) => m.ListadoUsuariosPage),
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () =>
+              import('./pages/usuarios/nuevo-usuario/nuevo-usuario.page').then(
+                (m) => m.NuevoUsuarioPage
+              ),
+          },
+        ],
+      },
     ],
   },
 ];
