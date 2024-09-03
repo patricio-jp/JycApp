@@ -21,18 +21,32 @@ export interface Cliente {
   domicilios?: Domicilio[];
   telefonos?: Telefono[];
   vendedorAsociado?: Usuario;
-  id_vendedorAsociado?: number;
   vendedorAsociadoHasta?: Date;
   cobradorAsociado?: Usuario;
-  id_cobradorAsociado?: number;
   zona?: Zona;
-  id_zona: number;
   saldo?: number;
   observaciones?: string;
   estado: EstadoCliente;
   ventas?: Venta[];
 }
 
+// Create DTO for app
+export interface CreateClienteDTO {
+  dni: number;
+  nombre: string;
+  apellido?: string;
+  fechaNacimiento?: Date;
+  domicilios?: Domicilio[];
+  telefonos?: Telefono[];
+  id_vendedorAsociado?: number;
+  id_cobradorAsociado?: number;
+  id_zona?: number;
+  saldo?: number;
+  observaciones?: string;
+  estado?: EstadoCliente;
+}
+
+// Get all from server
 export interface ClienteAPIResponse {
   data: Cliente[];
   count: number;

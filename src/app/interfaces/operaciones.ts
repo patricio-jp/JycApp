@@ -17,7 +17,7 @@ export enum EstadoOperacion {
 }
 
 interface Operacion {
-  id?: number;
+  id: number;
   fecha: Date;
   comprobante?: string;
   comprobante_url?: string;
@@ -38,8 +38,29 @@ export interface Venta extends Operacion {
 }
 
 export interface DetalleVenta {
+  producto: Producto;
+  cantidad: number;
+  precioUnitario: number;
+}
+
+export interface CreateVentaDTO {
+  fecha: Date;
+  comprobante?: string;
+  comprobante_url?: string;
+  subtotal?: number;
+  descuento?: number;
+  total: number;
+  condicion: CondicionOperacion;
+  observaciones?: string;
+  estado?: EstadoOperacion;
+  fechaEntrega?: Date;
+  cliente_id: number;
+  productos: CreateDetVentaDTO[];
+  financiacion?: Credito[];
+}
+
+export interface CreateDetVentaDTO {
   producto_id: number;
-  producto?: Producto;
   cantidad: number;
   precioUnitario: number;
 }
@@ -52,6 +73,26 @@ export interface Compra extends Operacion {
 export interface DetalleCompra {
   producto_id: number;
   producto?: Producto;
+  cantidad: number;
+  costoUnitario: number;
+}
+
+export interface CreateCompraDTO {
+  fecha: Date;
+  comprobante?: string;
+  comprobante_url?: string;
+  subtotal?: number;
+  descuento?: number;
+  total: number;
+  condicion: CondicionOperacion;
+  observaciones?: string;
+  estado?: EstadoOperacion;
+  fechaRecepcion?: Date;
+  productos: CreateDetCompraDTO[];
+}
+
+export interface CreateDetCompraDTO {
+  producto_id: number;
   cantidad: number;
   costoUnitario: number;
 }

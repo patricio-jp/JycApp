@@ -4,15 +4,22 @@ interface Historico {
   id?: number;
   precioUnitario: number;
   fechaInicio: Date;
-  fechaFin: Date | null;
-}
-
-export interface Costo extends Historico {
-  id_producto: number;
+  fechaFin?: Date;
   producto?: Producto;
 }
 
-export interface Precio extends Historico {
-  id_producto: number;
-  producto?: Producto;
+export interface Costo extends Historico {}
+
+export interface Precio extends Historico {}
+
+export interface CreateCostoDTO {
+  precioUnitario: number;
+  fechaInicio: Date;
+  fechaFin?: Date;
+}
+
+export interface CreatePrecioDTO {
+  precioUnitario: number;
+  fechaInicio: Date;
+  fechaFin?: Date;
 }

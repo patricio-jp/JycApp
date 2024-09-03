@@ -15,9 +15,8 @@ export enum Periodo {
 }
 
 export interface Credito {
-  id?: number;
-  id_venta?: number;
-  venta?: Venta;
+  id: number;
+  venta: Venta;
   fechaInicio: Date;
   fechaUltimoPago?: Date;
   anticipo?: number;
@@ -25,7 +24,19 @@ export interface Credito {
   montoCuota: number;
   periodo: Periodo;
   estado: EstadoCredito;
-  cuotas?: Cuota[];
+  cuotas: Cuota[];
+}
+
+export interface CreditoVenta extends Omit<Credito, 'venta'> {}
+
+export interface CreateCreditoDTO {
+  fechaInicio: Date;
+  fechaUltimoPago?: Date;
+  anticipo?: number;
+  cantidadCuotas: number;
+  montoCuota: number;
+  periodo: Periodo;
+  estado?: EstadoCredito;
 }
 
 export enum EstadoCuota {

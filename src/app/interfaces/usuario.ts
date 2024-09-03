@@ -27,6 +27,21 @@ export interface Usuario {
   clientesACobrar?: Cliente[];
 }
 
+export interface CreateUsuarioDTO {
+  dni: number;
+  nombre: string;
+  apellido: string;
+  password: string;
+  fechaNacimiento: Date;
+  domicilios?: Domicilio[];
+  telefonos?: Telefono[];
+  fechaInicio: Date;
+  rol: Rol;
+  comision?: number;
+  saldo?: number;
+  observaciones?: string;
+}
+
 export interface LoginInfo {
   dni: number;
   password: string;

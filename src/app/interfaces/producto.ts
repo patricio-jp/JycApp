@@ -1,18 +1,23 @@
 import { Costo, Precio } from './precios';
 
 export interface Producto {
-  id?: number;
+  id: number;
   codigo: string;
   nombre: string;
   costos: Costo[];
   precios: Precio[];
-  id_inventario: number;
-  inventario?: Inventario;
+  stock: number;
 }
 
-export interface Inventario {
-  id?: number;
-  id_producto: number;
-  producto?: Producto;
-  stock: number;
+export interface CreateProductoDTO {
+  codigo: string;
+  nombre: string;
+  costos?: Costo[];
+  precios?: Precio[];
+  stock?: number;
+}
+
+export interface ProductosAPIResponse {
+  data: Producto[];
+  count: number;
 }

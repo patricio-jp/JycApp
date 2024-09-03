@@ -1,4 +1,8 @@
 export interface Telefono {
-  id?: number;
+  id: number;
+  telefono: string;
+}
+
+export interface CreateTelefonoDTO {
   telefono: string;
 }
