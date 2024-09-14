@@ -17,9 +17,9 @@
     <ion-card-content>
       @if (credito) {
       <div class="space-y-2">
-        <p><span class="font-bold">Crédito N°: </span>{{credito.venta?.comprobante}}</p>
-        <p><span class="font-bold">Cliente: </span>{{credito.venta?.cliente?.apellido + ", " +
-          credito.venta?.cliente?.nombre}}</p>
+        <p><span class="font-bold">Crédito N°: </span>{{credito.venta.comprobante}}</p>
+        <p><span class="font-bold">Cliente: </span>{{credito.venta.cliente?.apellido + ", " +
+          credito.venta.cliente?.nombre}}</p>
         <p><span class="font-bold">Fecha Inicio: </span>{{credito.fechaInicio | date}}</p>
         <p><span class="font-bold">Cant. de cuotas: </span>{{credito.cantidadCuotas}}</p>
         <p><span class="font-bold">Período: </span>{{periodos[credito.periodo]}}</p>

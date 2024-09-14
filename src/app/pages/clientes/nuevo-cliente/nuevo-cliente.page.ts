@@ -7,7 +7,11 @@ import {
   Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { Cliente, EstadoCliente } from 'src/app/interfaces/cliente';
+import {
+  Cliente,
+  CreateClienteDTO,
+  EstadoCliente,
+} from 'src/app/interfaces/cliente';
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { ClientesService } from 'src/app/services/clientes.service';
@@ -78,7 +82,7 @@ export class NuevoClientePage {
   guardarCliente() {
     console.log(this.nuevoCliente.value);
     if (this.nuevoCliente.dirty && this.nuevoCliente.valid) {
-      const cliente: Cliente = {
+      const cliente: CreateClienteDTO = {
         dni: this.nuevoCliente.value.dni ?? 0,
         nombre: this.nuevoCliente.value.nombre ?? '',
         apellido: this.nuevoCliente.value.apellido ?? '',

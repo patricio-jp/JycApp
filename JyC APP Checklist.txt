@@ -1,0 +1,4 @@
+JyC APP Checklist
+
+[ ] Productos (completo)
+	[*] Crear producto

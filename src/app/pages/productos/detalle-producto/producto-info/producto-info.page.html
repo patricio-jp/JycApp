@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (producto) {
+  <div class="space-y-2">
+    <p><span class="font-bold">Nombre: </span>{{producto.nombre}}</p>
+    <p><span class="font-bold">Código: </span>{{producto.codigo}}</p>
+    <p><span class="font-bold">En Stock: </span>{{producto.stock}}</p>
+    <p><span class="font-bold">Costo unitario: </span>{{producto.costos.at(-1)?.precioUnitario | currency: 'ARS' :
+      'symbol': '1.2-2' : 'es-AR'}}</p>
+    <p><span class="font-bold">Precio unitario: </span>{{producto.precios.at(-1)?.precioUnitario | currency: 'ARS' :
+      'symbol': '1.2-2' : 'es-AR'}}
+    </p>
+  </div>
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <ion-label>Historial de Precios</ion-label>
+    <table class="w-full text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      <thead
+        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th class="px-4 py-3">Desde</th>
+          <th class="px-4 py-3">Hasta</th>
+          <th class="px-4 py-3">Precio Unitario</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @for (precio of producto.precios; track precio.id) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-4 py-3">{{precio.fechaInicio | date}}</td>
+          <td class="px-4 py-3">{{precio.fechaFin | date}}</td>
+          <td class="px-4 py-3">{{precio.precioUnitario | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <ion-label>Historial de Costos</ion-label>
+    <table class="w-full text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      <thead
+        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th class="px-4 py-3">Desde</th>
+          <th class="px-4 py-3">Hasta</th>
+          <th class="px-4 py-3">Costo Unitario</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @for (costo of producto.costos; track costo.id) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-4 py-3">{{costo.fechaInicio | date}}</td>
+          <td class="px-4 py-3">{{costo.fechaFin | date}}</td>
+          <td class="px-4 py-3">{{costo.precioUnitario | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</ion-content>

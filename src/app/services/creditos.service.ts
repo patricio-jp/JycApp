@@ -1,5 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Credito, CreditoAPIResponse } from '../interfaces/credito';
+import {
+  CreateCreditoDTO,
+  Credito,
+  CreditoAPIResponse,
+} from '../interfaces/credito';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of, Observable } from 'rxjs';
 
@@ -49,7 +53,7 @@ export class CreditosService {
     return this.httpClient.get<Credito>(this.apiEndpoint + id);
   }
 
-  createCredito(credito: Credito): Observable<Credito> {
+  createCredito(credito: CreateCreditoDTO): Observable<Credito> {
     return this.httpClient.post<Credito>(this.apiEndpoint, credito);
   }
 

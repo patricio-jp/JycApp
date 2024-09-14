@@ -160,6 +160,13 @@ export const routes: Routes = [
                 './pages/productos/nuevo-producto/nuevo-producto.page'
               ).then((m) => m.NuevoProductoPage),
           },
+          {
+            path: 'detalle/:id',
+            loadComponent: () =>
+              import(
+                './pages/productos/detalle-producto/detalle-producto.page'
+              ).then((m) => m.DetalleProductoPage),
+          },
         ],
       },
       {

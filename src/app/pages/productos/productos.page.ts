@@ -9,7 +9,7 @@ import {
   IonTitle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { addOutline, barChartOutline, listOutline } from 'ionicons/icons';
+import { addOutline, barChartOutline, cubeOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-productos',
@@ -28,6 +28,6 @@ import { addOutline, barChartOutline, listOutline } from 'ionicons/icons';
 })
 export class ProductosPage {
   constructor() {
-    addIcons({ barChartOutline, addOutline, listOutline });
+    addIcons({ barChartOutline, addOutline, cubeOutline });
   }
 }

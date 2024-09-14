@@ -1,13 +1,118 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>nuevoProducto</ion-title>
+    <ion-title>Nuevo Producto</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">nuevoProducto</ion-title>
+      <ion-title size="large">Nuevo Producto</ion-title>
     </ion-toolbar>
   </ion-header>
+  <form [formGroup]="nuevoProducto" class="p-4 grid gap-4 lg:grid-cols-2">
+    <div class="lg:col-span-2 grid gap-4 lg:grid-cols-3">
+      <div>
+        <ion-input type="text" label="Código" required labelPlacement="floating" fill="solid" formControlName="codigo"
+          class="bg-transparent rounded-lg"></ion-input>
+      </div>
+      <div>
+        <ion-input type="text" label="Nombre" required labelPlacement="floating" fill="solid" formControlName="nombre"
+          class="bg-transparent rounded-lg"></ion-input>
+      </div>
+      <div>
+        <ion-input type="number" label="Cantidad en stock" labelPlacement="floating" fill="solid"
+          formControlName="stock" class="bg-transparent rounded-lg"></ion-input>
+      </div>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div formArrayName="costos" class="space-y-4 lg:space-y-0">
+      <ion-label position="floating" class="font-bold">Costos <ion-button class="ml-3 mb-3" (click)="addCosto()">Agregar
+          Costo</ion-button></ion-label>
+      <div *ngFor="let costo of costos.controls; let i = index" [formGroupName]="i">
+        <ion-label>Costo {{i + 1}}:</ion-label>
+        <div class="flex space-x-3 items-center">
+          <div class="flex flex-col space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4 w-full">
+            <div>
+              <ion-label>Fecha Inicio (desde) </ion-label>
+              <p class="text-xs font-bold mb-3">* No modificar si es fecha actual</p>
+              <ion-datetime-button [datetime]="'fechaInicio' + i"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime [id]="'fechaInicio' + i" displayFormat="DD/MM/YYYY" label="Fecha de inicio" fill="solid"
+                    formControlName="fechaInicio" class="" presentation="date"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </div>
+            <div>
+              <ion-input type="number" label="Costo Unitario" labelPlacement="floating" fill="solid"
+                formControlName="precioUnitario" class="bg-transparent rounded-lg"></ion-input>
+            </div>
+            <div>
+              <ion-label>Fecha de Fin (hasta)</ion-label>
+              <p class="text-xs font-bold mb-3">* No modificar si es fecha actual</p>
+              <ion-datetime-button [datetime]="'fechaFin' + i"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime [id]="'fechaFin' + i" displayFormat="DD/MM/YYYY" label="Fecha de fin" fill="solid"
+                    formControlName="fechaFin" class="" presentation="date"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </div>
+          </div>
+          <div>
+            <ion-button color="danger" shape="round" (click)="costos.removeAt(i)">
+              <ion-icon slot="icon-only" class="text-xl" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 lg:hidden">
+    <div formArrayName="precios" class="space-y-4 lg:space-y-0">
+      <ion-label position="floating" class="font-bold">Precios <ion-button class="ml-3 mb-3"
+          (click)="addPrecio()">Agregar
+          Precio</ion-button></ion-label>
+      <div *ngFor="let precio of precios.controls; let i = index" [formGroupName]="i">
+        <ion-label>Precio {{i + 1}}:</ion-label>
+        <div class="flex space-x-3 items-center">
+          <div class="flex flex-col space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4 w-full">
+            <div>
+              <ion-label>Fecha Inicio (desde)</ion-label>
+              <p class="text-xs font-bold mb-3">* No modificar si es fecha actual</p>
+              <ion-datetime-button [datetime]="'fechaInicio' + i"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime [id]="'fechaInicio' + i" displayFormat="DD/MM/YYYY" label="Fecha de inicio" fill="solid"
+                    formControlName="fechaInicio" class="" presentation="date"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </div>
+            <div>
+              <ion-input type="number" label="Precio Unitario" labelPlacement="floating" fill="solid"
+                formControlName="precioUnitario" class="bg-transparent rounded-lg"></ion-input>
+            </div>
+            <div>
+              <ion-label>Fecha de Fin (hasta)</ion-label>
+              <p class="text-xs font-bold mb-3">* No modificar si es fecha actual</p>
+              <ion-datetime-button [datetime]="'fechaFin' + i"></ion-datetime-button>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime [id]="'fechaFin' + i" displayFormat="DD/MM/YYYY" label="Fecha de fin" fill="solid"
+                    formControlName="fechaFin" class="" presentation="date"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+            </div>
+          </div>
+          <div>
+            <ion-button color="danger" shape="round" (click)="precios.removeAt(i)">
+              <ion-icon slot="icon-only" class="text-xl" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ion-button expand="block" (click)="guardarProducto()">Guardar Producto</ion-button>
+    <ion-button expand="block" fill="outline" (click)="resetForm()">Limpiar</ion-button>
+  </form>
 </ion-content>

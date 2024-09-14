@@ -1,6 +1,6 @@
-import { Domicilio } from './domicilio';
+import { CreateDomicilioDTO, Domicilio } from './domicilio';
 import { Venta } from './operaciones';
-import { Telefono } from './telefono';
+import { CreateTelefonoDTO, Telefono } from './telefono';
 import { Usuario } from './usuario';
 import { Zona } from './zona';
 
@@ -36,8 +36,8 @@ export interface CreateClienteDTO {
   nombre: string;
   apellido?: string;
   fechaNacimiento?: Date;
-  domicilios?: Domicilio[];
-  telefonos?: Telefono[];
+  domicilios?: CreateDomicilioDTO[];
+  telefonos?: CreateTelefonoDTO[];
   id_vendedorAsociado?: number;
   id_cobradorAsociado?: number;
   id_zona?: number;

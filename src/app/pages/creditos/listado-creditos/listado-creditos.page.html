@@ -47,7 +47,7 @@
           @for (credito of listadoCreditos(); track credito.id) {
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="px-4 py-3">{{credito.id}}</td>
-            <td class="px-4 py-3">{{credito.venta?.comprobante}}</td>
+            <td class="px-4 py-3">{{credito.venta.comprobante}}</td>
             <td class="px-4 py-3">{{credito.fechaInicio | date}}</td>
             <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>
             <td class="px-4 py-3">{{periodos[credito.periodo]}}</td>

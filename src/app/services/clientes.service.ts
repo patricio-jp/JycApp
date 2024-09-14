@@ -1,7 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { catchError, Observable, of } from 'rxjs';
-import { Cliente, ClienteAPIResponse } from '../interfaces/cliente';
+import {
+  Cliente,
+  ClienteAPIResponse,
+  CreateClienteDTO,
+} from '../interfaces/cliente';
 
 @Injectable({
   providedIn: 'root',
@@ -49,7 +53,7 @@ export class ClientesService {
     return this.httpClient.get<Cliente>(this.apiEndpoint + id);
   }
 
-  createCliente(cliente: Cliente): Observable<Cliente> {
+  createCliente(cliente: CreateClienteDTO): Observable<Cliente> {
     return this.httpClient.post<Cliente>(this.apiEndpoint, cliente);
   }
 
