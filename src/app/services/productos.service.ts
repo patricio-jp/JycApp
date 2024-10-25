@@ -6,6 +6,7 @@ import {
   ProductosAPIResponse,
 } from '../interfaces/producto';
 import { catchError, of, tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class ProductosService {
 
   private httpClient = inject(HttpClient);
 
-  private apiEndpoint = 'http://192.168.200.200:3000/productos/';
+  private apiEndpoint = `${environment.apiBaseUrl}/productos/`;
 
   dataProductos = signal({
     count: 0,

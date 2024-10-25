@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Seleccionar Cliente</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (cliente) {
+  <div class="p-4 space-y-2 rounded-md bg-primary-900">
+    <h3 class="font-bold text-lg text-center">Cliente seleccionado</h3>
+    <p>
+      DNI: {{ cliente.dni }}<br>
+      {{ cliente.apellido + ", " + cliente.nombre }}
+    </p>
+  </div>
+  <hr class="my-4">
+  }
+  <ion-searchbar placeholder="Buscar cliente" inputmode="text" type="text" (ionChange)="onSearchChange($event)"
+    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="bg-transparent border-0"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let result of searchResults" (click)="select(result)">
+      <ion-label>
+        DNI: {{ result.dni }}<br>
+        {{ result.apellido + ", " + result.nombre }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

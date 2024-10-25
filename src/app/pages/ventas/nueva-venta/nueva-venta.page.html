@@ -1,13 +1,199 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>nuevaVenta</ion-title>
+    <ion-title>Nueva Venta</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">nuevaVenta</ion-title>
+      <ion-title size="large">Nueva Venta</ion-title>
     </ion-toolbar>
   </ion-header>
+  <form [formGroup]="nuevaVenta" class="p-4 grid gap-4">
+    <div class="grid gap-4 lg:grid-cols-4">
+      <div class="col-span-4 lg:col-span-1">
+        <ion-input label="Fecha" type="date" class="bg-transparent rounded-md w-full"
+          formControlName="fecha"></ion-input>
+      </div>
+      <div class="col-span-4 lg:col-span-2 flex space-x-2 items-center">
+        <ion-input formControlName="cliente" readonly="true" label="Cliente:" class="w-full"></ion-input>
+        <ion-button (click)="searchCliente()">
+          <ion-icon slot="start" name="search"></ion-icon>
+          Buscar
+        </ion-button>
+      </div>
+      <div class="col-span-4 lg:col-span-1">
+        <ion-input label="Comprobante" type="text" class="bg-transparent rounded-md w-full"
+          formControlName="comprobante"></ion-input>
+      </div>
+      <div class="col-span-4 lg:col-span-3 relative overflow-x-auto">
+        <table class="w-full text-sm text-gray-500 dark:text-gray-400">
+          <thead class="text-xs uppercase text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
+            <tr>
+              <th scope="col" class="px-4 py-3">ID</th>
+              <th scope="col" class="px-4 py-3">Código</th>
+              <th scope="col" class="px-4 py-3">Nombre</th>
+              <th scope="col" class="px-4 py-3">Cantidad</th>
+              <th scope="col" class="px-4 py-3">Precio Unitario</th>
+              <th scope="col" class="px-4 py-3">Subtotal</th>
+              <th scope="col" class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (producto of productos.controls; track $index) {
+            <tr class="text-center">
+              <td class="px-4 py-3">{{ producto.get('producto')?.value.id }}</td>
+              <td class="px-4 py-3">
+                {{producto.get('producto')?.value.codigo}}
+              </td>
+              <td class="px-4 py-3 text-left">
+                {{producto.get('producto')?.value.nombre}}
+              </td>
+              <td class="px-4 py-3 inline-flex items-center justify-center w-full">
+                <ion-button (click)="decreaseQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
+                  <ion-icon name="remove-circle-outline"></ion-icon>
+                </ion-button>
+                <span>{{ producto.get('cantidad')?.value }}</span>
+                <ion-button (click)="addQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
+                  <ion-icon name="add-circle-outline"></ion-icon>
+                </ion-button>
+              </td>
+              <td class="px-4 py-3">
+                {{producto.get('precioUnitario')?.value | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}
+              </td>
+              <td class="px-4 py-3">
+                {{ (producto.get('cantidad')?.value || 0) * (producto.get('precioUnitario')?.value || 0) | currency:
+                'ARS' : 'symbol': '1.2-2' : 'es-AR' }}
+              </td>
+              <td class="px-4 py-3">
+                <ion-button (click)="removeProducto(producto.get('producto_id')?.value)" color="danger" fill="clear">
+                  <ion-icon name="trash-outline"></ion-icon>
+                </ion-button>
+              </td>
+            </tr>
+            }
+          </tbody>
+        </table>
+        @if (hasCredito) {
+        <hr class="my-4 dark:text-white">
+        <div class="grid grid-cols-5 gap-4" [formGroup]="financiacion">
+          <div>
+            <label for="fechaInicio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
+              Inicio (1era cuota)</label>
+            <input type="date" id="fechaInicio" formControlName="fechaInicio"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="anticipo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Anticipo</label>
+            <input type="number" id="anticipo" formControlName="anticipo"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="cantidadCuotas" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad de
+              Cuotas</label>
+            <input type="number" id="cantidadCuotas" formControlName="cantidadCuotas"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="montoCuota" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Monto de
+              Cuota</label>
+            <input type="number" id="montoCuota" formControlName="montoCuota"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="periodo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Periodo</label>
+            <select id="periodo" formControlName="periodo"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option value="0">Mensual</option>
+              <option value="1">Quincenal</option>
+              <option value="2">Semanal</option>
+            </select>
+          </div>
+        </div>
+        }
+      </div>
+      <hr class="my-4 text-white col-span-4 lg:hidden">
+      <div class="col-span-4 lg:col-span-1 space-y-3">
+        <div>
+          <ion-button (click)="agregarProducto()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Agregar Producto
+          </ion-button>
+        </div>
+        <div>
+          <div>
+            <label class="inline-flex items-center cursor-pointer">
+              <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Fue Entregado?</span>
+              <input type="checkbox" value="" class="sr-only peer" [checked]="entregado" (change)="toggleEntrega()">
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+              </div>
+            </label>
+          </div>
+          @if (entregado) {
+          <div class="mt-3">
+            <ion-input label="Fecha de Entrega" type="date" class="bg-transparent rounded-md w-full"
+              formControlName="fechaEntrega"></ion-input>
+          </div>
+          }
+        </div>
+        <div>
+          <label for="condicion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Condición</label>
+          <select id="condicion" formControlName="condicion" (change)="toggleCredito()"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="CONTADO">Contado</option>
+            <option value="CTA CTE">Crédito</option>
+          </select>
+        </div>
+        <div class="flex items-center space-x-2">
+          <label class="inline-flex items-center cursor-pointer">
+            <span class="me-3 text-sm font-medium text-gray-900 dark:text-gray-300">Tiene Descuento?</span>
+            <input type="checkbox" value="" class="sr-only peer" [checked]="hasDiscount" (change)="toggleDiscount()">
+            <div
+              class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
+            </div>
+          </label>
+        </div>
+        @if (hasDiscount) {
+        <p><span class="font-bold">Subtotal: </span>{{subtotal | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</p>
+        <ion-input label="Descuento" type="number" class="bg-transparent rounded-md w-full" formControlName="descuento"
+          (ngModelChange)="refreshTotal()"></ion-input>
+        <p class="text-xl"><span class="font-bold">Total: </span>{{total | currency: 'ARS' : 'symbol': '1.2-2' :
+          'es-AR'}}</p>
+        @if (hasCredito) {
+        <p class="text-xl"><span class="font-bold">Total Crédito: </span>{{totalCredito | currency: 'ARS' : 'symbol':
+          '1.2-2' :
+          'es-AR'}}</p>
+        }
+        } @else {
+        <p class="text-xl"><span class="font-bold">Total: </span>{{total | currency: 'ARS' : 'symbol': '1.2-2' :
+          'es-AR'}}</p>
+        @if (hasCredito) {
+        <p class="text-xl"><span class="font-bold">Total Crédito: </span>{{totalCredito | currency: 'ARS' : 'symbol':
+          '1.2-2' :
+          'es-AR'}}</p>
+        }
+        }
+        <div>
+          <label for="estado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
+          <select id="estado" formControlName="estado"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <option value="0">Pendiente</option>
+            <option value="1">Para Entregar</option>
+            <option value="2">Pagado</option>
+            <option value="3" [disabled]="!entregado">Entregado</option>
+            <option value="4">Anulado</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-span-4 lg:col-span-3">
+        <ion-input label="Observaciones" type="text" class="bg-transparent rounded-md w-full"
+          formControlName="observaciones"></ion-input>
+      </div>
+    </div>
+    <ion-button (click)="guardarVenta()" expand="block" shape="round">
+      Click me
+    </ion-button>
+  </form>
 </ion-content>

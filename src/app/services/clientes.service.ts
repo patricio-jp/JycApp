@@ -6,6 +6,7 @@ import {
   ClienteAPIResponse,
   CreateClienteDTO,
 } from '../interfaces/cliente';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class ClientesService {
 
   private httpClient = inject(HttpClient);
 
-  private apiEndpoint = 'http://192.168.200.200:3000/clientes/';
+  private apiEndpoint = `${environment.apiBaseUrl}/clientes/`;
 
   dataClientes = signal<ClienteAPIResponse>({
     count: 0,

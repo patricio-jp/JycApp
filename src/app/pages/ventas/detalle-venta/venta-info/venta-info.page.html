@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (venta) {
+  <div class="space-y-2">
+    <p><span class="font-bold">ID: </span>{{venta.id}}</p>
+    <p><span class="font-bold">Fecha: </span>{{venta.fecha | date}}</p>
+    <p><span class="font-bold">Cliente: </span>{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</p>
+    <p><span class="font-bold">Comprobante: </span>{{venta.comprobante}}</p>
+    <p><span class="font-bold">Condición: </span>{{venta.condicion}}</p>
+    <p><span class="font-bold">Observaciones: </span>{{venta.observaciones}}</p>
+    <p><span class="font-bold">Estado: </span>{{venta.estado}}</p>
+  </div>
+  }
+</ion-content>

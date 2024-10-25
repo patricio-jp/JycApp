@@ -10,4 +10,73 @@
       <ion-title size="large">listadoVentas</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div class="relative overflow-hidden">
+    <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:pace-x-4 p-4">
+      <div class="w-full md-w-1/2">
+        <form class="flex items-center">
+          <ion-searchbar inputmode="search" animated="true" autocomplete="false"
+            showClearButton="focus"></ion-searchbar>
+        </form>
+      </div>
+      <div
+        class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+        <ion-button routerLink="../nueva">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Nueva Venta
+        </ion-button>
+      </div>
+    </div>
+    <div class="relative overflow-x-auto">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-4 py-3">
+              ID
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Fecha
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Cliente
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Condición
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Total
+            </th>
+            <th scope="col" class="px-4 py-3">
+              Estado
+            </th>
+            <th scope="col" class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (venta of listadoVentas(); track venta.id) {
+          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
+            <td class="px-4 py-3">{{venta.id}}</td>
+            <td class="px-4 py-3">{{venta.fecha}}</td>
+            <td class="px-4 py-3">{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</td>
+            <td class="px-4 py-3">{{venta.condicion}}</td>
+            <td class="px-4 py-3">{{venta.total | currency: 'ARS'}}</td>
+            <td class="px-4 py-3">{{venta.estado}}</td>
+            <!-- <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td> -->
+            <td class="p-2">
+              <button
+                class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
+                (click)="ventaDetails(venta)">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              </button>
+              <button
+                class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:block"
+                (click)="ventaDesktopDetails(venta.id)">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              </button>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
 </ion-content>

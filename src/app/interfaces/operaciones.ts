@@ -1,5 +1,5 @@
 import { Cliente } from './cliente';
-import { Credito } from './credito';
+import { CreateCreditoDTO, Credito } from './credito';
 import { Producto } from './producto';
 
 export enum CondicionOperacion {
@@ -43,6 +43,11 @@ export interface DetalleVenta {
   precioUnitario: number;
 }
 
+export interface VentasAPIResponse {
+  data: Venta[];
+  count: number;
+}
+
 export interface CreateVentaDTO {
   fecha: Date;
   comprobante?: string;
@@ -56,7 +61,7 @@ export interface CreateVentaDTO {
   fechaEntrega?: Date;
   cliente_id: number;
   productos: CreateDetVentaDTO[];
-  financiacion?: Credito[];
+  financiacion?: CreateCreditoDTO;
 }
 
 export interface CreateDetVentaDTO {
@@ -75,6 +80,11 @@ export interface DetalleCompra {
   producto?: Producto;
   cantidad: number;
   costoUnitario: number;
+}
+
+export interface ComprasAPIResponse {
+  data: Compra[];
+  count: number;
 }
 
 export interface CreateCompraDTO {

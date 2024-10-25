@@ -125,6 +125,13 @@ export const routes: Routes = [
                 (m) => m.NuevaVentaPage
               ),
           },
+          {
+            path: 'detalle/:id',
+            loadComponent: () =>
+              import('./pages/ventas/detalle-venta/detalle-venta.page').then(
+                (m) => m.DetalleVentaPage
+              ),
+          },
         ],
       },
       {

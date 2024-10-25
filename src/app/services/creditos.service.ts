@@ -6,6 +6,7 @@ import {
 } from '../interfaces/credito';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of, Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,7 @@ export class CreditosService {
 
   private httpClient = inject(HttpClient);
 
-  private apiEndpoint = 'http://192.168.200.200:3000/creditos/';
+  private apiEndpoint = `${environment.apiBaseUrl}/creditos/`;
 
   dataCreditos = signal<CreditoAPIResponse>({
     count: 0,
