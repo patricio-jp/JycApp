@@ -18,9 +18,9 @@
       </div>
       <div class="col-span-4 lg:col-span-2 flex space-x-2 items-center">
         <ion-input formControlName="cliente" readonly="true" label="Cliente:" class="w-full"></ion-input>
-        <ion-button (click)="searchCliente()">
+        <ion-button (click)="searchCliente()" class="text-nowrap">
           <ion-icon slot="start" name="search"></ion-icon>
-          Buscar
+          Buscar cliente
         </ion-button>
       </div>
       <div class="col-span-4 lg:col-span-1">
@@ -159,21 +159,13 @@
         <p><span class="font-bold">Subtotal: </span>{{subtotal | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</p>
         <ion-input label="Descuento" type="number" class="bg-transparent rounded-md w-full" formControlName="descuento"
           (ngModelChange)="refreshTotal()"></ion-input>
-        <p class="text-xl"><span class="font-bold">Total: </span>{{total | currency: 'ARS' : 'symbol': '1.2-2' :
+        }
+        <p class="text-xl"><span class="font-bold">Total Venta: </span>{{total | currency: 'ARS' : 'symbol': '1.2-2' :
           'es-AR'}}</p>
         @if (hasCredito) {
         <p class="text-xl"><span class="font-bold">Total Crédito: </span>{{totalCredito | currency: 'ARS' : 'symbol':
           '1.2-2' :
           'es-AR'}}</p>
-        }
-        } @else {
-        <p class="text-xl"><span class="font-bold">Total: </span>{{total | currency: 'ARS' : 'symbol': '1.2-2' :
-          'es-AR'}}</p>
-        @if (hasCredito) {
-        <p class="text-xl"><span class="font-bold">Total Crédito: </span>{{totalCredito | currency: 'ARS' : 'symbol':
-          '1.2-2' :
-          'es-AR'}}</p>
-        }
         }
         <div>
           <label for="estado" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>

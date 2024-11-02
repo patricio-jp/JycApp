@@ -1,20 +1,86 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonHeader,
+  IonTitle,
+  IonToolbar,
+  IonCardSubtitle,
+  IonCardHeader,
+  IonCard,
+  IonCardTitle,
+  IonCardContent,
+  IonLabel,
+  ModalController,
+} from '@ionic/angular/standalone';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { VentasService } from 'src/app/services/ventas.service';
+import {
+  CondicionOperacion,
+  EstadoOperacion,
+  Venta,
+} from 'src/app/interfaces/operaciones';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { Credito, EstadoCredito, Periodo } from 'src/app/interfaces/credito';
+import { CreditoInfoComponent } from '../../creditos/detalle-credito/credito-info/credito-info.component';
 
 @Component({
   selector: 'app-detalle-venta',
   templateUrl: './detalle-venta.page.html',
   styleUrls: ['./detalle-venta.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    IonCardSubtitle,
+    IonCardHeader,
+    IonCard,
+    IonCardTitle,
+    IonCardContent,
+    IonLabel,
+    RouterLink,
+    CommonModule,
+    FormsModule,
+    FaIconComponent,
+  ],
 })
-export class DetalleVentaPage implements OnInit {
+export class DetalleVentaPage {
+  private route: ActivatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
+  private ventasService = inject(VentasService);
+  private modalCtrl = inject(ModalController);
 
-  constructor() { }
+  venta: Venta | undefined;
+  condicionVenta = CondicionOperacion;
+  estadosVenta = EstadoOperacion;
+  periodosCredito = Periodo;
+  estadosCredito = EstadoCredito;
 
-  ngOnInit() {
+  constructor() {
+    const ventaID = Number(this.route.snapshot.params['id']);
+    this.ventasService
+      .getVenta(ventaID)
+      .subscribe((venta) => (this.venta = venta));
   }
 
+  async viewCreditoDetails(credito: Credito) {
+    const modal = await this.modalCtrl.create({
+      component: CreditoInfoComponent,
+      componentProps: { credito },
+      breakpoints: [0.25, 0.5, 1],
+      initialBreakpoint: 0.25,
+    });
+    //console.log(credito);
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    //console.log(data, role);
+  }
+
+  viewDesktopCreditoDetails(id?: number) {
+    this.router.navigate(['./dashboard/creditos/detalle', id]);
+  }
 }

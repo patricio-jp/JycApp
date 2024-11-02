@@ -20,5 +20,83 @@
     <p><span class="font-bold">Observaciones: </span>{{venta.observaciones}}</p>
     <p><span class="font-bold">Estado: </span>{{venta.estado}}</p>
   </div>
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      <thead
+        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-4 py-3">ID</th>
+          <th scope="col" class="px-4 py-3">Código</th>
+          <th scope="col" class="px-4 py-3">Nombre</th>
+          <th scope="col" class="px-4 py-3">Cantidad</th>
+          <th scope="col" class="px-4 py-3">Precio Unitario</th>
+          <th scope="col" class="px-4 py-3">Subtotal</th>
+          <th scope="col" class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @for (detalle of venta.productos; track $index) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-4 py-3">{{detalle.producto.id}}</td>
+          <td class="px-4 py-3">{{detalle.producto.codigo}}</td>
+          <td class="px-4 py-3 text-left">{{detalle.producto.nombre}}</td>
+          <td class="px-4 py-3">{{detalle.cantidad}}</td>
+          <td class="px-4 py-3">{{detalle.precioUnitario | currency: 'ARS'}}</td>
+          <td class="px-4 py-3">{{(detalle.cantidad * detalle.precioUnitario) | currency: 'ARS'}}</td>
+          <td class="px-4 py-3"></td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  @if (venta.condicion === 'CTA CTE' && venta.financiacion && venta.financiacion[0]) {
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+      Financiación asociada
+      <!-- <a class="text-primary-600 hover:underline"
+        routerLink="/dashboard/creditos/detalle/{{venta.financiacion[0].id}}">Detalles</a> -->
+      <ion-button (click)="viewCreditoDetails(venta.financiacion[0])" fill="clear" shape="round">
+        Detalles
+      </ion-button>
+    </h3>
+    <table class="w-full mt-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      <thead class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-4 py-3">ID</th>
+          <th scope="col" class="px-4 py-3">Fecha Inicio</th>
+          <th scope="col" class="px-4 py-3">Cant. cuotas</th>
+          <th scope="col" class="px-4 py-3">Periodo</th>
+          <th scope="col" class="px-4 py-3">Monto Cuota</th>
+          <th scope="col" class="px-4 py-3">Fecha Últ. Pago</th>
+          <th scope="col" class="px-4 py-3">Estado</th>
+          <th scope="col" class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        @for (credito of venta.financiacion; track $index) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+          <td class="px-4 py-3">{{credito.id}}</td>
+          <td class="px-4 py-3">{{credito.fechaInicio | date}}</td>
+          <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>
+          <td class="px-4 py-3">{{periodosCredito[credito.periodo]}}</td>
+          <td class="px-4 py-3">{{credito.montoCuota | currency: 'ARS' }}</td>
+          <td class="px-4 py-3">{{credito.fechaUltimoPago | date}}</td>
+          <td class="px-4 py-3">{{estadosCredito[credito.estado]}}</td>
+          <td class="p-2">
+            <button
+              class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
+              (click)="viewCreditoDetails(credito)">
+              <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+            </button>
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  }
   }
 </ion-content>

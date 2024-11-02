@@ -21,6 +21,7 @@ import { Router } from '@angular/router';
 import { VentasService } from 'src/app/services/ventas.service';
 import {
   CondicionOperacion,
+  CreateVentaDTO,
   EstadoOperacion,
 } from 'src/app/interfaces/operaciones';
 import { Periodo } from 'src/app/interfaces/credito';
@@ -70,13 +71,16 @@ export class NuevaVentaPage {
     descuento: [0, Validators.min(0)],
     total: [0, [Validators.required, Validators.min(0)]],
     condicion: [CondicionOperacion.CONTADO, Validators.required],
-    productos: this.formBuilder.array([
-      /* this.formBuilder.group({
+    productos: this.formBuilder.array(
+      [
+        /* this.formBuilder.group({
         producto_id: [null, Validators.required],
         cantidad: [1, [Validators.required, Validators.min(1)]],
         precioUnitario: [null, [Validators.required, Validators.min(0)]],
       }), */
-    ]),
+      ],
+      Validators.required
+    ),
     financiacion: this.formBuilder.group({
       fechaInicio: [
         new Date().toISOString().substring(0, 10),
@@ -271,6 +275,76 @@ export class NuevaVentaPage {
 
   async guardarVenta() {
     console.log(this.nuevaVenta.value);
+    console.log(this.nuevaVenta.valid);
+    if (this.nuevaVenta.valid) {
+      const venta: CreateVentaDTO = {
+        fecha: this.nuevaVenta.get('fecha')?.value ?? new Date(),
+        cliente_id: Number(this.nuevaVenta.get('cliente_id')?.value) ?? 0,
+        subtotal: Number(this.nuevaVenta.get('subtotal')?.value) ?? 0,
+        descuento: Number(this.nuevaVenta.get('descuento')?.value) ?? undefined,
+        total: Number(this.nuevaVenta.get('total')?.value) ?? 0,
+        condicion:
+          this.nuevaVenta.get('condicion')?.value ??
+          (this.hasCredito
+            ? CondicionOperacion.CTA_CTE
+            : CondicionOperacion.CONTADO),
+        productos: this.productos.controls.map((control) => ({
+          id_producto: Number(control.get('producto_id')?.value),
+          cantidad: Number(control.get('cantidad')?.value),
+          precioUnitario: Number(control.get('precioUnitario')?.value),
+        })),
+        financiacion: this.hasCredito
+          ? {
+              fechaInicio: this.financiacion.get('fechaInicio')?.value,
+              anticipo: Number(this.financiacion.get('anticipo')?.value),
+              cantidadCuotas: Number(
+                this.financiacion.get('cantidadCuotas')?.value
+              ),
+              montoCuota: Number(this.financiacion.get('montoCuota')?.value),
+              periodo:
+                Number(this.financiacion.get('periodo')?.value) ?? undefined,
+            }
+          : undefined,
+        comprobante: this.nuevaVenta.get('comprobante')?.value ?? undefined,
+        observaciones: this.nuevaVenta.get('observaciones')?.value ?? undefined,
+        fechaEntrega: this.entregado
+          ? this.nuevaVenta.get('fechaEntrega')?.value ?? new Date()
+          : undefined,
+        estado: Number(this.nuevaVenta.get('estado')?.value) ?? undefined,
+      };
+      console.log(venta);
+      try {
+        this.ventasService.createVenta(venta).subscribe(async (nuevaVta) => {
+          const toast = await this.toastCtrl.create({
+            position: 'top',
+            duration: 3000,
+            message: 'Venta cargada exitosamente',
+          });
+
+          await toast.present();
+
+          toast.onDidDismiss().then(() => {
+            this.router.navigate(['./dashboard/ventas/listado']);
+          });
+        });
+      } catch (error) {
+        const toast = await this.toastCtrl.create({
+          position: 'top',
+          duration: 3000,
+          message: 'Error al crear la venta',
+        });
+
+        await toast.present();
+      }
+    } else {
+      const toast = await this.toastCtrl.create({
+        position: 'top',
+        duration: 3000,
+        message: 'Formulario inválido',
+      });
+
+      await toast.present();
+    }
   }
 
   /* increaseQuantity(producto: FormGroup) {

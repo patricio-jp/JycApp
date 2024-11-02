@@ -45,3 +45,8 @@ JyC APP Checklist
 
 [ ] Otros
   [ ] Login
+
+
+[---] BUGS
+  [ ] [Mobile] Al acceder al detalle del crédito desde el detalle de una venta, no se muestra la info.
+  [ ]

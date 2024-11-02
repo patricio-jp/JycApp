@@ -49,7 +49,7 @@ export interface VentasAPIResponse {
 }
 
 export interface CreateVentaDTO {
-  fecha: Date;
+  fecha: Date | string;
   comprobante?: string;
   comprobante_url?: string;
   subtotal?: number;
@@ -58,14 +58,14 @@ export interface CreateVentaDTO {
   condicion: CondicionOperacion;
   observaciones?: string;
   estado?: EstadoOperacion;
-  fechaEntrega?: Date;
+  fechaEntrega?: Date | string;
   cliente_id: number;
   productos: CreateDetVentaDTO[];
   financiacion?: CreateCreditoDTO;
 }
 
 export interface CreateDetVentaDTO {
-  producto_id: number;
+  id_producto: number;
   cantidad: number;
   precioUnitario: number;
 }

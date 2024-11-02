@@ -37,6 +37,9 @@
               Fecha
             </th>
             <th scope="col" class="px-4 py-3">
+              Comprobante
+            </th>
+            <th scope="col" class="px-4 py-3">
               Cliente
             </th>
             <th scope="col" class="px-4 py-3">
@@ -56,10 +59,11 @@
           <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
             <td class="px-4 py-3">{{venta.id}}</td>
             <td class="px-4 py-3">{{venta.fecha}}</td>
+            <td class="px-4 py-3">{{venta.comprobante}}</td>
             <td class="px-4 py-3">{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</td>
             <td class="px-4 py-3">{{venta.condicion}}</td>
             <td class="px-4 py-3">{{venta.total | currency: 'ARS'}}</td>
-            <td class="px-4 py-3">{{venta.estado}}</td>
+            <td class="px-4 py-3">{{estadosVenta[venta.estado]}}</td>
             <!-- <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td> -->
             <td class="p-2">
               <button

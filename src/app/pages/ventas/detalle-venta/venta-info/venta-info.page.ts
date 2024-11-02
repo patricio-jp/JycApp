@@ -10,9 +10,18 @@ import {
   IonTitle,
   ModalController,
   IonLabel,
+  IonCardTitle,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { Venta } from 'src/app/interfaces/operaciones';
+import {
+  CondicionOperacion,
+  EstadoOperacion,
+  Venta,
+} from 'src/app/interfaces/operaciones';
+import { Periodo, EstadoCredito, Credito } from 'src/app/interfaces/credito';
+import { CreditoInfoComponent } from 'src/app/pages/creditos/detalle-credito/credito-info/credito-info.component';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-venta-info',
@@ -20,8 +29,10 @@ import { Venta } from 'src/app/interfaces/operaciones';
   styleUrls: ['./venta-info.page.scss'],
   standalone: true,
   imports: [
+    IonCardTitle,
     IonLabel,
     CommonModule,
+    RouterLink,
     IonHeader,
     IonToolbar,
     IonButtons,
@@ -30,12 +41,18 @@ import { Venta } from 'src/app/interfaces/operaciones';
     IonTitle,
     IonCard,
     IonCardContent,
+    FaIconComponent,
   ],
 })
 export class VentaInfoPage {
   @Input() venta?: Venta;
 
   modalCtrl = inject(ModalController);
+
+  condicionVenta = CondicionOperacion;
+  estadosVenta = EstadoOperacion;
+  periodosCredito = Periodo;
+  estadosCredito = EstadoCredito;
 
   constructor() {}
 
@@ -45,5 +62,24 @@ export class VentaInfoPage {
 
   confirm() {
     return this.modalCtrl.dismiss(null, 'confirm');
+  }
+
+  async viewCreditoDetails(credito: Credito) {
+    if (credito) {
+      const modal = await this.modalCtrl.create({
+        id: 'creditoModal',
+        component: CreditoInfoComponent,
+        componentProps: { credito },
+        breakpoints: [0.25, 0.5, 1],
+        initialBreakpoint: 0.25,
+      });
+      //console.log(credito);
+      modal.present();
+
+      const { data, role } = await modal.onWillDismiss();
+    } else {
+      alert('No crédito');
+    }
+    //console.log(data, role);
   }
 }
