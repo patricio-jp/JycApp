@@ -66,33 +66,16 @@
             <td class="px-4 py-3">{{cliente.saldo | currency: 'ARS'}}</td>
             <td class="px-4 py-3">{{cliente.observaciones}}</td>
             <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td>
-            <td class="px-2 py-3">
-              <button (click)="toggleDetails(cliente.id)" data-accordion-icon class="w-3 h-3 rotate-180">
-                <ion-icon icon="chevron-up"></ion-icon>
+            <td class="p-2">
+              <button
+                class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
+                (click)="clienteDetails(cliente.id)">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
               </button>
-            </td>
-          </tr>
-          <tr [id]="'cliente' + cliente.id + 'Detalle'" class="clientDetail hidden">
-            <td colspan="8" class="p-4">
-              <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded">
-                <h4 class="font-bold mb-2">Detalles del cliente</h4>
-                <p>
-                  <strong>Teléfonos:</strong>
-                <ul>
-                  @for (telefono of cliente.telefonos; track $index) {
-                  <li>{{telefono.telefono}}</li>
-                  }
-                </ul>
-                <p>
-                  <strong>Domicilios:</strong>
-                <ul>
-                  @for (domicilio of cliente.domicilios; track $index) {
-                  <li>Dirección: {{domicilio.direccion}}, Barrio: {{domicilio.barrio}}, Localidad:
-                    {{domicilio.localidad}}</li>
-                  }
-                </ul>
-                <p><strong>Observaciones:</strong> {{cliente.observaciones}}</p>
-              </div>
+              <button (click)="clienteDesktopDetails(cliente.id)"
+                class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:block">
+                <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+              </button>
             </td>
           </tr>
           }

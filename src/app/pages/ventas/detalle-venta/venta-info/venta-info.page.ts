@@ -4,13 +4,9 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonTitle,
   ModalController,
-  IonLabel,
-  IonCardTitle,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import {
@@ -21,7 +17,6 @@ import {
 import { Periodo, EstadoCredito, Credito } from 'src/app/interfaces/credito';
 import { CreditoInfoComponent } from 'src/app/pages/creditos/detalle-credito/credito-info/credito-info.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-venta-info',
@@ -29,18 +24,13 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./venta-info.page.scss'],
   standalone: true,
   imports: [
-    IonCardTitle,
-    IonLabel,
     CommonModule,
-    RouterLink,
     IonHeader,
     IonToolbar,
     IonButtons,
     IonButton,
     IonContent,
     IonTitle,
-    IonCard,
-    IonCardContent,
     FaIconComponent,
   ],
 })

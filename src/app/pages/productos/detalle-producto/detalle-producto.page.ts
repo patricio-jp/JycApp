@@ -1,12 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonCardSubtitle,
   IonCardHeader,
   IonCard,
   IonCardTitle,
@@ -28,19 +26,17 @@ import { Producto } from 'src/app/interfaces/producto';
     IonCardTitle,
     IonCard,
     IonCardHeader,
-    IonCardSubtitle,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
     CommonModule,
-    FormsModule,
   ],
 })
 export class DetalleProductoPage {
   route: ActivatedRoute = inject(ActivatedRoute);
   productosService = inject(ProductosService);
-  producto: Producto | undefined;
+  producto?: Producto;
 
   constructor() {
     const productoID = Number(this.route.snapshot.params['id']);

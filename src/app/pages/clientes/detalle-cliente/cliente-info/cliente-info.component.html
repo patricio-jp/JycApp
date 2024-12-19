@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (cliente) {
+  <div class="space-y-2">
+    <p><span class="font-bold">ID: </span>{{cliente.id}}</p>
+    <p><span class="font-bold">Apellido y Nombre: </span>{{cliente.apellido}}, {{cliente.nombre}}</p>
+    <p><span class="font-bold">DNI: </span>{{cliente.dni}}</p>
+    <p><span class="font-bold">Fecha de Nacimiento: </span>{{cliente.fechaNacimiento | date }}</p>
+    <p><span class="font-bold">Estado: </span>{{estadosCliente[cliente.estado]}}</p>
+    <p><span class="font-bold">Saldo: </span>{{cliente.saldo | currency : 'ARS'}}</p>
+    <p><span class="font-bold">Observaciones: </span>{{cliente.observaciones}}</p>
+  </div>
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <table class="w-full text-gray-500 dark:text-gray-400 whitespace-nowrap">
+      <thead
+        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Fecha</th>
+          <th class="px-4 py-3">Comprobante</th>
+          <th class="px-4 py-3">Condición</th>
+          <th class="px-4 py-3">Total</th>
+          <th class="px-4 py-3">Estado</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (cliente.ventas!.length > 0) {
+        @for (venta of cliente.ventas; track venta.id) {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
+          <td class="px-4 py-3">{{venta.id}}</td>
+          <td class="px-4 py-3">{{venta.fecha}}</td>
+          <td class="px-4 py-3">{{venta.comprobante}}</td>
+          <td class="px-4 py-3">{{venta.condicion}}</td>
+          <td class="px-4 py-3">{{venta.total | currency: 'ARS'}}</td>
+          <td class="px-4 py-3">{{estadosVenta[venta.estado]}}</td>
+          <td class="p-2">
+            <button
+              class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
+              (click)="ventaDetails(venta)">
+              <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+            </button>
+          </td>
+        </tr>
+        }
+        } @else {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
+          <td class="px-4 py-3 text-center" colspan="7">El cliente no tiene ventas asociadas a él</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }
+</ion-content>

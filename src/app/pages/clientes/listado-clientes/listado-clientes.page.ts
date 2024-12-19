@@ -1,10 +1,4 @@
-import {
-  AfterViewChecked,
-  Component,
-  OnInit,
-  computed,
-  inject,
-} from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -12,18 +6,18 @@ import {
   IonTitle,
   IonToolbar,
   IonLoading,
-  IonSpinner,
   IonSearchbar,
   IonButton,
   IonIcon,
+  ModalController,
 } from '@ionic/angular/standalone';
-import { EstadoCliente } from 'src/app/interfaces/cliente';
+import { Cliente, EstadoCliente } from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
-import { RouterLink } from '@angular/router';
-import { Accordion } from 'flowbite';
-import type { AccordionOptions, AccordionItem } from 'flowbite';
+import { Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { chevronUp } from 'ionicons/icons';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { ClienteInfoComponent } from '../detalle-cliente/cliente-info/cliente-info.component';
 
 @Component({
   selector: 'app-listado-clientes',
@@ -34,28 +28,29 @@ import { chevronUp } from 'ionicons/icons';
     IonIcon,
     IonButton,
     IonSearchbar,
-    IonSpinner,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
     IonLoading,
+    FaIconComponent,
     CommonModule,
-    RouterLink,
+    RouterModule,
   ],
 })
-export class ListadoClientesPage implements OnInit, AfterViewChecked {
+export class ListadoClientesPage implements OnInit {
   constructor() {
     addIcons({ chevronUp });
   }
 
   private clientesService = inject(ClientesService);
+  private router = inject(Router);
+
+  private modalCtrl = inject(ModalController);
 
   dataClientes = computed(() => this.clientesService.dataClientes());
   listadoClientes = computed(() => this.clientesService.listadoClientes());
   loadingSignal = computed(() => this.clientesService.loadingSignal());
-
-  accordion!: Accordion;
 
   estadoClientes = EstadoCliente;
 
@@ -63,51 +58,20 @@ export class ListadoClientesPage implements OnInit, AfterViewChecked {
     this.clientesService.getClientes();
   }
 
-  ngAfterViewChecked(): void {
-    const accordionContainer = document.getElementById('clientesBody');
-    //console.log('Accordion Container:', accordionContainer);
-
-    if (accordionContainer) {
-      const accordionItems: AccordionItem[] = this.listadoClientes().map(
-        (cliente) => {
-          const triggerEl = document.getElementById(
-            `cliente${cliente.id}Info`
-          ) as HTMLElement;
-          const targetEl = document.getElementById(
-            `cliente${cliente.id}Detalle`
-          ) as HTMLElement;
-          /* console.log('Trigger Element:', triggerEl);
-          console.log('Target Element:', targetEl); */
-
-          return {
-            id: `cliente${cliente.id}Info`,
-            triggerEl: triggerEl,
-            targetEl: targetEl,
-            active: false,
-          };
-        }
-      );
-
-      const options: AccordionOptions = {
-        activeClasses:
-          'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white',
-        inactiveClasses: 'bg-white dark:bg-gray-800',
-      };
-
-      this.accordion = new Accordion(
-        accordionContainer,
-        accordionItems,
-        options
-      );
-      //console.log('Accordion Initialized:', this.accordion);
-    }
+  clienteDesktopDetails(id?: number) {
+    this.router.navigate(['./dashboard/clientes/detalle/', id]);
   }
 
-  toggleDetails(id?: number) {
-    const idG = `cliente${id}Info`;
-    //console.log('Toggling Details for ID:', idG);
+  async clienteDetails(id?: number) {
+    const modal = await this.modalCtrl.create({
+      component: ClienteInfoComponent,
+      componentProps: { clienteID: id },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 0.5,
+    });
 
-    this.accordion.toggle(idG);
-    //console.log('Accordion State after Toggle:', this.accordion);
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
   }
 }

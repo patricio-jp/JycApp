@@ -52,6 +52,13 @@ export const routes: Routes = [
                 (m) => m.NuevoClientePage
               ),
           },
+          {
+            path: 'detalle/:id',
+            loadComponent: () =>
+              import(
+                './pages/clientes/detalle-cliente/detalle-cliente.page'
+              ).then((m) => m.DetalleClientePage),
+          },
         ],
       },
       {

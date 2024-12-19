@@ -4,10 +4,36 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">clientesDashboard</ion-title>
     </ion-toolbar>
   </ion-header>
+  <section class="grid md:grid-cols-3 gap-5 grid-rows-2 items-center justify-center">
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de clientes</h4>
+      <p class="text-4xl text-right">{{cantClientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes con créditos activos</h4>
+      <p class="text-4xl text-right">{{cantActivos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes pendientes</h4>
+      <p class="text-4xl text-right">{{cantPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes con deuda</h4>
+      <p class="text-4xl text-right">{{cantConDeuda()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes incobrables</h4>
+      <p class="text-4xl text-right">{{cantIncobrables()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes inactivos</h4>
+      <p class="text-4xl text-right">{{cantInactivos()}}</p>
+    </div>
+  </section>
 </ion-content>
