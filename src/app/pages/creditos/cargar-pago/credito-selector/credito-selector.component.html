@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Seleccionar Crédito</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (credito) {
+  <div class="p-4 space-y-2 rounded-md bg-primary-900">
+    <h3 class="font-bold text-lg text-center">Crédito seleccionado</h3>
+    <div>
+      <div>
+        <p>Crédito: {{ credito.venta.comprobante }} - Fecha Inicio: {{credito.fechaInicio | date: 'dd/MM/yyy'}}
+        </p>
+        <p>{{credito.cantidadCuotas}} cuotas ({{periodos[credito.periodo]}}) de {{credito.montoCuota | currency: 'ARS'}}
+        </p>
+      </div>
+      <div>
+        <strong>Productos:</strong>
+        @for (producto of credito.venta.productos; track $index) {
+        <div class="ml-2">- {{ producto.producto.nombre }}</div>
+        }
+      </div>
+      <div>Cliente: {{ credito.venta.cliente?.apellido + ", " + credito.venta.cliente?.nombre }}</div>
+    </div>
+  </div>
+  <hr class="my-4">
+  }
+  <ion-searchbar placeholder="Buscar crédito o cliente" inputmode="text" type="text" (ionChange)="searchCredito($event)"
+    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="bg-transparent border-0"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let result of searchResults" (click)="select(result)">
+      <ion-label>
+        <div>
+          <p>Crédito: {{ result.venta.comprobante }} - Fecha Inicio: {{result.fechaInicio | date: 'dd/MM/yyy'}}
+          </p>
+          <p>{{result.cantidadCuotas}} cuotas ({{periodos[result.periodo]}}) de {{result.montoCuota | currency: 'ARS' :
+            'symbol' : '1.2-2'}}
+          </p>
+        </div>
+        <div>
+          <strong>Productos:</strong>
+          @for (producto of result.venta.productos; track $index) {
+          <div class="ml-2">- {{ producto.producto.nombre }}</div>
+          }
+        </div>
+        <div>Cliente: {{ result.venta.cliente?.apellido + ", " + result.venta.cliente?.nombre }}</div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

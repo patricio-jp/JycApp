@@ -4,8 +4,6 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonTitle,
   ModalController,
@@ -35,8 +33,6 @@ import { ClientesService } from 'src/app/services/clientes.service';
     IonButton,
     IonContent,
     IonTitle,
-    IonCard,
-    IonCardContent,
   ],
 })
 export class ClienteSelectorComponent {

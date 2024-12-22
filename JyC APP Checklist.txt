@@ -49,4 +49,5 @@ JyC APP Checklist
 
 [---] BUGS
   [ ] [Mobile] Al acceder al detalle del crédito desde el detalle de una venta, no se muestra la info.
-  [ ]
+  [ ] Al cargar un pago, no se actualiza la info y es necesario forzar refresco de página
+  [ ] Al crear un producto, no se actualiza el listado de todos los productos

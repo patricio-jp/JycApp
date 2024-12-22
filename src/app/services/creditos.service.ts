@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import {
+  CargarPagoDTO,
   CreateCreditoDTO,
   Credito,
   CreditoAPIResponse,
@@ -60,6 +61,14 @@ export class CreditosService {
 
   updateCredito(id: number, credito: Credito): Observable<Credito> {
     return this.httpClient.put<Credito>(this.apiEndpoint + id, credito);
+  }
+
+  cargarPago(pago: CargarPagoDTO) {
+    const { creditoId } = pago;
+    return this.httpClient.patch(
+      `${this.apiEndpoint + creditoId}/cargar-pago`,
+      pago
+    );
   }
 
   deleteCredito(id: number) {

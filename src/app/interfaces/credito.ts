@@ -39,6 +39,12 @@ export interface CreateCreditoDTO {
   estado?: EstadoCredito;
 }
 
+export interface CargarPagoDTO {
+  monto: number;
+  fechaPago?: Date;
+  creditoId: number;
+}
+
 export enum EstadoCuota {
   aVencer,
   Vencida,
