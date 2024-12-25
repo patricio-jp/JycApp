@@ -1,28 +1,23 @@
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
-  FormsModule,
+  ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
 import {
   IonContent,
   IonButton,
   IonCard,
-  IonRow,
-  IonGrid,
-  IonCol,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonItem,
-  IonLabel,
   IonInput,
-  IonText,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
-import { LoginInfo } from 'src/app/interfaces/usuario';
+import { AuthService } from 'src/app/services/auth.service';
+import { Login } from 'src/app/interfaces/login';
 
 @Component({
   selector: 'app-login',
@@ -30,19 +25,14 @@ import { LoginInfo } from 'src/app/interfaces/usuario';
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    IonText,
     IonInput,
-    IonLabel,
     IonCardContent,
     IonCardTitle,
     IonCardHeader,
-    IonCol,
-    IonGrid,
-    IonRow,
     IonCard,
     IonContent,
-    IonItem,
     IonButton,
+    ReactiveFormsModule,
   ],
 })
 export class LoginPage {
@@ -50,12 +40,22 @@ export class LoginPage {
 
   router = inject(Router);
 
+  private authService = inject(AuthService);
+  private readonly destroyRef = inject(DestroyRef);
+
   loginForm = new FormGroup({
     dni: new FormControl<number | null>(null, [Validators.required]),
     password: new FormControl<string | null>(null, [Validators.required]),
   });
 
   login() {
-    this.router.navigate(['/dashboard']);
+    if (!this.loginForm.valid) {
+      return;
+    }
+    //console.log(this.loginForm);
+    this.authService
+      .login(this.loginForm.value as Login)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe();
   }
 }

@@ -41,8 +41,3 @@ export interface CreateUsuarioDTO {
   saldo?: number;
   observaciones?: string;
 }
-
-export interface LoginInfo {
-  dni: number;
-  password: string;
-}

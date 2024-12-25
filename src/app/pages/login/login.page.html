@@ -1,8 +1,8 @@
 <ion-content class="ion-padding">
   <div class="card-container">
-    <ion-card>
+    <ion-card class="max-w-xl mx-auto">
       <ion-card-header>
-        <ion-card-title> Iniciar Sesión </ion-card-title>
+        <ion-card-title class="text-center"> Iniciar Sesión </ion-card-title>
       </ion-card-header>
       <!-- <ion-grid>
         <ion-row>
@@ -16,24 +16,26 @@
           </ion-col>
         </ion-row>
       </ion-grid> -->
-      <ion-card-content formGroupName="loginForm" class="loginFormContainer">
+      <ion-card-content class="loginFormContainer">
 
-        <ion-input required label="DNI" labelPlacement="floating" fill="solid" formControlName="dni" type="number"
-          class="loginInput bg-transparent rounded-lg"></ion-input>
-        <ion-input required label="Contraseña" labelPlacement="floating" fill="solid" formControlName="password"
-          type="password" class="loginInput bg-transparent rounded-lg"></ion-input>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
+          <ion-input required label="DNI" labelPlacement="floating" fill="solid" formControlName="dni" type="number"
+            class="loginInput bg-transparent rounded-lg"></ion-input>
+          <ion-input required label="Contraseña" labelPlacement="floating" fill="solid" formControlName="password"
+            type="password" class="loginInput bg-transparent rounded-lg"></ion-input>
 
-        <!-- <ion-item>
-          <ion-input required labelPlacement="floating" formControlName="Usuario" type="text">
-            <ion-label slot="label">Usuario <ion-text color="danger">*</ion-text></ion-label>
-          </ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-input required labelPlacement="floating" formControlName="password" type="password">
-            <ion-label slot="label">Contraseña <ion-text color="danger">*</ion-text></ion-label>
-          </ion-input>
-        </ion-item> -->
-        <ion-button (click)="login()" expand="block" class="loginButton" color="primary">Ingresar</ion-button>
+          <!-- <ion-item>
+            <ion-input required labelPlacement="floating" formControlName="Usuario" type="text">
+              <ion-label slot="label">Usuario <ion-text color="danger">*</ion-text></ion-label>
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input required labelPlacement="floating" formControlName="password" type="password">
+              <ion-label slot="label">Contraseña <ion-text color="danger">*</ion-text></ion-label>
+            </ion-input>
+          </ion-item> -->
+          <ion-button (click)="login()" expand="block" class="loginButton" color="primary">Ingresar</ion-button>
+        </form>
       </ion-card-content>
     </ion-card>
   </div>

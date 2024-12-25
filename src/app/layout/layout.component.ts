@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonHeader,
@@ -14,6 +14,7 @@ import {
   IonLabel,
   IonRouterOutlet,
 } from '@ionic/angular/standalone';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-layout',
@@ -38,4 +39,16 @@ import {
 })
 export class LayoutComponent {
   constructor() {}
+
+  private authService = inject(AuthService);
+
+  user = computed(() => this.authService.user());
+
+  getUser() {
+    console.log(this.user());
+  }
+
+  logOut() {
+    this.authService.logout();
+  }
 }
