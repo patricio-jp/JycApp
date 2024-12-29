@@ -19,8 +19,10 @@
       <div class="flex space-x-2 items-center">
         <ion-input formControlName="credito" readonly="true" label="Crédito:" class="w-full"></ion-input>
         <ion-button (click)="searchCredito()" class="text-nowrap">
-          <ion-icon slot="start" name="search"></ion-icon>
-          Buscar por crédito o por cliente
+          <ion-icon slot="start" class="me-0 lg:me-2" name="search"></ion-icon>
+          <span class="hidden lg:inline">
+            Buscar por crédito o por cliente
+          </span>
         </ion-button>
       </div>
     </div>

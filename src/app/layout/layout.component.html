@@ -4,8 +4,6 @@
       <ion-toolbar color="primary">
         <ion-title>Menu</ion-title>
       </ion-toolbar>
-      <button (click)="getUser()">Click to get user</button>
-      <button (click)="logOut()">Click to Log Out</button>
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
@@ -41,6 +39,28 @@
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>JyC Amoblamientos</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="popoverUser($event)" class="lg:hidden">
+            <ion-icon slot="icon-only" name="person-circle"></ion-icon>
+          </ion-button>
+          <button id="profileButton" (click)="popoverUser($event)"
+            class="hidden lg:block px-5 py-2.5 rounded-md text-sm mr-6 font-bold hover:bg-gray-200 dark:hover:bg-gray-700">
+            {{user()?.apellido + ', ' + user()?.nombre}}
+          </button>
+          <!-- <ion-popover trigger="profileButton" [dismissOnSelect]="true">
+            <ng-template>
+              <ion-content class="ion-padding text-center space-y-2">
+                <h3 class="font-bold">{{user()?.apellido + ', ' + user()?.nombre}}</h3>
+                <p>{{user()?.rol}}</p>
+                <hr class="my-2">
+                <ion-button (click)="logOut()">
+                  <ion-icon slot="start" name="log-out-outline"></ion-icon>
+                  Cerrar Sesión
+                </ion-button>
+              </ion-content>
+            </ng-template>
+          </ion-popover> -->
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
     <ion-router-outlet></ion-router-outlet>

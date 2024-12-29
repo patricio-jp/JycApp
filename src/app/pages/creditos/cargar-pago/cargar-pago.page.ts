@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -43,10 +43,25 @@ import { Router } from '@angular/router';
   ],
 })
 export class CargarPagoPage {
+  @Input() credito?: Credito;
+
   constructor() {
     addIcons({
       search,
     });
+
+    const navigation = this.router.getCurrentNavigation();
+
+    if (navigation?.extras.state) {
+      this.credito = navigation.extras.state['credito'];
+      if (this.credito) {
+        this.selectedCredito = this.credito;
+        this.nuevoPago.patchValue({
+          creditoId: this.credito.id,
+          credito: this.credito?.venta.comprobante,
+        });
+      }
+    }
   }
 
   private formBuilder = inject(FormBuilder);

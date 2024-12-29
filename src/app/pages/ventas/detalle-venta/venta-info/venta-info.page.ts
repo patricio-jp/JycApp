@@ -17,6 +17,7 @@ import {
 import { Periodo, EstadoCredito, Credito } from 'src/app/interfaces/credito';
 import { CreditoInfoComponent } from 'src/app/pages/creditos/detalle-credito/credito-info/credito-info.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-venta-info',
@@ -38,6 +39,7 @@ export class VentaInfoPage {
   @Input() venta?: Venta;
 
   modalCtrl = inject(ModalController);
+  router = inject(Router);
 
   condicionVenta = CondicionOperacion;
   estadosVenta = EstadoOperacion;
@@ -71,5 +73,11 @@ export class VentaInfoPage {
       alert('No crédito');
     }
     //console.log(data, role);
+  }
+
+  cargarPagoACredito(credito: Credito) {
+    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+      state: { credito },
+    });
   }
 }

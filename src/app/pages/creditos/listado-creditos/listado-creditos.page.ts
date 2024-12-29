@@ -1,19 +1,15 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
   IonLoading,
-  IonSpinner,
   IonSearchbar,
-  IonButton,
-  IonIcon,
   ModalController,
 } from '@ionic/angular/standalone';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { CreditosService } from 'src/app/services/creditos.service';
 import {
   Credito,
@@ -32,17 +28,13 @@ import { CreditoInfoComponent } from '../detalle-credito/credito-info/credito-in
   styleUrls: ['./listado-creditos.page.scss'],
   standalone: true,
   imports: [
-    IonIcon,
-    IonButton,
     IonSearchbar,
-    IonSpinner,
     IonContent,
     IonHeader,
     IonTitle,
     IonToolbar,
     IonLoading,
     CommonModule,
-    RouterLink,
     FaIconComponent,
   ],
 })
@@ -85,5 +77,11 @@ export class ListadoCreditosPage implements OnInit {
 
   viewDesktopDetails(id?: number) {
     this.router.navigate(['./dashboard/creditos/detalle', id]);
+  }
+
+  cargarPagoACredito(credito: Credito) {
+    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+      state: { credito },
+    });
   }
 }

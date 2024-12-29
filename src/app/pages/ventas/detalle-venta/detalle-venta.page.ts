@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -6,12 +6,10 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonCardSubtitle,
   IonCardHeader,
   IonCard,
   IonCardTitle,
   IonCardContent,
-  IonLabel,
   ModalController,
 } from '@ionic/angular/standalone';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -35,12 +33,10 @@ import { CreditoInfoComponent } from '../../creditos/detalle-credito/credito-inf
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonCardSubtitle,
     IonCardHeader,
     IonCard,
     IonCardTitle,
     IonCardContent,
-    IonLabel,
     RouterLink,
     CommonModule,
     FormsModule,
@@ -82,5 +78,11 @@ export class DetalleVentaPage {
 
   viewDesktopCreditoDetails(id?: number) {
     this.router.navigate(['./dashboard/creditos/detalle', id]);
+  }
+
+  cargarPagoACredito(credito: Credito) {
+    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+      state: { credito },
+    });
   }
 }

@@ -1,0 +1,15 @@
+<ion-content class="ion-padding">
+  <div [innerHTML]="data?.content"></div>
+  @if (data?.buttons) {
+  <div class="mt-2">
+    @for (button of data.buttons; track $index) {
+    <ion-button [color]="button.color || 'primary'" (click)="onAction(button.action)">
+      @if (button.icon) {
+      <ion-icon slot="{{button.icon.slot}}" name="{{button.icon.icon}}"></ion-icon>
+      }
+      {{ button.text }}
+    </ion-button>
+    }
+  </div>
+  }
+</ion-content>

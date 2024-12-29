@@ -85,10 +85,16 @@
           <td class="px-4 py-3">{{credito.fechaUltimoPago | date}}</td>
           <td class="px-4 py-3">{{estadosCredito[credito.estado]}}</td>
           <td class="p-2">
+          <td class="p-2 space-x-2">
             <button
-              class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
-              (click)="viewCreditoDetails(credito)">
+              class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block lg:hidden"
+              (click)="viewCreditoDetails(credito)" title="Detalles">
               <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+            </button>
+            <button
+              class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block"
+              (click)="cargarPagoACredito(credito)" title="Cargar Pago">
+              <fa-icon [icon]="['fas', 'file-invoice-dollar']"></fa-icon>
             </button>
           </td>
         </tr>
