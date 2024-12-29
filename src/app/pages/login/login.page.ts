@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject } from '@angular/core';
+import { Component, DestroyRef, inject, OnDestroy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
@@ -18,6 +18,7 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Login } from 'src/app/interfaces/login';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -35,13 +36,19 @@ import { Login } from 'src/app/interfaces/login';
     ReactiveFormsModule,
   ],
 })
-export class LoginPage {
+export class LoginPage implements OnDestroy {
   constructor() {}
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
 
   router = inject(Router);
 
   private authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
+
+  private subscriptions = new Subscription();
 
   loginForm = new FormGroup({
     dni: new FormControl<number | null>(null, [Validators.required]),
@@ -53,9 +60,11 @@ export class LoginPage {
       return;
     }
     //console.log(this.loginForm);
-    this.authService
-      .login(this.loginForm.value as Login)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe();
+    this.subscriptions.add(
+      this.authService
+        .login(this.loginForm.value as Login)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe()
+    );
   }
 }

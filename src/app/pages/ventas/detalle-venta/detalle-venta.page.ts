@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -22,6 +22,7 @@ import {
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Credito, EstadoCredito, Periodo } from 'src/app/interfaces/credito';
 import { CreditoInfoComponent } from '../../creditos/detalle-credito/credito-info/credito-info.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-venta',
@@ -43,11 +44,12 @@ import { CreditoInfoComponent } from '../../creditos/detalle-credito/credito-inf
     FaIconComponent,
   ],
 })
-export class DetalleVentaPage {
+export class DetalleVentaPage implements OnDestroy {
   private route: ActivatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private ventasService = inject(VentasService);
   private modalCtrl = inject(ModalController);
+  private subscriptions = new Subscription();
 
   venta: Venta | undefined;
   condicionVenta = CondicionOperacion;
@@ -57,9 +59,15 @@ export class DetalleVentaPage {
 
   constructor() {
     const ventaID = Number(this.route.snapshot.params['id']);
-    this.ventasService
-      .getVenta(ventaID)
-      .subscribe((venta) => (this.venta = venta));
+    this.subscriptions.add(
+      this.ventasService
+        .getVenta(ventaID)
+        .subscribe((venta) => (this.venta = venta))
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   async viewCreditoDetails(credito: Credito) {

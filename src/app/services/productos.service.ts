@@ -5,7 +5,7 @@ import {
   Producto,
   ProductosAPIResponse,
 } from '../interfaces/producto';
-import { catchError, of, tap } from 'rxjs';
+import { catchError, of, take, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -31,6 +31,7 @@ export class ProductosService {
     this.httpClient
       .get<ProductosAPIResponse>(this.apiEndpoint)
       .pipe(
+        take(1),
         catchError((error) => {
           this.errorSignal.set('Error al cargar los productos');
           this.loadingSignal.set(false);

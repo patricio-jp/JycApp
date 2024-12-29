@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   IonContent,
@@ -17,6 +17,7 @@ import { Cliente, EstadoCliente } from 'src/app/interfaces/cliente';
 import { EstadoOperacion, Venta } from 'src/app/interfaces/operaciones';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.page';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -36,11 +37,13 @@ import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.
     FaIconComponent,
   ],
 })
-export class DetalleClientePage {
+export class DetalleClientePage implements OnDestroy {
   route: ActivatedRoute = inject(ActivatedRoute);
   private clientesService = inject(ClientesService);
   private router = inject(Router);
   private modalCtrl = inject(ModalController);
+
+  private suscriptions = new Subscription();
 
   cliente?: Cliente;
 
@@ -49,9 +52,14 @@ export class DetalleClientePage {
 
   constructor() {
     const clienteID = Number(this.route.snapshot.params['id']);
-    this.clientesService
-      .getCliente(clienteID)
-      .subscribe((cliente) => (this.cliente = cliente));
+    this.suscriptions.add(
+      this.clientesService
+        .getCliente(clienteID)
+        .subscribe((cliente) => (this.cliente = cliente))
+    );
+  }
+  ngOnDestroy(): void {
+    this.suscriptions.unsubscribe();
   }
 
   async ventaDetails(venta: Venta) {

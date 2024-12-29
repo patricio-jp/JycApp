@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -15,6 +15,7 @@ import {
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { ClientesService } from 'src/app/services/clientes.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nuevo-cliente',
@@ -23,10 +24,16 @@ import { ClientesService } from 'src/app/services/clientes.service';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule],
 })
-export class NuevoClientePage {
+export class NuevoClientePage implements OnDestroy {
   constructor() {
     addIcons({ trashOutline });
   }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  private subscriptions = new Subscription();
 
   private formBuilder = inject(FormBuilder);
   private clientesService = inject(ClientesService);
@@ -103,10 +110,12 @@ export class NuevoClientePage {
         estado: this.nuevoCliente.value.estado ?? 0,
         observaciones: this.nuevoCliente.value.observaciones ?? '',
       };
-      this.clientesService.createCliente(cliente).subscribe((newCliente) => {
-        //console.log(newCliente);
-        this.clientesService.getClientes();
-      });
+      this.subscriptions.add(
+        this.clientesService.createCliente(cliente).subscribe((newCliente) => {
+          //console.log(newCliente);
+          this.clientesService.getClientes();
+        })
+      );
     }
   }
 

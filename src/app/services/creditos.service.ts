@@ -6,7 +6,7 @@ import {
   CreditoAPIResponse,
 } from '../interfaces/credito';
 import { HttpClient } from '@angular/common/http';
-import { catchError, of, Observable } from 'rxjs';
+import { catchError, of, Observable, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -32,6 +32,7 @@ export class CreditosService {
     this.httpClient
       .get<CreditoAPIResponse>(this.apiEndpoint)
       .pipe(
+        take(1),
         catchError((error) => {
           this.errorSignal.set('Error al cargar los créditos');
           this.loadingSignal.set(false);

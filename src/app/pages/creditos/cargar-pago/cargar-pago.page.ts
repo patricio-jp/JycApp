@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -24,6 +24,7 @@ import { CreditosService } from 'src/app/services/creditos.service';
 import { addIcons } from 'ionicons';
 import { search } from 'ionicons/icons';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cargar-pago',
@@ -42,7 +43,7 @@ import { Router } from '@angular/router';
     ReactiveFormsModule,
   ],
 })
-export class CargarPagoPage {
+export class CargarPagoPage implements OnDestroy {
   @Input() credito?: Credito;
 
   constructor() {
@@ -64,11 +65,17 @@ export class CargarPagoPage {
     }
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private modalCtrl = inject(ModalController);
   private toastCtrl = inject(ToastController);
   private creditosService = inject(CreditosService);
+
+  private subscriptions = new Subscription();
 
   selectedCredito?: Credito;
   estadosCreditos = EstadoCredito;
@@ -124,21 +131,23 @@ export class CargarPagoPage {
             this.selectedCredito?.id ||
             0,
         };
-        this.creditosService.cargarPago(pago).subscribe(async (credito) => {
-          const toast = await this.toastCtrl.create({
-            position: 'top',
-            duration: 3000,
-            message: 'Pago cargado exitosamente',
-          });
+        this.subscriptions.add(
+          this.creditosService.cargarPago(pago).subscribe(async (credito) => {
+            const toast = await this.toastCtrl.create({
+              position: 'top',
+              duration: 3000,
+              message: 'Pago cargado exitosamente',
+            });
 
-          await toast.present();
+            await toast.present();
 
-          toast.onDidDismiss().then(() => {
-            this.creditosService.getCreditos();
-            this.router.navigate(['./dashboard/creditos/listado']);
-            this.nuevoPago.reset();
-          });
-        });
+            toast.onDidDismiss().then(() => {
+              this.creditosService.getCreditos();
+              this.router.navigate(['./dashboard/creditos/listado']);
+              this.nuevoPago.reset();
+            });
+          })
+        );
       } catch (error) {
         const toast = await this.toastCtrl.create({
           position: 'top',

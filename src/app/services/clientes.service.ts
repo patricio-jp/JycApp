@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { catchError, Observable, of } from 'rxjs';
+import { catchError, Observable, of, take } from 'rxjs';
 import {
   Cliente,
   ClienteAPIResponse,
@@ -31,6 +31,7 @@ export class ClientesService {
     this.httpClient
       .get<ClienteAPIResponse>(this.apiEndpoint)
       .pipe(
+        take(1),
         catchError((error) => {
           this.errorSignal.set('Error al cargar los clientes');
           this.loadingSignal.set(false);

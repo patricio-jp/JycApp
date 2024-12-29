@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -14,6 +14,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { ProductosService } from 'src/app/services/productos.service';
 import { Producto } from 'src/app/interfaces/producto';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-producto',
@@ -33,15 +34,23 @@ import { Producto } from 'src/app/interfaces/producto';
     CommonModule,
   ],
 })
-export class DetalleProductoPage {
+export class DetalleProductoPage implements OnDestroy {
   route: ActivatedRoute = inject(ActivatedRoute);
   productosService = inject(ProductosService);
   producto?: Producto;
 
+  private subscriptions = new Subscription();
+
   constructor() {
     const productoID = Number(this.route.snapshot.params['id']);
-    this.productosService
-      .getProducto(productoID)
-      .subscribe((producto) => (this.producto = producto));
+    this.subscriptions.add(
+      this.productosService
+        .getProducto(productoID)
+        .subscribe((producto) => (this.producto = producto))
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

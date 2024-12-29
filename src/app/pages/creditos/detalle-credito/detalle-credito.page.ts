@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -20,6 +20,7 @@ import {
   Periodo,
 } from 'src/app/interfaces/credito';
 import { CreditoInfoComponent } from './credito-info/credito-info.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-detalle-credito',
@@ -39,10 +40,12 @@ import { CreditoInfoComponent } from './credito-info/credito-info.component';
     CreditoInfoComponent,
   ],
 })
-export class DetalleCreditoPage {
+export class DetalleCreditoPage implements OnDestroy {
   route: ActivatedRoute = inject(ActivatedRoute);
   creditosService = inject(CreditosService);
   credito: Credito | undefined;
+
+  private subscriptions = new Subscription();
 
   estadosCreditos = EstadoCredito;
   estadosCuota = EstadoCuota;
@@ -50,8 +53,14 @@ export class DetalleCreditoPage {
 
   constructor() {
     const creditoId = Number(this.route.snapshot.params['id']);
-    this.creditosService.getCredito(creditoId).subscribe((credito) => {
-      this.credito = credito;
-    });
+    this.subscriptions.add(
+      this.creditosService.getCredito(creditoId).subscribe((credito) => {
+        this.credito = credito;
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

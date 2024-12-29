@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -13,6 +13,7 @@ import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { CreateProductoDTO, Producto } from 'src/app/interfaces/producto';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nuevo-producto',
@@ -21,15 +22,20 @@ import { CreateProductoDTO, Producto } from 'src/app/interfaces/producto';
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule],
 })
-export class NuevoProductoPage {
+export class NuevoProductoPage implements OnDestroy {
   constructor() {
     addIcons({ trashOutline });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private productsService = inject(ProductosService);
   private toastCtrl = inject(ToastController);
+  private subscriptions = new Subscription();
 
   nuevoProducto = this.formBuilder.group({
     codigo: ['', Validators.required],
@@ -106,21 +112,23 @@ export class NuevoProductoPage {
           precios: this.precios.value || [],
           stock: this.nuevoProducto.value.stock || 0,
         };
-        this.productsService
-          .createProducto(producto)
-          .subscribe(async (nuevoProd) => {
-            const toast = await this.toastCtrl.create({
-              position: 'top',
-              duration: 3000,
-              message: 'Producto creado exitosamente',
-            });
+        this.subscriptions.add(
+          this.productsService
+            .createProducto(producto)
+            .subscribe(async (nuevoProd) => {
+              const toast = await this.toastCtrl.create({
+                position: 'top',
+                duration: 3000,
+                message: 'Producto creado exitosamente',
+              });
 
-            await toast.present();
+              await toast.present();
 
-            toast.onDidDismiss().then(() => {
-              this.router.navigate(['./dashboard/productos/inventario']);
-            });
-          });
+              toast.onDidDismiss().then(() => {
+                this.router.navigate(['./dashboard/productos/inventario']);
+              });
+            })
+        );
       } catch (error) {
         const toast = await this.toastCtrl.create({
           position: 'top',

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -14,6 +14,7 @@ import { Cliente, EstadoCliente } from 'src/app/interfaces/cliente';
 import { EstadoOperacion, Venta } from 'src/app/interfaces/operaciones';
 import { VentaInfoPage } from 'src/app/pages/ventas/detalle-venta/venta-info/venta-info.page';
 import { ClientesService } from 'src/app/services/clientes.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cliente-info',
@@ -31,11 +32,13 @@ import { ClientesService } from 'src/app/services/clientes.service';
     FaIconComponent,
   ],
 })
-export class ClienteInfoComponent implements OnInit {
+export class ClienteInfoComponent implements OnInit, OnDestroy {
   @Input() clienteID!: number;
   cliente!: Cliente;
 
   private clientesService = inject(ClientesService);
+
+  private suscriptions = new Subscription();
 
   modalCtrl = inject(ModalController);
 
@@ -45,11 +48,15 @@ export class ClienteInfoComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.clientesService
-      .getCliente(this.clienteID)
-      .subscribe((cliente) => (this.cliente = cliente));
+    this.suscriptions.add(
+      this.clientesService
+        .getCliente(this.clienteID)
+        .subscribe((cliente) => (this.cliente = cliente))
+    );
   }
-
+  ngOnDestroy(): void {
+    this.suscriptions.unsubscribe();
+  }
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }

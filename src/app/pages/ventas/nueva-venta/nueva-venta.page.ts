@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormArray,
@@ -30,6 +30,7 @@ import { Producto } from 'src/app/interfaces/producto';
 import { Cliente } from 'src/app/interfaces/cliente';
 import { ClienteSelectorComponent } from './cliente-selector/cliente-selector.component';
 import { ProductoSelectorComponent } from './producto-selector/producto-selector.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-venta',
@@ -38,7 +39,7 @@ import { ProductoSelectorComponent } from './producto-selector/producto-selector
   standalone: true,
   imports: [IonicModule, CommonModule, ReactiveFormsModule],
 })
-export class NuevaVentaPage {
+export class NuevaVentaPage implements OnDestroy {
   constructor() {
     addIcons({
       trashOutline,
@@ -49,10 +50,15 @@ export class NuevaVentaPage {
     });
   }
 
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private toastCtrl = inject(ToastController);
   private modalCtrl = inject(ModalController);
+  private subscriptions = new Subscription();
 
   private ventasService = inject(VentasService);
   private productosService = inject(ProductosService);
@@ -314,19 +320,21 @@ export class NuevaVentaPage {
       };
       console.log(venta);
       try {
-        this.ventasService.createVenta(venta).subscribe(async (nuevaVta) => {
-          const toast = await this.toastCtrl.create({
-            position: 'top',
-            duration: 3000,
-            message: 'Venta cargada exitosamente',
-          });
+        this.subscriptions.add(
+          this.ventasService.createVenta(venta).subscribe(async (nuevaVta) => {
+            const toast = await this.toastCtrl.create({
+              position: 'top',
+              duration: 3000,
+              message: 'Venta cargada exitosamente',
+            });
 
-          await toast.present();
+            await toast.present();
 
-          toast.onDidDismiss().then(() => {
-            this.router.navigate(['./dashboard/ventas/listado']);
-          });
-        });
+            toast.onDidDismiss().then(() => {
+              this.router.navigate(['./dashboard/ventas/listado']);
+            });
+          })
+        );
       } catch (error) {
         const toast = await this.toastCtrl.create({
           position: 'top',

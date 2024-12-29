@@ -5,7 +5,7 @@ import {
   Venta,
   VentasAPIResponse,
 } from '../interfaces/operaciones';
-import { catchError, count, of } from 'rxjs';
+import { catchError, count, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -31,6 +31,7 @@ export class VentasService {
     this.httpClient
       .get<VentasAPIResponse>(this.apiEndpoint)
       .pipe(
+        take(1),
         catchError((error) => {
           this.errorSignal.set('Error al cargar las ventas');
           this.loadingSignal.set(false);
