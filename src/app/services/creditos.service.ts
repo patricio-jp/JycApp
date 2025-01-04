@@ -4,6 +4,8 @@ import {
   CreateCreditoDTO,
   Credito,
   CreditoAPIResponse,
+  EstadoCredito,
+  Periodo,
 } from '../interfaces/credito';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of, Observable, take } from 'rxjs';
@@ -27,6 +29,67 @@ export class CreditosService {
   loadingSignal = signal<boolean>(true);
 
   errorSignal = signal<string | null>(null);
+
+  cantCreditosTotales = computed(() => this.listadoCreditos().length);
+
+  cantCreditosPendientes = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) => credito.estado === EstadoCredito.Pendiente
+      ).length
+  );
+  cantCreditosActivos = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) => credito.estado === EstadoCredito.Activo
+      ).length
+  );
+  cantCreditosPagados = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) => credito.estado === EstadoCredito.Pagado
+      ).length
+  );
+  cantCreditosEnDeuda = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) => credito.estado === EstadoCredito.EnDeuda
+      ).length
+  );
+  cantCreditosAnulados = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) => credito.estado === EstadoCredito.Anulado
+      ).length
+  );
+
+  cantCreditosActivosSemanales = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) =>
+          credito.estado !== EstadoCredito.Anulado &&
+          credito.estado !== EstadoCredito.Pagado &&
+          credito.periodo === Periodo.Semanal
+      ).length
+  );
+  cantCreditosActivosQuincenales = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) =>
+          credito.estado !== EstadoCredito.Anulado &&
+          credito.estado !== EstadoCredito.Pagado &&
+          credito.periodo === Periodo.Quincenal
+      ).length
+  );
+  cantCreditosActivosMensuales = computed(
+    () =>
+      this.listadoCreditos().filter(
+        (credito) =>
+          credito.estado !== EstadoCredito.Anulado &&
+          credito.estado !== EstadoCredito.Pagado &&
+          credito.periodo === Periodo.Mensual
+      ).length
+  );
 
   getCreditos() {
     this.httpClient

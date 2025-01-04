@@ -4,22 +4,68 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">home</ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="6">
-        <ion-card>
-          A
-        </ion-card>
-      </ion-col>
-      <ion-col size="6">
-        B
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <section class="grid md:grid-cols-3 gap-5 items-center justify-center">
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de clientes</h4>
+      <p class="text-4xl text-right">{{cantClientesTotales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes con créditos activos</h4>
+      <p class="text-4xl text-right">{{cantClientesActivos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes pendientes</h4>
+      <p class="text-4xl text-right">{{cantClientesPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Clientes con deuda</h4>
+      <p class="text-4xl text-right">{{cantClientesConDeuda()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de ventas</h4>
+      <p class="text-4xl text-right">{{cantVentasTotales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Pendientes de aprobación</h4>
+      <p class="text-4xl text-right">{{cantVentasPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Pendientes de entrega</h4>
+      <p class="text-4xl text-right">{{cantVentasParaEntrega()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de créditos</h4>
+      <p class="text-4xl text-right">{{cantCreditosTotales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Activos</h4>
+      <p class="text-4xl text-right">{{cantCreditosActivos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Pendientes de aprobación</h4>
+      <p class="text-4xl text-right">{{cantCreditosPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos con deuda</h4>
+      <p class="text-4xl text-right">{{cantCreditosEnDeuda()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-green-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Semanales</h4>
+      <p class="text-4xl text-right">{{cantCreditosSemanales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-yellow-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Quincenales</h4>
+      <p class="text-4xl text-right">{{cantCreditosQuincenales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-indigo-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Mensuales</h4>
+      <p class="text-4xl text-right">{{cantCreditosMensuales()}}</p>
+    </div>
+  </section>
 </ion-content>

@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   IonTabs,
   IonIcon,
   IonTabButton,
   IonTabBar,
-  IonHeader,
-  IonToolbar,
-  IonTitle,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { barChartOutline, listOutline, personAddOutline } from 'ionicons/icons';
@@ -16,15 +14,7 @@ import { barChartOutline, listOutline, personAddOutline } from 'ionicons/icons';
   templateUrl: './usuarios.page.html',
   styleUrls: ['./usuarios.page.scss'],
   standalone: true,
-  imports: [
-    IonTitle,
-    IonToolbar,
-    IonHeader,
-    IonTabBar,
-    IonTabButton,
-    IonIcon,
-    IonTabs,
-  ],
+  imports: [IonTabBar, IonTabButton, IonIcon, IonTabs, RouterLink],
 })
 export class UsuariosPage {
   constructor() {

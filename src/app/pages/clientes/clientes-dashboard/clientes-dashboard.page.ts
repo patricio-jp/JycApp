@@ -8,7 +8,6 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { ClientesService } from 'src/app/services/clientes.service';
-import { EstadoCliente } from 'src/app/interfaces/cliente';
 
 @Component({
   selector: 'app-clientes-dashboard',
@@ -27,38 +26,13 @@ import { EstadoCliente } from 'src/app/interfaces/cliente';
 export class ClientesDashboardPage implements OnInit {
   private clientesService = inject(ClientesService);
 
-  listadoClientes = computed(() => this.clientesService.listadoClientes());
-  cantClientes = computed(() => this.listadoClientes().length);
-  cantPendientes = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.AConfirmar
-      ).length
-  );
-  cantActivos = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Activo
-      ).length
-  );
-  cantInactivos = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Inactivo
-      ).length
-  );
-  cantConDeuda = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.ConDeuda
-      ).length
-  );
-  cantIncobrables = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Incobrable
-      ).length
-  );
+  //listadoClientes = computed(() => this.clientesService.listadoClientes());
+  cantClientes = computed(() => this.clientesService.cantClientesTotales());
+  cantPendientes = computed(() => this.clientesService.cantPendientes());
+  cantActivos = computed(() => this.clientesService.cantActivos());
+  cantInactivos = computed(() => this.clientesService.cantInactivos());
+  cantConDeuda = computed(() => this.clientesService.cantConDeuda());
+  cantIncobrables = computed(() => this.clientesService.cantIncobrables());
 
   constructor() {}
 

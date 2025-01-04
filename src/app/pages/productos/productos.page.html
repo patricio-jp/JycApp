@@ -1,14 +1,14 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="dashboard">
+    <ion-tab-button routerLink="/dashboard/productos" routerDirection="root">
       <ion-icon name="bar-chart-outline"></ion-icon>
       Dashboard
     </ion-tab-button>
-    <ion-tab-button tab="inventario">
+    <ion-tab-button routerLink="/dashboard/productos/inventario" routerDirection="forward">
       <ion-icon name="cube-outline"></ion-icon>
       Inventario
     </ion-tab-button>
-    <ion-tab-button tab="nuevo">
+    <ion-tab-button routerLink="/dashboard/productos/nuevo" routerDirection="forward">
       <ion-icon name="add-outline"></ion-icon>
       Nuevo Producto
     </ion-tab-button>

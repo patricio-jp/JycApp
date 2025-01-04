@@ -5,6 +5,7 @@ import {
   Cliente,
   ClienteAPIResponse,
   CreateClienteDTO,
+  EstadoCliente,
 } from '../interfaces/cliente';
 import { environment } from 'src/environments/environment';
 
@@ -26,6 +27,39 @@ export class ClientesService {
   loadingSignal = signal<boolean>(true);
 
   errorSignal = signal<string | null>(null);
+
+  cantClientesTotales = computed(() => this.listadoClientes().length);
+
+  cantPendientes = computed(
+    () =>
+      this.listadoClientes().filter(
+        (cliente) => cliente.estado === EstadoCliente.AConfirmar
+      ).length
+  );
+  cantActivos = computed(
+    () =>
+      this.listadoClientes().filter(
+        (cliente) => cliente.estado === EstadoCliente.Activo
+      ).length
+  );
+  cantInactivos = computed(
+    () =>
+      this.listadoClientes().filter(
+        (cliente) => cliente.estado === EstadoCliente.Inactivo
+      ).length
+  );
+  cantConDeuda = computed(
+    () =>
+      this.listadoClientes().filter(
+        (cliente) => cliente.estado === EstadoCliente.ConDeuda
+      ).length
+  );
+  cantIncobrables = computed(
+    () =>
+      this.listadoClientes().filter(
+        (cliente) => cliente.estado === EstadoCliente.Incobrable
+      ).length
+  );
 
   getClientes() {
     this.httpClient

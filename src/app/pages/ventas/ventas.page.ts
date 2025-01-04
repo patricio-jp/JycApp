@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   IonTabs,
   IonIcon,
   IonTabButton,
   IonTabBar,
-  IonHeader,
-  IonToolbar,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import { addOutline, barChartOutline, listOutline } from 'ionicons/icons';
@@ -15,7 +14,7 @@ import { addOutline, barChartOutline, listOutline } from 'ionicons/icons';
   templateUrl: './ventas.page.html',
   styleUrls: ['./ventas.page.scss'],
   standalone: true,
-  imports: [IonToolbar, IonHeader, IonTabBar, IonTabButton, IonIcon, IonTabs],
+  imports: [IonTabBar, IonTabButton, IonIcon, IonTabs, RouterLink],
 })
 export class VentasPage {
   constructor() {

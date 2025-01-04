@@ -29,7 +29,6 @@ import { PopoverComponent } from '../components/popover/popover.component';
   styleUrls: ['layout.component.scss'],
   standalone: true,
   imports: [
-    IonPopover,
     IonIcon,
     IonButton,
     IonLabel,

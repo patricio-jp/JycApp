@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import {
   IonTabs,
   IonIcon,
@@ -13,7 +14,7 @@ import { barChartOutline, walletOutline, listOutline } from 'ionicons/icons';
   templateUrl: './creditos.page.html',
   styleUrls: ['./creditos.page.scss'],
   standalone: true,
-  imports: [IonTabBar, IonTabButton, IonIcon, IonTabs],
+  imports: [IonTabBar, IonTabButton, IonIcon, IonTabs, RouterLink],
 })
 export class CreditosPage {
   constructor() {

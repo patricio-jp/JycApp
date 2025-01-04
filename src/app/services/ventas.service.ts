@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import {
+  CondicionOperacion,
   CreateVentaDTO,
+  EstadoOperacion,
   Venta,
   VentasAPIResponse,
 } from '../interfaces/operaciones';
@@ -26,6 +28,52 @@ export class VentasService {
   loadingSignal = signal<boolean>(true);
 
   errorSignal = signal<string | null>(null);
+
+  cantVentasTotales = computed(() => this.listadoVentas().length);
+
+  cantVentasPendientes = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.estado === EstadoOperacion.Pendiente
+      ).length
+  );
+  cantVentasParaEntrega = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.estado === EstadoOperacion.ParaEntregar
+      ).length
+  );
+  cantVentasPagadas = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.estado === EstadoOperacion.Pagado
+      ).length
+  );
+  cantVentasEntregadas = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.estado === EstadoOperacion.Entregado
+      ).length
+  );
+  cantVentasAnuladas = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.estado === EstadoOperacion.Anulado
+      ).length
+  );
+
+  cantVentasACredito = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.condicion === CondicionOperacion.CTA_CTE
+      ).length
+  );
+  cantVentasAlContado = computed(
+    () =>
+      this.listadoVentas().filter(
+        (venta) => venta.condicion === CondicionOperacion.CONTADO
+      ).length
+  );
 
   getVentas() {
     this.httpClient
