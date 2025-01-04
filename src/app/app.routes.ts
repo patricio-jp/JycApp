@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { AuthGuardService, LoginGuard } from './guards/auth.guard';
+import { roleGuard } from './guards/role.guard';
+import { Rol } from './interfaces/usuario';
 
 export const routes: Routes = [
   {
@@ -53,6 +55,8 @@ export const routes: Routes = [
                 (m) => m.NuevoClientePage
               ),
             title: 'Nuevo cliente - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
           {
             path: 'detalle/:id',
@@ -76,6 +80,8 @@ export const routes: Routes = [
                 './pages/creditos/creditos-dashboard/creditos-dashboard.page'
               ).then((m) => m.CreditosDashboardPage),
             title: 'Créditos - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Cobrador] },
           },
           {
             path: 'listado',
@@ -84,6 +90,8 @@ export const routes: Routes = [
                 './pages/creditos/listado-creditos/listado-creditos.page'
               ).then((m) => m.ListadoCreditosPage),
             title: 'Listado de créditos - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Cobrador] },
           },
           {
             path: 'cargar-pago',
@@ -92,6 +100,8 @@ export const routes: Routes = [
                 (m) => m.CargarPagoPage
               ),
             title: 'Cargar Pago - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Cobrador] },
           },
           {
             path: 'detalle/:id',
@@ -100,6 +110,8 @@ export const routes: Routes = [
                 './pages/creditos/detalle-credito/detalle-credito.page'
               ).then((m) => m.DetalleCreditoPage),
             title: 'Detalle de crédito - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Cobrador] },
           },
         ],
       },
@@ -115,6 +127,8 @@ export const routes: Routes = [
                 './pages/ventas/ventas-dashboard/ventas-dashboard.page'
               ).then((m) => m.VentasDashboardPage),
             title: 'Ventas - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
           {
             path: 'listado',
@@ -123,6 +137,8 @@ export const routes: Routes = [
                 (m) => m.ListadoVentasPage
               ),
             title: 'Listado de ventas - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
           {
             path: 'nueva',
@@ -131,6 +147,8 @@ export const routes: Routes = [
                 (m) => m.NuevaVentaPage
               ),
             title: 'Nueva venta - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
           {
             path: 'detalle/:id',
@@ -139,6 +157,8 @@ export const routes: Routes = [
                 (m) => m.DetalleVentaPage
               ),
             title: 'Detalle de venta - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
         ],
       },
@@ -156,6 +176,8 @@ export const routes: Routes = [
                 './pages/productos/productos-dashboard/productos-dashboard.page'
               ).then((m) => m.ProductosDashboardPage),
             title: 'Productos - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
           {
             path: 'inventario',
@@ -164,6 +186,8 @@ export const routes: Routes = [
                 (m) => m.InventarioPage
               ),
             title: 'Inventario - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
           {
             path: 'nuevo',
@@ -172,6 +196,8 @@ export const routes: Routes = [
                 './pages/productos/nuevo-producto/nuevo-producto.page'
               ).then((m) => m.NuevoProductoPage),
             title: 'Nuevo producto - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
           {
             path: 'detalle/:id',
@@ -180,6 +206,8 @@ export const routes: Routes = [
                 './pages/productos/detalle-producto/detalle-producto.page'
               ).then((m) => m.DetalleProductoPage),
             title: 'Detalle de producto - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
         ],
       },
@@ -195,6 +223,8 @@ export const routes: Routes = [
                 './pages/usuarios/usuarios-dashboard/usuarios-dashboard.page'
               ).then((m) => m.UsuariosDashboardPage),
             title: 'Usuarios - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
           {
             path: 'listado',
@@ -203,6 +233,8 @@ export const routes: Routes = [
                 './pages/usuarios/listado-usuarios/listado-usuarios.page'
               ).then((m) => m.ListadoUsuariosPage),
             title: 'Listado de usuarios - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
           {
             path: 'nuevo',
@@ -211,6 +243,8 @@ export const routes: Routes = [
                 (m) => m.NuevoUsuarioPage
               ),
             title: 'Nuevo usuario - JyC Amoblamientos',
+            canActivate: [roleGuard],
+            data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
         ],
       },

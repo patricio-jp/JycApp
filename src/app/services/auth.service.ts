@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { IS_PUBLIC } from '../interceptors/jwt.interceptor';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Usuario } from '../interfaces/usuario';
+import { Rol, Usuario } from '../interfaces/usuario';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +40,25 @@ export class AuthService {
 
   isAuthenticated() {
     return !this.jwtHelper.isTokenExpired();
+  }
+
+  getUserRole(): Rol | null {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+      //console.log('Decoded Token: ', decodedToken);
+      const roleIndex = decodedToken.rol;
+
+      // Validar si el índice está dentro del enum
+      if (roleIndex !== undefined && roleIndex in Rol) {
+        return roleIndex as Rol;
+      }
+    }
+    return null;
+  }
+
+  hasRole(role: Rol): boolean {
+    return this.getUserRole() === role;
   }
 
   scheduleTokenRefresh(token: string): void {
