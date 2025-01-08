@@ -100,4 +100,8 @@ export class ClientesService {
   deleteCliente(id: number) {
     return this.httpClient.delete(this.apiEndpoint + id);
   }
+
+  forceDeleteCliente(id: number) {
+    return this.httpClient.delete(`${this.apiEndpoint + id}/force`);
+  }
 }

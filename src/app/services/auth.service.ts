@@ -70,8 +70,13 @@ export class AuthService {
       : Date.now();
     const refreshInterval = refreshTime - Date.now();
 
+    //console.log('Token expiration time:', expirationTime);
+    //console.log('Scheduled refresh time:', refreshTime);
+    //console.log('Refresh interval:', refreshInterval);
+
     if (refreshInterval > 0) {
       setTimeout(() => {
+        //console.log('Attempting to refresh token...');
         this.refreshToken()
           .pipe(takeUntilDestroyed(this.destroyRef))
           .subscribe();
@@ -102,22 +107,30 @@ export class AuthService {
 
   storeTokens(data: LoginSuccess): void {
     localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('refresh_token', data.refresh_token);
   }
 
   refreshToken(): Observable<LoginResponse | null> {
     const refresh_token = localStorage.getItem('refresh_token');
     if (!refresh_token) {
+      console.error('No refresh token available');
       return of();
     }
+
+    //console.log('Refreshing token with refresh token:', refresh_token);
 
     return this.httpClient
       .post<LoginResponse>(
         `${this.apiEndpoint}/token-refresh`,
-        { refresh_token },
+        { token: refresh_token },
         this.CONTEXT
       )
       .pipe(
-        catchError(() => of()),
+        catchError((error) => {
+          console.error('Error refreshing token:', error);
+          this.logout();
+          return of();
+        }),
         tap((data) => {
           const loginSuccessData = data as LoginSuccess;
           this.storeTokens(loginSuccessData);
