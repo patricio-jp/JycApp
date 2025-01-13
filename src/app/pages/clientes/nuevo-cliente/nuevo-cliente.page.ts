@@ -16,6 +16,7 @@ import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nuevo-cliente',
@@ -37,6 +38,7 @@ export class NuevoClientePage implements OnDestroy {
 
   private formBuilder = inject(FormBuilder);
   private clientesService = inject(ClientesService);
+  private router = inject(Router);
 
   nuevoCliente = this.formBuilder.group({
     dni: [null, Validators.required],
@@ -114,6 +116,8 @@ export class NuevoClientePage implements OnDestroy {
         this.clientesService.createCliente(cliente).subscribe((newCliente) => {
           //console.log(newCliente);
           this.clientesService.getClientes();
+          this.nuevoCliente.reset();
+          this.router.navigate(['./dashboard/clientes/listado']);
         })
       );
     }

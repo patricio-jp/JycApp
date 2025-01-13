@@ -125,7 +125,9 @@ export class NuevoProductoPage implements OnDestroy {
               await toast.present();
 
               toast.onDidDismiss().then(() => {
+                this.productsService.getProductos();
                 this.router.navigate(['./dashboard/productos/inventario']);
+                this.nuevoProducto.reset();
               });
             })
         );

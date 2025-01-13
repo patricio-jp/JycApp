@@ -331,6 +331,8 @@ export class NuevaVentaPage implements OnDestroy {
             await toast.present();
 
             toast.onDidDismiss().then(() => {
+              this.nuevaVenta.reset();
+              this.ventasService.getVentas();
               this.router.navigate(['./dashboard/ventas/listado']);
             });
           })
