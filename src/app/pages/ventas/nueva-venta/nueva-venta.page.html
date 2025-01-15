@@ -27,58 +27,60 @@
         <ion-input label="Comprobante" type="text" class="bg-transparent rounded-md w-full"
           formControlName="comprobante"></ion-input>
       </div>
-      <div class="col-span-4 lg:col-span-3 relative overflow-x-auto">
-        <table class="w-full text-sm text-gray-500 dark:text-gray-400">
-          <thead class="text-xs uppercase text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
-            <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">Código</th>
-              <th scope="col" class="px-4 py-3">Nombre</th>
-              <th scope="col" class="px-4 py-3">Cantidad</th>
-              <th scope="col" class="px-4 py-3">Precio Unitario</th>
-              <th scope="col" class="px-4 py-3">Subtotal</th>
-              <th scope="col" class="px-4 py-3"></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (producto of productos.controls; track $index) {
-            <tr class="text-center">
-              <td class="px-4 py-3">{{ producto.get('producto')?.value.id }}</td>
-              <td class="px-4 py-3">
-                {{producto.get('producto')?.value.codigo}}
-              </td>
-              <td class="px-4 py-3 text-left">
-                {{producto.get('producto')?.value.nombre}}
-              </td>
-              <td class="px-4 py-3 inline-flex items-center justify-center w-full">
-                <ion-button (click)="decreaseQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
-                  <ion-icon name="remove-circle-outline"></ion-icon>
-                </ion-button>
-                <span>{{ producto.get('cantidad')?.value }}</span>
-                <ion-button (click)="addQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
-                  <ion-icon name="add-circle-outline"></ion-icon>
-                </ion-button>
-              </td>
-              <td class="px-4 py-3">
-                {{producto.get('precioUnitario')?.value | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}
-              </td>
-              <td class="px-4 py-3">
-                {{ (producto.get('cantidad')?.value || 0) * (producto.get('precioUnitario')?.value || 0) | currency:
-                'ARS' : 'symbol': '1.2-2' : 'es-AR' }}
-              </td>
-              <td class="px-4 py-3">
-                <ion-button (click)="removeProducto(producto.get('producto_id')?.value)" color="danger" fill="clear">
-                  <ion-icon name="trash-outline"></ion-icon>
-                </ion-button>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
+      <div class="col-span-4 lg:col-span-3 w-full overflow-x-auto relative">
+        <div class="relative overflow-x-auto">
+          <table class="w-full text-sm text-gray-500 dark:text-gray-400">
+            <thead class="text-xs uppercase text-gray-700 dark:text-gray-400 bg-gray-50 dark:bg-gray-700">
+              <tr>
+                <th scope="col" class="px-4 py-3">ID</th>
+                <th scope="col" class="px-4 py-3">Código</th>
+                <th scope="col" class="px-4 py-3">Nombre</th>
+                <th scope="col" class="px-4 py-3">Cantidad</th>
+                <th scope="col" class="px-4 py-3">Precio Unitario</th>
+                <th scope="col" class="px-4 py-3">Subtotal</th>
+                <th scope="col" class="px-4 py-3"></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (producto of productos.controls; track $index) {
+              <tr class="text-center">
+                <td class="px-4 py-3">{{ producto.get('producto')?.value.id }}</td>
+                <td class="px-4 py-3">
+                  {{producto.get('producto')?.value.codigo}}
+                </td>
+                <td class="px-4 py-3 text-left">
+                  {{producto.get('producto')?.value.nombre}}
+                </td>
+                <td class="px-4 py-3 inline-flex items-center justify-center w-full">
+                  <ion-button (click)="decreaseQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
+                    <ion-icon name="remove-circle-outline"></ion-icon>
+                  </ion-button>
+                  <span>{{ producto.get('cantidad')?.value }}</span>
+                  <ion-button (click)="addQty(producto.get('producto_id')?.value)" color="medium" fill="clear">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                  </ion-button>
+                </td>
+                <td class="px-4 py-3">
+                  {{producto.get('precioUnitario')?.value | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}
+                </td>
+                <td class="px-4 py-3">
+                  {{ (producto.get('cantidad')?.value || 0) * (producto.get('precioUnitario')?.value || 0) | currency:
+                  'ARS' : 'symbol': '1.2-2' : 'es-AR' }}
+                </td>
+                <td class="px-4 py-3">
+                  <ion-button (click)="removeProducto(producto.get('producto_id')?.value)" color="danger" fill="clear">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </ion-button>
+                </td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
         @if (hasCredito) {
         <hr class="my-4 dark:text-white">
-        <div class="grid grid-cols-5 gap-4" [formGroup]="financiacion">
-          <div>
+        <div class="grid grid-cols-2 lg:grid-cols-5 gap-4" [formGroup]="financiacion">
+          <div class="col-span-2 lg:col-span-1">
             <label for="fechaInicio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha de
               Inicio (1era cuota)</label>
             <input type="date" id="fechaInicio" formControlName="fechaInicio"
@@ -115,7 +117,7 @@
       </div>
       <hr class="my-4 text-white col-span-4 lg:hidden">
       <div class="col-span-4 lg:col-span-1 space-y-3">
-        <div>
+        <div class="mx-auto">
           <ion-button (click)="agregarProducto()">
             <ion-icon slot="start" name="add"></ion-icon>
             Agregar Producto
@@ -183,9 +185,24 @@
         <ion-input label="Observaciones" type="text" class="bg-transparent rounded-md w-full"
           formControlName="observaciones"></ion-input>
       </div>
+      <div class="col-span-4 lg:col-span-1 mx-auto space-y-4">
+        @for (image of images; track $index) {
+        <div class="flex w-full items-center">
+          <img [src]="image.data" alt="Vista previa de la imagen" class="w-16 h-auto mr-2 rounded-md">
+          <p>Archivo subido: {{ image.name }}</p>
+          <ion-button (click)="deleteImage(image)" color="danger" fill="clear">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+        }
+        <ion-button (click)="selectImage()" fill="outline">
+          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+          Subir comprobante
+        </ion-button>
+      </div>
     </div>
-    <ion-button (click)="guardarVenta()" expand="block" shape="round">
-      Click me
+    <ion-button (click)="guardarVenta()" expand="block">
+      Guardar Venta
     </ion-button>
   </form>
 </ion-content>

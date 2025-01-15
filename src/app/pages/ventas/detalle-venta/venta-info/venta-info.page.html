@@ -19,6 +19,12 @@
     <p><span class="font-bold">Condición: </span>{{venta.condicion}}</p>
     <p><span class="font-bold">Observaciones: </span>{{venta.observaciones}}</p>
     <p><span class="font-bold">Estado: </span>{{venta.estado}}</p>
+    @if (blobComprobante) {
+    <ion-button (click)="showComprobante(blobComprobante)">
+      <ion-icon slot="start" name="image-outline"></ion-icon>
+      Mostrar comprobante
+    </ion-button>
+    }
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">

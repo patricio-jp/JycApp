@@ -9,6 +9,8 @@ import {
 } from '../interfaces/operaciones';
 import { catchError, count, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LocalFile } from '../interfaces/files';
+import { FileService } from './files.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,7 @@ export class VentasService {
   constructor() {}
 
   private httpClient = inject(HttpClient);
+  private fileService = inject(FileService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/ventas/`;
 
@@ -96,7 +99,7 @@ export class VentasService {
         });
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
-        console.log(this.dataVentas());
+        //console.log(this.dataVentas());
       });
   }
 
@@ -104,9 +107,15 @@ export class VentasService {
     return this.httpClient.get<Venta>(this.apiEndpoint + id);
   }
 
-  createVenta(venta: CreateVentaDTO) {
-    const response = this.httpClient.post<Venta>(this.apiEndpoint, venta);
-    this.getVentas();
+  async createVenta(venta: CreateVentaDTO, comprobante?: LocalFile) {
+    const formData = new FormData();
+    formData.append('data', JSON.stringify(venta));
+    if (comprobante) {
+      const blob = await this.fileService.convertFileToBlob(comprobante);
+      formData.append('file', blob, comprobante.name);
+      console.log(formData);
+    }
+    const response = this.httpClient.post<Venta>(this.apiEndpoint, formData);
     return response;
   }
 

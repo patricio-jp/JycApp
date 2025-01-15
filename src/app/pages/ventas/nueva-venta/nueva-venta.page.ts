@@ -8,11 +8,16 @@ import {
   Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { ModalController, ToastController } from '@ionic/angular/standalone';
+import {
+  ModalController,
+  ToastController,
+  Platform,
+} from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   add,
   addCircleOutline,
+  cloudUploadOutline,
   removeCircleOutline,
   search,
   trashOutline,
@@ -31,6 +36,17 @@ import { Cliente } from 'src/app/interfaces/cliente';
 import { ClienteSelectorComponent } from './cliente-selector/cliente-selector.component';
 import { ProductoSelectorComponent } from './producto-selector/producto-selector.component';
 import { Subscription } from 'rxjs';
+import {
+  Camera,
+  CameraResultType,
+  CameraSource,
+  Photo,
+} from '@capacitor/camera';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { LocalFile } from 'src/app/interfaces/files';
+import { FileService } from 'src/app/services/files.service';
+
+const IMAGE_DIR = 'stored-comprobantes';
 
 @Component({
   selector: 'app-nueva-venta',
@@ -47,7 +63,10 @@ export class NuevaVentaPage implements OnDestroy {
       add,
       addCircleOutline,
       removeCircleOutline,
+      cloudUploadOutline,
     });
+
+    this.loadFiles();
   }
 
   ngOnDestroy(): void {
@@ -59,15 +78,19 @@ export class NuevaVentaPage implements OnDestroy {
   private toastCtrl = inject(ToastController);
   private modalCtrl = inject(ModalController);
   private subscriptions = new Subscription();
+  private plt = inject(Platform);
 
   private ventasService = inject(VentasService);
   private productosService = inject(ProductosService);
+  private filesService = inject(FileService);
 
   condicionOperacion = CondicionOperacion;
 
   hasDiscount: boolean = false;
   hasCredito: boolean = false;
   entregado: boolean = false;
+
+  images: LocalFile[] = [];
 
   nuevaVenta = this.formBuilder.group({
     fecha: [new Date().toISOString().substring(0, 10), Validators.required],
@@ -318,10 +341,12 @@ export class NuevaVentaPage implements OnDestroy {
           : undefined,
         estado: Number(this.nuevaVenta.get('estado')?.value) ?? undefined,
       };
-      console.log(venta);
+      //console.log(venta);
       try {
         this.subscriptions.add(
-          this.ventasService.createVenta(venta).subscribe(async (nuevaVta) => {
+          (
+            await this.ventasService.createVenta(venta, this.images[0])
+          ).subscribe(async (nuevaVta) => {
             const toast = await this.toastCtrl.create({
               position: 'top',
               duration: 3000,
@@ -335,6 +360,7 @@ export class NuevaVentaPage implements OnDestroy {
               this.ventasService.getVentas();
               this.router.navigate(['./dashboard/ventas/listado']);
             });
+            this.deleteImage(this.images[0]);
           })
         );
       } catch (error) {
@@ -357,15 +383,75 @@ export class NuevaVentaPage implements OnDestroy {
     }
   }
 
-  /* increaseQuantity(producto: FormGroup) {
-    const currentQuantity = producto.get('cantidad')?.value || 0;
-    producto.get('cantidad')?.setValue(currentQuantity + 1);
+  async loadFiles() {
+    this.images = [];
+
+    Filesystem.readdir({
+      path: IMAGE_DIR,
+      directory: Directory.Data,
+    }).then(
+      (result) => {
+        this.loadFileData(result.files.map((x) => x.name));
+      },
+      async (err) => {
+        // Folder does not yet exists!
+        await Filesystem.mkdir({
+          path: IMAGE_DIR,
+          directory: Directory.Data,
+        });
+      }
+    );
   }
 
-  decreaseQuantity(producto: FormGroup) {
-    const currentQuantity = producto.get('cantidad')?.value || 0;
-    if (currentQuantity > 0) {
-      producto.get('cantidad')?.setValue(currentQuantity - 1);
+  async loadFileData(fileNames: string[]) {
+    for (let f of fileNames) {
+      const filePath = `${IMAGE_DIR}/${f}`;
+
+      const readFile = await Filesystem.readFile({
+        path: filePath,
+        directory: Directory.Data,
+      });
+
+      this.images.push({
+        name: f,
+        path: filePath,
+        data: `data:image/jpeg;base64,${readFile.data}`,
+      });
     }
-  } */
+  }
+
+  async selectImage() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Uri,
+      source: CameraSource.Prompt,
+    });
+
+    if (image) {
+      //console.log(image);
+      this.saveImage(image);
+    }
+  }
+
+  async saveImage(photo: Photo) {
+    const base64Data = await this.filesService.readAsBase64(photo);
+
+    const fileName = this.nuevaVenta.get('comprobante')?.value + '.jpeg';
+    const savedFile = await Filesystem.writeFile({
+      path: `${IMAGE_DIR}/${fileName}`,
+      data: base64Data,
+      directory: Directory.Data,
+    });
+    this.loadFiles();
+    //console.log(this.images);
+  }
+
+  async deleteImage(file: LocalFile) {
+    await Filesystem.deleteFile({
+      directory: Directory.Data,
+      path: file.path,
+    });
+    this.loadFiles();
+  }
 }

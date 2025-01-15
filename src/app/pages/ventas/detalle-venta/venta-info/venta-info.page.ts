@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -7,6 +7,7 @@ import {
   IonContent,
   IonTitle,
   ModalController,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
 import {
@@ -18,6 +19,12 @@ import { Periodo, EstadoCredito, Credito } from 'src/app/interfaces/credito';
 import { CreditoInfoComponent } from 'src/app/pages/creditos/detalle-credito/credito-info/credito-info.component';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { FileService } from 'src/app/services/files.service';
+import { ImageViewerComponent } from 'src/app/components/image-viewer/image-viewer.component';
+import { addIcons } from 'ionicons';
+import { imageOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-venta-info',
@@ -25,6 +32,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./venta-info.page.scss'],
   standalone: true,
   imports: [
+    IonIcon,
     CommonModule,
     IonHeader,
     IonToolbar,
@@ -35,18 +43,43 @@ import { Router } from '@angular/router';
     FaIconComponent,
   ],
 })
-export class VentaInfoPage {
+export class VentaInfoPage implements OnInit, OnDestroy {
   @Input() venta?: Venta;
+  blobComprobante?: string;
 
-  modalCtrl = inject(ModalController);
-  router = inject(Router);
+  private modalCtrl = inject(ModalController);
+  private router = inject(Router);
+  private httpClient = inject(HttpClient);
+  private filesService = inject(FileService);
 
   condicionVenta = CondicionOperacion;
   estadosVenta = EstadoOperacion;
   periodosCredito = Periodo;
   estadosCredito = EstadoCredito;
 
-  constructor() {}
+  private subscriptions = new Subscription();
+
+  constructor() {
+    addIcons({ imageOutline });
+  }
+
+  ngOnInit(): void {
+    console.log(this.venta);
+    if (this.venta?.comprobanteUrl) {
+      this.subscriptions.add(
+        this.filesService
+          .getFileFromServer(this.venta.comprobanteUrl)
+          .subscribe(
+            (blob) => {
+              this.blobComprobante = URL.createObjectURL(blob);
+            },
+            (error) => {
+              console.error('Error al cargar la imagen del comprobante');
+            }
+          )
+      );
+    }
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
@@ -54,6 +87,20 @@ export class VentaInfoPage {
 
   confirm() {
     return this.modalCtrl.dismiss(null, 'confirm');
+  }
+
+  async showComprobante(comprobanteBlob: string) {
+    const modal = await this.modalCtrl.create({
+      id: 'imageModal',
+      component: ImageViewerComponent,
+      componentProps: { image: comprobanteBlob },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+    //console.log(credito);
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
   }
 
   async viewCreditoDetails(credito: Credito) {
@@ -79,5 +126,9 @@ export class VentaInfoPage {
     this.router.navigate(['./dashboard/creditos/cargar-pago'], {
       state: { credito },
     });
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

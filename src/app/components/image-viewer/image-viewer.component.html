@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ion-img [src]="image"></ion-img>
+  <ion-button class="mt-3" expand="block" (click)="shareImage()">
+    <ion-icon slot="start" name="share-outline"></ion-icon>
+    Compartir
+  </ion-button>
+</ion-content>

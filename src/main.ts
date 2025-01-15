@@ -23,9 +23,12 @@ import { jwtInterceptor } from './app/interceptors/jwt.interceptor';
 import { APP_INITIALIZER, importProvidersFrom } from '@angular/core';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthService } from './app/services/auth.service';
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
 //import {} from '@angular/common/locales/es-419';
 
 registerLocaleData(localeArg);
+
+defineCustomElements(window);
 
 bootstrapApplication(AppComponent, {
   providers: [

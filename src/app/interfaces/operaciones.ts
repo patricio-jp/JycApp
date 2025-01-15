@@ -20,7 +20,7 @@ interface Operacion {
   id: number;
   fecha: Date;
   comprobante?: string;
-  comprobante_url?: string;
+  comprobanteUrl?: string;
   subtotal?: number;
   descuento?: number;
   total: number;

@@ -16,19 +16,22 @@
     </ion-card-header>
     <ion-card-content>
       @if (venta) {
-      <div class="space-y-2">
-        <p><span class="font-bold">Venta N°: </span>{{venta.comprobante}}</p>
-        <p><span class="font-bold">Cliente: </span>{{venta.cliente?.apellido + ", " +
-          venta.cliente?.nombre}}</p>
-        <p><span class="font-bold">Fecha: </span>{{venta.fecha | date}}</p>
-        <p><span class="font-bold">Subtotal: </span>{{venta.subtotal | currency : 'ARS'}}</p>
-        <p><span class="font-bold">Descuento: </span>{{venta.descuento | currency : 'ARS'}}</p>
-        <p><span class="font-bold">Total de Venta: </span>{{venta.total | currency : 'ARS'}}</p>
-        <p>
-          <span class="font-bold">Condición: </span>{{venta.condicion}}
-
-        </p>
-        <p><span class="font-bold">Estado: </span>{{estadosVenta[venta.estado]}}</p>
+      <div class="space-y-2 lg:flex lg:space-y-0 lg:space-x-4">
+        <div class="lg:w-1/2">
+          <p><span class="font-bold">Venta N°: </span>{{venta.comprobante}}</p>
+          <p><span class="font-bold">Cliente: </span>{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</p>
+          <p><span class="font-bold">Fecha: </span>{{venta.fecha | date}}</p>
+          <p><span class="font-bold">Subtotal: </span>{{venta.subtotal | currency : 'ARS'}}</p>
+          <p><span class="font-bold">Descuento: </span>{{venta.descuento | currency : 'ARS'}}</p>
+          <p><span class="font-bold">Total de Venta: </span>{{venta.total | currency : 'ARS'}}</p>
+          <p><span class="font-bold">Condición: </span>{{venta.condicion}}</p>
+          <p><span class="font-bold">Estado: </span>{{estadosVenta[venta.estado]}}</p>
+        </div>
+        <div class="lg:w-1/2 text-center" *ngIf="blobComprobante">
+          <p><span class="font-bold">Imagen Comprobante:</span></p>
+          <img [src]="blobComprobante" alt="Imagen Comprobante" (click)="showComprobante(blobComprobante)"
+            class="max-h-96 mx-auto">
+        </div>
       </div>
       <hr class="my-4">
       <div class="relative overflow-x-auto">
