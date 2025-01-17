@@ -70,6 +70,15 @@ export interface CreateDetVentaDTO {
   precioUnitario: number;
 }
 
+export interface VentasFilter {
+  cliente?: string;
+  fecha?: Date | string;
+  estado?: EstadoOperacion;
+  condicion?: CondicionOperacion;
+  productos?: string;
+  searchTerm?: string;
+}
+
 export interface Compra extends Operacion {
   fechaRecepcion?: Date;
   productos: DetalleCompra[];

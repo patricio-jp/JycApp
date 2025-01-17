@@ -45,3 +45,17 @@
 
 /* Override Ionic variables (?) */
 @import './theme/variables.scss';
+
+ion-popover ion-content {
+  --background: white;
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-popover ion-content {
+    --background: #1f2937;
+  }
+}
+
+ion-popover#ventasFilter {
+  --width: max-content;
+}

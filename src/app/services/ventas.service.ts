@@ -6,8 +6,9 @@ import {
   EstadoOperacion,
   Venta,
   VentasAPIResponse,
+  VentasFilter,
 } from '../interfaces/operaciones';
-import { catchError, count, of, take } from 'rxjs';
+import { catchError, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LocalFile } from '../interfaces/files';
 import { FileService } from './files.service';
@@ -21,7 +22,7 @@ export class VentasService {
   private httpClient = inject(HttpClient);
   private fileService = inject(FileService);
 
-  private apiEndpoint = `${environment.apiBaseUrl}/ventas/`;
+  private apiEndpoint = `${environment.apiBaseUrl}/ventas`;
 
   dataVentas = signal({
     count: 0,
@@ -78,9 +79,29 @@ export class VentasService {
       ).length
   );
 
-  getVentas() {
+  getVentas(pageSize: number = 10, page: number = 1, filters?: VentasFilter) {
+    /* let filter = '';
+    if (filters) {
+      filter = Object.entries(filters)
+        .map(([key, value]) => {
+          if (typeof value === 'number') {
+            return `${key}=${value}`;
+          } else {
+            return `${key}='${value}'`;
+          }
+        })
+        .join('&');
+    } */
+    const params: any = { page, pageSize };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    //const params = { filter, page, pageSize };
+    console.log(params);
     this.httpClient
-      .get<VentasAPIResponse>(this.apiEndpoint)
+      .get<VentasAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
@@ -104,16 +125,17 @@ export class VentasService {
   }
 
   getVenta(id: number) {
-    return this.httpClient.get<Venta>(this.apiEndpoint + id);
+    return this.httpClient.get<Venta>(`${this.apiEndpoint}/${id}`);
   }
 
   async createVenta(venta: CreateVentaDTO, comprobante?: LocalFile) {
     const formData = new FormData();
     formData.append('data', JSON.stringify(venta));
+    //console.log('Data:', formData.get('data'));
     if (comprobante) {
       const blob = await this.fileService.convertFileToBlob(comprobante);
       formData.append('file', blob, comprobante.name);
-      console.log(formData);
+      //console.log('File:', formData.get('file'));
     }
     const response = this.httpClient.post<Venta>(this.apiEndpoint, formData);
     return response;
