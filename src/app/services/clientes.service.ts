@@ -4,6 +4,7 @@ import { catchError, Observable, of, take } from 'rxjs';
 import {
   Cliente,
   ClienteAPIResponse,
+  ClientesFilter,
   CreateClienteDTO,
   EstadoCliente,
 } from '../interfaces/cliente';
@@ -61,9 +62,19 @@ export class ClientesService {
       ).length
   );
 
-  getClientes() {
+  getClientes(
+    pageSize: number = 10,
+    page: number = 1,
+    filters?: ClientesFilter
+  ) {
+    const params: any = { page, pageSize };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
     this.httpClient
-      .get<ClienteAPIResponse>(this.apiEndpoint)
+      .get<ClienteAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
@@ -80,6 +91,7 @@ export class ClientesService {
           data: clientes.data,
           count: clientes.count,
         });
+        console.log(this.listadoClientes());
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
       });

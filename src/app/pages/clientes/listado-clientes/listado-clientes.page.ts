@@ -6,14 +6,16 @@ import {
   IonTitle,
   IonToolbar,
   IonLoading,
-  IonSearchbar,
-  IonButton,
-  IonIcon,
+  IonPopover,
   ModalController,
   ActionSheetController,
   ToastController,
 } from '@ionic/angular/standalone';
-import { Cliente, EstadoCliente } from 'src/app/interfaces/cliente';
+import {
+  Cliente,
+  ClientesFilter,
+  EstadoCliente,
+} from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { Router, RouterModule } from '@angular/router';
 import { addIcons } from 'ionicons';
@@ -21,6 +23,7 @@ import { chevronUp } from 'ionicons/icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ClienteInfoComponent } from '../detalle-cliente/cliente-info/cliente-info.component';
 import { Subscription } from 'rxjs';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-listado-clientes',
@@ -28,9 +31,7 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./listado-clientes.page.scss'],
   standalone: true,
   imports: [
-    IonIcon,
-    IonButton,
-    IonSearchbar,
+    IonPopover,
     IonContent,
     IonHeader,
     IonTitle,
@@ -39,6 +40,7 @@ import { Subscription } from 'rxjs';
     FaIconComponent,
     CommonModule,
     RouterModule,
+    FormsModule,
   ],
 })
 export class ListadoClientesPage implements OnInit, OnDestroy {
@@ -60,8 +62,101 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
 
   estadoClientes = EstadoCliente;
 
+  actualPage: number = 1;
+  pageSize: number = 10;
+  totalPages = computed(() => {
+    const totalVentas = this.dataClientes().count;
+    return Math.ceil(totalVentas / this.pageSize);
+  });
+  arrayPages = computed(() => {
+    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+  });
+  itemsShowed = computed(() => {
+    const start = (this.actualPage - 1) * this.pageSize + 1;
+    const end = Math.min(
+      this.actualPage * this.pageSize,
+      this.dataClientes().count
+    );
+    return `${start} - ${end}`;
+  });
+
+  searchTerm?: string;
+  domicilioFilter?: string;
+  estadoFilter?: EstadoCliente;
+  zonaFilter?: string;
+  aparicionesFilter?: string;
+  cantCreditosActivosFilter?: number;
+
+  filters: ClientesFilter = {};
+
   ngOnInit() {
-    this.clientesService.getClientes();
+    this.clientesService.getClientes(10, 1);
+  }
+
+  applyFiltersAndPagination() {
+    this.clientesService.getClientes(
+      this.pageSize,
+      this.actualPage,
+      this.filters
+    );
+  }
+
+  searchClientes(event: any) {
+    this.filters.searchTerm = event.target.value;
+    this.applyFilters();
+  }
+
+  nextPage() {
+    if (this.actualPage !== this.totalPages()) {
+      this.actualPage++;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  previousPage() {
+    if (this.actualPage > 1) {
+      this.actualPage--;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  goToPage(page: number) {
+    if (this.actualPage !== page) {
+      this.actualPage = page;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  applyFilters() {
+    this.filters = {
+      ...this.filters,
+      domicilio: this.domicilioFilter,
+      estado: this.estadoFilter,
+      zona: this.zonaFilter,
+      apariciones: this.aparicionesFilter,
+      cantCreditosActivos: this.cantCreditosActivosFilter,
+    };
+
+    // Remove undefined values from filters
+    this.filters = Object.fromEntries(
+      Object.entries(this.filters).filter(
+        ([_, v]) => v !== undefined && v !== '' && v !== 'undefined'
+      )
+    );
+    console.log(this.filters);
+    this.actualPage = 1; // Reset to first page on new filter
+    this.applyFiltersAndPagination();
+  }
+
+  clearFilters() {
+    this.domicilioFilter = undefined;
+    this.estadoFilter = undefined;
+    this.zonaFilter = undefined;
+    this.aparicionesFilter = undefined;
+    this.cantCreditosActivosFilter = undefined;
+    this.filters = {};
+    this.actualPage = 1; // Reset to first page on clear filters
+    this.applyFiltersAndPagination();
   }
 
   clienteDesktopDetails(id?: number) {

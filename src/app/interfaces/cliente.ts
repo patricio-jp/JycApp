@@ -51,3 +51,12 @@ export interface ClienteAPIResponse {
   data: Cliente[];
   count: number;
 }
+
+export interface ClientesFilter {
+  searchTerm?: string; // Usado para campos simples de la entidad
+  domicilio?: string;
+  estado?: EstadoCliente;
+  zona?: string;
+  apariciones?: string;
+  cantCreditosActivos?: number;
+}
