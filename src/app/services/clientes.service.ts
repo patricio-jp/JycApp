@@ -116,4 +116,8 @@ export class ClientesService {
   forceDeleteCliente(id: number) {
     return this.httpClient.delete(`${this.apiEndpoint + id}/force`);
   }
+
+  restoreCliente(id: number) {
+    return this.httpClient.patch(`${this.apiEndpoint + id}/restore`, null);
+  }
 }

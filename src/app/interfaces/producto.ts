@@ -1,6 +1,4 @@
-import { Injectable } from '@angular/core';
 import { Costo, CreateCostoDTO, CreatePrecioDTO, Precio } from './precios';
-import { Mapper } from './mapper';
 
 export interface Producto {
   id: number;
@@ -9,6 +7,9 @@ export interface Producto {
   costos: Costo[];
   precios: Precio[];
   stock: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface CreateProductoDTO {

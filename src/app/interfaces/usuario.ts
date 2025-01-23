@@ -25,6 +25,9 @@ export interface Usuario {
   observaciones?: string;
   clientesAsociados?: Cliente[];
   clientesACobrar?: Cliente[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface CreateUsuarioDTO {

@@ -27,6 +27,9 @@ interface Operacion {
   condicion: CondicionOperacion;
   observaciones?: string;
   estado: EstadoOperacion;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface Venta extends Operacion {
@@ -77,6 +80,7 @@ export interface VentasFilter {
   condicion?: CondicionOperacion;
   productos?: string;
   searchTerm?: string;
+  mostrarEliminados?: boolean;
 }
 
 export interface Compra extends Operacion {

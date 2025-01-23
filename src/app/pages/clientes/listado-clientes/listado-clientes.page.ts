@@ -85,7 +85,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   estadoFilter?: EstadoCliente;
   zonaFilter?: string;
   aparicionesFilter?: string;
-  cantCreditosActivosFilter?: number;
+  elminadosFilter?: boolean;
 
   filters: ClientesFilter = {};
 
@@ -134,7 +134,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
       estado: this.estadoFilter,
       zona: this.zonaFilter,
       apariciones: this.aparicionesFilter,
-      cantCreditosActivos: this.cantCreditosActivosFilter,
+      mostrarEliminados: this.elminadosFilter ? true : undefined,
     };
 
     // Remove undefined values from filters
@@ -153,7 +153,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
     this.estadoFilter = undefined;
     this.zonaFilter = undefined;
     this.aparicionesFilter = undefined;
-    this.cantCreditosActivosFilter = undefined;
+    this.elminadosFilter = undefined;
     this.filters = {};
     this.actualPage = 1; // Reset to first page on clear filters
     this.applyFiltersAndPagination();
@@ -179,7 +179,6 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   async deleteCliente(cliente: Cliente) {
     const sheet = await this.actionSheetCtrl.create({
       header: `Seguro desea eliminar el cliente ${cliente.apellido}, ${cliente.nombre}?`,
-      mode: 'ios',
       buttons: [
         {
           text: 'Si, eliminar',
@@ -236,6 +235,54 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
                 const toast = await this.toastCtrl.create({
                   position: 'top',
                   message: 'Cliente eliminado correctamente',
+                  duration: 3000,
+                });
+                await toast.present();
+                this.clientesService.getClientes();
+              }
+            })
+        );
+      }
+    }
+  }
+
+  async restoreCliente(cliente: Cliente) {
+    const sheet = await this.actionSheetCtrl.create({
+      header: `Restablecer el cliente ${cliente.apellido}, ${cliente.nombre}?`,
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'No',
+          role: 'destructive',
+          data: {
+            action: 'cancel',
+          },
+        },
+        {
+          text: 'Si, restablecer',
+          role: 'selected',
+          data: {
+            action: 'restore',
+          },
+        },
+      ],
+    });
+
+    await sheet.present();
+
+    const { data, role } = await sheet.onWillDismiss();
+    console.log('data: ', data);
+    console.log('role: ', role);
+    if (role === 'selected' && data.action && cliente.id) {
+      if (data.action === 'restore') {
+        this.subscriptions.add(
+          this.clientesService
+            .restoreCliente(cliente.id)
+            .subscribe(async (cliente) => {
+              if (cliente) {
+                const toast = await this.toastCtrl.create({
+                  position: 'top',
+                  message: 'Cliente restablecido correctamente',
                   duration: 3000,
                 });
                 await toast.present();

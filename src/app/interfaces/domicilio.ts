@@ -3,6 +3,9 @@ export interface Domicilio {
   direccion: string;
   barrio: string;
   localidad: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface CreateDomicilioDTO {

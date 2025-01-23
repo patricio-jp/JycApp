@@ -4,6 +4,7 @@ import {
   CreateCreditoDTO,
   Credito,
   CreditoAPIResponse,
+  CreditosFilter,
   EstadoCredito,
   Periodo,
 } from '../interfaces/credito';
@@ -91,9 +92,20 @@ export class CreditosService {
       ).length
   );
 
-  getCreditos() {
+  getCreditos(
+    pageSize: number = 10,
+    page: number = 1,
+    filters?: CreditosFilter
+  ) {
+    const params: any = { page, pageSize };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    console.log(params);
     this.httpClient
-      .get<CreditoAPIResponse>(this.apiEndpoint)
+      .get<CreditoAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
@@ -112,6 +124,7 @@ export class CreditosService {
         });
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
+        console.log(creditos);
       });
   }
 
@@ -137,5 +150,13 @@ export class CreditosService {
 
   deleteCredito(id: number) {
     return this.httpClient.delete(this.apiEndpoint + id);
+  }
+
+  forceDeleteCredito(id: number) {
+    return this.httpClient.delete(`${this.apiEndpoint + id}/force`);
+  }
+
+  restoreCredito(id: number) {
+    return this.httpClient.patch(`${this.apiEndpoint + id}/restore`, null);
   }
 }

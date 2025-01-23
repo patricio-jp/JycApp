@@ -29,7 +29,7 @@
                 <!-- TO-DO -->
                 <input type="text" id="simple-search" (change)="searchVentas($event)"
                   class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Search" required="">
+                  placeholder="Buscar por nota" required="">
               </div>
             </form>
           </div>
@@ -49,13 +49,13 @@
                 <fa-icon class="ml-2" [icon]="['fas', 'angle-down']"></fa-icon>
               </button>
               <!-- Dropdown menu -->
-              <ion-popover trigger="filterDropdown" id="ventasFilter" triggerAction="click" side="bottom"
+              <ion-popover trigger="filterDropdown" id="filterDropdown" triggerAction="click" side="bottom"
                 alignment="end" size="auto">
                 <ng-template>
                   <ion-content class="ion-padding">
                     <p class="text-center font-bold mb-3">[EXPERIMENTAL] Los filtros no funcionan por el momento, o
                       pueden tener un comportamiento inadecuado. No utilizar</p>
-                    <section class="grid md:grid-cols-5 gap-3">
+                    <section class="grid md:grid-cols-3 md:grid-rows-2 items-center justify-center gap-3">
                       <div class="w-full">
                         <label for="clienteFilter"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cliente</label>
@@ -103,6 +103,12 @@
                         <input type="text" id="productoFilter" [(ngModel)]="productoFilter"
                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                       </div>
+                      <div class="flex items-center mb-4">
+                        <input id="eliminadosFilter" type="checkbox" [(ngModel)]="eliminadosFilter"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="eliminadosFilter"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mostrar eliminados</label>
+                      </div>
                     </section>
                     <nav class="flex mt-4 items-center justify-end space-x-2">
                       <button type="button" (click)="clearFilters()"
@@ -125,29 +131,16 @@
       </div>
       <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <thead class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
-              <th scope="col" class="px-4 py-3">
-                ID
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Fecha
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Comprobante
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Cliente
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Condición
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Total
-              </th>
-              <th scope="col" class="px-4 py-3">
-                Estado
-              </th>
+              <th scope="col" class="px-4 py-3">ID</th>
+              <th scope="col" class="px-4 py-3">Fecha</th>
+              <th scope="col" class="px-4 py-3">Nota</th>
+              <th scope="col" class="px-4 py-3">Cliente</th>
+              <th scope="col" class="px-4 py-3">Producto/s</th>
+              <th scope="col" class="px-4 py-3">Condición</th>
+              <th scope="col" class="px-4 py-3">Total</th>
+              <th scope="col" class="px-4 py-3">Estado</th>
               <th scope="col" class="px-4 py-3"></th>
             </tr>
           </thead>
@@ -155,25 +148,41 @@
             @for (venta of listadoVentas(); track venta.id) {
             <tr
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
-              <td class="px-4 py-3">{{venta.id}}</td>
-              <td class="px-4 py-3">{{venta.fecha}}</td>
-              <td class="px-4 py-3">{{venta.comprobante}}</td>
+              <td class="px-4 py-3 text-center">{{venta.id}}</td>
+              <td class="px-4 py-3 text-center">{{venta.fecha | date : 'dd/MM/YYYY'}}</td>
+              <td class="px-4 py-3 text-center">{{venta.comprobante}}</td>
               <td class="px-4 py-3">{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</td>
-              <td class="px-4 py-3">{{venta.condicion}}</td>
+              <td class="px-4 py-3">
+                @for (detalle of venta.productos; track $index) {
+                {{detalle.cantidad !== 1 ? detalle.cantidad + ' ' : ''}}{{detalle.producto.nombre}}<br>
+                }
+              </td>
+              <td class="px-4 py-3 text-center">{{venta.condicion}}</td>
               <td class="px-4 py-3">{{venta.total | currency: 'ARS'}}</td>
-              <td class="px-4 py-3">{{estadosVenta[venta.estado]}}</td>
+              <td class="px-4 py-3 text-center">{{estadosVenta[venta.estado]}}</td>
               <!-- <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td> -->
-              <td class="p-2">
+              <td class="p-2 space-x-2">
                 <button
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
                   (click)="ventaDetails(venta)">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
                 </button>
                 <button
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:block"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:inline-block"
                   (click)="ventaDesktopDetails(venta.id)">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
                 </button>
+                @if (venta.deletedAt) {
+                <button (click)="restoreVenta(venta)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'trash-arrow-up']"></fa-icon>
+                </button>
+                } @else {
+                <button (click)="deleteVenta(venta)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </button>
+                }
               </td>
             </tr>
             }

@@ -120,7 +120,7 @@ export class VentasService {
         });
         this.loadingSignal.set(false);
         this.errorSignal.set(null);
-        //console.log(this.dataVentas());
+        console.log(this.dataVentas());
       });
   }
 
@@ -143,5 +143,13 @@ export class VentasService {
 
   deleteVenta(id: number) {
     return this.httpClient.delete(this.apiEndpoint + id);
+  }
+
+  forceDeleteVenta(id: number) {
+    return this.httpClient.delete(`${this.apiEndpoint}/${id}/force`);
+  }
+
+  restoreVenta(id: number) {
+    return this.httpClient.patch(`${this.apiEndpoint}/${id}/restore`, null);
   }
 }

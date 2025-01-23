@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -11,6 +11,8 @@ import {
   IonDatetimeButton,
   IonModal,
   IonDatetime,
+  ActionSheetController,
+  ToastController,
 } from '@ionic/angular/standalone';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { VentasService } from 'src/app/services/ventas.service';
@@ -23,6 +25,7 @@ import {
 } from 'src/app/interfaces/operaciones';
 import { VentaInfoPage } from '../detalle-venta/venta-info/venta-info.page';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-listado-ventas',
@@ -44,14 +47,17 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
   ],
 })
-export class ListadoVentasPage implements OnInit {
+export class ListadoVentasPage implements OnInit, OnDestroy {
   constructor() {}
 
   private ventasService = inject(VentasService);
 
   private modalCtrl = inject(ModalController);
+  private actionSheetCtrl = inject(ActionSheetController);
+  private toastCtrl = inject(ToastController);
 
   private router = inject(Router);
+  private subscriptions = new Subscription();
 
   estadosVenta = EstadoOperacion;
 
@@ -82,6 +88,7 @@ export class ListadoVentasPage implements OnInit {
   estadoFilter?: EstadoOperacion;
   condicionFilter?: CondicionOperacion;
   productoFilter?: string;
+  eliminadosFilter?: boolean;
 
   filters: VentasFilter = {};
 
@@ -127,12 +134,13 @@ export class ListadoVentasPage implements OnInit {
       estado: this.estadoFilter,
       condicion: this.condicionFilter,
       productos: this.productoFilter,
+      mostrarEliminados: this.eliminadosFilter ? true : undefined,
     };
 
     // Remove undefined values from filters
     this.filters = Object.fromEntries(
       Object.entries(this.filters).filter(
-        ([_, v]) => v !== undefined && v !== ''
+        ([_, v]) => v !== undefined && v !== '' && v !== 'undefined'
       )
     );
     console.log(this.filters);
@@ -146,6 +154,7 @@ export class ListadoVentasPage implements OnInit {
     this.estadoFilter = undefined;
     this.condicionFilter = undefined;
     this.productoFilter = undefined;
+    this.eliminadosFilter = false;
     this.filters = {};
     this.actualPage = 1; // Reset to first page on clear filters
     this.applyFiltersAndPagination();
@@ -172,5 +181,123 @@ export class ListadoVentasPage implements OnInit {
 
   ventaDesktopDetails(id?: number) {
     this.router.navigate(['./dashboard/ventas/detalle', id]);
+  }
+
+  async deleteVenta(venta: Venta) {
+    const sheet = await this.actionSheetCtrl.create({
+      header: `Seguro desea eliminar la venta ${venta.comprobante}?`,
+      buttons: [
+        {
+          text: 'Si, eliminar',
+          role: 'destructive',
+          data: {
+            action: 'soft-delete',
+          },
+        },
+        {
+          text: 'Si, eliminar definitivamente',
+          role: 'destructive',
+          data: {
+            action: 'delete',
+          },
+        },
+        {
+          text: 'No, cancelar',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await sheet.present();
+
+    const { data, role } = await sheet.onWillDismiss();
+    console.log('data: ', data);
+    console.log('role: ', role);
+    if (role === 'destructive' && data.action && venta.id) {
+      if (data.action === 'soft-delete') {
+        this.subscriptions.add(
+          this.ventasService.deleteVenta(venta.id).subscribe(async (venta) => {
+            if (venta) {
+              const toast = await this.toastCtrl.create({
+                position: 'top',
+                message: 'Venta eliminada correctamente',
+                duration: 3000,
+              });
+              await toast.present();
+              this.ventasService.getVentas();
+            }
+          })
+        );
+      } else if (data.action === 'delete') {
+        this.subscriptions.add(
+          this.ventasService
+            .forceDeleteVenta(venta.id)
+            .subscribe(async (venta) => {
+              if (venta) {
+                const toast = await this.toastCtrl.create({
+                  position: 'top',
+                  message: 'Venta eliminada correctamente',
+                  duration: 3000,
+                });
+                await toast.present();
+                this.ventasService.getVentas();
+              }
+            })
+        );
+      }
+    }
+  }
+
+  async restoreVenta(venta: Venta) {
+    const sheet = await this.actionSheetCtrl.create({
+      header: `Restablecer la venta ${venta.comprobante}?`,
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'No',
+          role: 'destructive',
+          data: {
+            action: 'cancel',
+          },
+        },
+        {
+          text: 'Si, restablecer',
+          role: 'selected',
+          data: {
+            action: 'restore',
+          },
+        },
+      ],
+    });
+
+    await sheet.present();
+
+    const { data, role } = await sheet.onWillDismiss();
+    console.log('data: ', data);
+    console.log('role: ', role);
+    if (role === 'selected' && data.action && venta.id) {
+      if (data.action === 'restore') {
+        this.subscriptions.add(
+          this.ventasService.restoreVenta(venta.id).subscribe(async (venta) => {
+            if (venta) {
+              const toast = await this.toastCtrl.create({
+                position: 'top',
+                message: 'Venta restablecida correctamente',
+                duration: 3000,
+              });
+              await toast.present();
+              this.ventasService.getVentas();
+            }
+          })
+        );
+      }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 }

@@ -6,6 +6,9 @@ interface Historico {
   fechaInicio: Date;
   fechaFin?: Date;
   producto?: Producto;
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 export interface Costo extends Historico {}

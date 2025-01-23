@@ -28,6 +28,9 @@ export interface Cliente {
   observaciones?: string;
   estado: EstadoCliente;
   ventas?: Venta[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
 
 // Create DTO for app
@@ -58,5 +61,5 @@ export interface ClientesFilter {
   estado?: EstadoCliente;
   zona?: string;
   apariciones?: string;
-  cantCreditosActivos?: number;
+  mostrarEliminados?: boolean;
 }

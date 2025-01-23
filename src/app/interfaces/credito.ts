@@ -1,3 +1,4 @@
+import { Carton, EstadoCarton } from './carton';
 import { Venta } from './operaciones';
 
 export enum EstadoCredito {
@@ -24,10 +25,12 @@ export interface Credito {
   montoCuota: number;
   periodo: Periodo;
   estado: EstadoCredito;
+  carton: Carton;
   cuotas: Cuota[];
+  createdAt?: Date;
+  updatedAt?: Date;
+  deletedAt?: Date | null;
 }
-
-export interface CreditoVenta extends Omit<Credito, 'venta'> {}
 
 export interface CreateCreditoDTO {
   fechaInicio: Date;
@@ -37,6 +40,16 @@ export interface CreateCreditoDTO {
   montoCuota: number;
   periodo: Periodo;
   estado?: EstadoCredito;
+}
+
+export interface CreditosFilter {
+  estadoCredito?: EstadoCredito;
+  periodo?: Periodo;
+  estadoCarton?: EstadoCarton;
+  fechaVencCuota?: Date | string;
+  fechaUltimoPago?: Date | string;
+  searchTerm?: string;
+  mostrarEliminados?: boolean;
 }
 
 export interface CargarPagoDTO {
