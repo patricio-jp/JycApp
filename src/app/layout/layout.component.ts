@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import {
   IonHeader,
@@ -9,19 +9,37 @@ import {
   IonMenu,
   IonButtons,
   IonMenuButton,
+  IonMenuToggle,
   IonList,
   IonItem,
   IonLabel,
   IonRouterOutlet,
   IonButton,
   IonIcon,
-  IonPopover,
   PopoverController,
 } from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
-import { logOutOutline, personCircle } from 'ionicons/icons';
+import {
+  cash,
+  cashOutline,
+  close,
+  closeOutline,
+  cube,
+  cubeOutline,
+  hammer,
+  hammerOutline,
+  home,
+  homeOutline,
+  logOutOutline,
+  people,
+  peopleOutline,
+  personCircle,
+  pricetags,
+  pricetagsOutline,
+} from 'ionicons/icons';
 import { PopoverComponent } from '../components/popover/popover.component';
+import { navLinks } from '../constants/navigation';
 
 @Component({
   selector: 'app-layout',
@@ -40,21 +58,48 @@ import { PopoverComponent } from '../components/popover/popover.component';
     IonContent,
     IonSplitPane,
     IonMenu,
+    IonMenuToggle,
     IonButtons,
     IonMenuButton,
     RouterLink,
     IonRouterOutlet,
   ],
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
   constructor() {
-    addIcons({ personCircle, logOutOutline });
+    addIcons({
+      personCircle,
+      logOutOutline,
+      home,
+      homeOutline,
+      cash,
+      cashOutline,
+      people,
+      peopleOutline,
+      pricetags,
+      pricetagsOutline,
+      cube,
+      cubeOutline,
+      hammer,
+      hammerOutline,
+      close,
+      closeOutline,
+    });
   }
 
   private popoverCtrl = inject(PopoverController);
   private authService = inject(AuthService);
 
+  appPages = navLinks;
+  selectedIndex: number = 0;
+
   user = computed(() => this.authService.user());
+
+  ngOnInit(): void {
+    this.selectedIndex = this.appPages.findIndex(
+      (page) => page.url === window.location.pathname
+    );
+  }
 
   getUser() {
     console.log(this.user());

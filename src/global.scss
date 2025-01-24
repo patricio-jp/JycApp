@@ -46,6 +46,11 @@
 /* Override Ionic variables (?) */
 @import './theme/variables.scss';
 
+ion-split-pane {
+  --side-min-width: 250px;
+  --side-max-width: 20%;
+}
+
 ion-popover ion-content {
   --background: white;
 }
