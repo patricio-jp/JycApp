@@ -12,7 +12,6 @@ import {
   IonModal,
   IonDatetime,
   ActionSheetController,
-  ToastController,
 } from '@ionic/angular/standalone';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { VentasService } from 'src/app/services/ventas.service';
@@ -26,6 +25,7 @@ import {
 import { VentaInfoPage } from '../detalle-venta/venta-info/venta-info.page';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-listado-ventas',
@@ -51,10 +51,10 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
   constructor() {}
 
   private ventasService = inject(VentasService);
+  private notificationsService = inject(NotificationsService);
 
   private modalCtrl = inject(ModalController);
   private actionSheetCtrl = inject(ActionSheetController);
-  private toastCtrl = inject(ToastController);
 
   private router = inject(Router);
   private subscriptions = new Subscription();
@@ -221,12 +221,9 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
         this.subscriptions.add(
           this.ventasService.deleteVenta(venta.id).subscribe(async (venta) => {
             if (venta) {
-              const toast = await this.toastCtrl.create({
-                position: 'top',
-                message: 'Venta eliminada correctamente',
-                duration: 3000,
-              });
-              await toast.present();
+              this.notificationsService.presentSuccessToast(
+                'Venta eliminada correctamente'
+              );
               this.ventasService.getVentas();
             }
           })
@@ -237,12 +234,9 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
             .forceDeleteVenta(venta.id)
             .subscribe(async (venta) => {
               if (venta) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Venta eliminada correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Venta eliminada correctamente'
+                );
                 this.ventasService.getVentas();
               }
             })
@@ -283,12 +277,9 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
         this.subscriptions.add(
           this.ventasService.restoreVenta(venta.id).subscribe(async (venta) => {
             if (venta) {
-              const toast = await this.toastCtrl.create({
-                position: 'top',
-                message: 'Venta restablecida correctamente',
-                duration: 3000,
-              });
-              await toast.present();
+              this.notificationsService.presentSuccessToast(
+                'Venta restablecida correctamente'
+              );
               this.ventasService.getVentas();
             }
           })

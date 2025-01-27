@@ -7,13 +7,13 @@ import {
   Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import { ToastController } from '@ionic/angular/standalone';
 import { ProductosService } from 'src/app/services/productos.service';
 import { addIcons } from 'ionicons';
 import { trashOutline } from 'ionicons/icons';
 import { Router } from '@angular/router';
-import { CreateProductoDTO, Producto } from 'src/app/interfaces/producto';
+import { CreateProductoDTO } from 'src/app/interfaces/producto';
 import { Subscription } from 'rxjs';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-nuevo-producto',
@@ -34,7 +34,7 @@ export class NuevoProductoPage implements OnDestroy {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private productsService = inject(ProductosService);
-  private toastCtrl = inject(ToastController);
+  private notificationsService = inject(NotificationsService);
   private subscriptions = new Subscription();
 
   nuevoProducto = this.formBuilder.group({
@@ -116,38 +116,24 @@ export class NuevoProductoPage implements OnDestroy {
           this.productsService
             .createProducto(producto)
             .subscribe(async (nuevoProd) => {
-              const toast = await this.toastCtrl.create({
-                position: 'top',
-                duration: 3000,
-                message: 'Producto creado exitosamente',
-              });
-
-              await toast.present();
-
-              toast.onDidDismiss().then(() => {
-                this.productsService.getProductos();
-                this.router.navigate(['./dashboard/productos/inventario']);
-                this.nuevoProducto.reset();
-              });
+              this,
+                this.notificationsService.presentSuccessToast(
+                  'Producto creado exitosamente'
+                );
+              this.productsService.getProductos();
+              this.nuevoProducto.reset();
+              this.router.navigate(['./dashboard/productos/inventario']);
             })
         );
       } catch (error) {
-        const toast = await this.toastCtrl.create({
-          position: 'top',
-          duration: 3000,
-          message: 'Error al crear el producto',
-        });
-
-        await toast.present();
+        this.notificationsService.presentErrorToast(
+          'Error al crear el producto'
+        );
       }
     } else {
-      const toast = await this.toastCtrl.create({
-        position: 'top',
-        duration: 3000,
-        message: 'Formulario inválido',
-      });
-
-      await toast.present();
+      this.notificationsService.presentWarningToast(
+        'Formulario inválido. Complete los campos requeridos'
+      );
     }
   }
 }

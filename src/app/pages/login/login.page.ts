@@ -8,12 +8,10 @@ import {
 } from '@angular/forms';
 import {
   IonContent,
-  IonButton,
   IonCard,
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
-  IonInput,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -26,13 +24,11 @@ import { Subscription } from 'rxjs';
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    IonInput,
     IonCardContent,
     IonCardTitle,
     IonCardHeader,
     IonCard,
     IonContent,
-    IonButton,
     ReactiveFormsModule,
   ],
 })

@@ -31,6 +31,7 @@ import {
   hammerOutline,
   home,
   homeOutline,
+  logOut,
   logOutOutline,
   people,
   peopleOutline,
@@ -40,6 +41,7 @@ import {
 } from 'ionicons/icons';
 import { PopoverComponent } from '../components/popover/popover.component';
 import { navLinks } from '../constants/navigation';
+import { Rol } from '../interfaces/usuario';
 
 @Component({
   selector: 'app-layout',
@@ -69,6 +71,7 @@ export class LayoutComponent implements OnInit {
   constructor() {
     addIcons({
       personCircle,
+      logOut,
       logOutOutline,
       home,
       homeOutline,
@@ -94,11 +97,23 @@ export class LayoutComponent implements OnInit {
   selectedIndex: number = 0;
 
   user = computed(() => this.authService.user());
+  userRoles = Rol;
 
   ngOnInit(): void {
-    this.selectedIndex = this.appPages.findIndex(
-      (page) => page.url === window.location.pathname
-    );
+    //console.log(window.location.pathname);
+    const basePath = '/dashboard';
+    if (window.location.pathname.startsWith(basePath)) {
+      const subPath = window.location.pathname.slice(basePath.length);
+      //console.log(subPath);
+      if (subPath === '') {
+        this.selectedIndex = 0;
+      } else {
+        this.selectedIndex = this.appPages.findIndex((page) => {
+          const pageUrl = page.url.slice(basePath.length);
+          return pageUrl !== '' && subPath.includes(pageUrl);
+        });
+      }
+    }
   }
 
   getUser() {
@@ -114,17 +129,18 @@ export class LayoutComponent implements OnInit {
           content: `<h3 class="font-bold">${
             this.user()?.apellido + ', ' + this.user()?.nombre
           }</h3>
-                <p>${this.user()?.rol}</p>
+                <p>${this.userRoles[this.user()!.rol]}</p>
                 <hr class="my-2">`,
           buttons: [
             {
               text: 'Cerrar Sesión',
               icon: {
                 slot: 'start',
-                icon: 'log-out-outline',
+                icon_md: 'log-out',
+                icon_ios: 'log-out-outline',
               },
               action: 'close',
-              color: 'primary',
+              color: 'danger',
             },
           ],
         },

@@ -3,14 +3,13 @@
     <ion-title>Listado de Créditos</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-loading [isOpen]="loadingSignal()" message="Cargando..." duration="3000"></ion-loading>
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Listado</ion-title>
+      <ion-title size="large">Listado de Créditos</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div class="relative overflow-hidden pt-4 px-4">
+  <div class="relative overflow-hidden">
     <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
       <div class="relative bg-white shadow-md dark:bg-gray-800 sm:rounded-lg">
         <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
@@ -29,7 +28,7 @@
                 <!-- TO-DO -->
                 <input type="text" id="simple-search" (change)="searchCreditos($event)"
                   class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                  placeholder="Search" required="">
+                  placeholder="Buscar" required="">
               </div>
             </form>
           </div>
@@ -195,12 +194,19 @@
               </td>
             </tr>
             }
+            @empty {
+            <tr>
+              <td colspan="12" class="p-4 text-center">No hay créditos para mostrar</td>
+            </tr>
+            }
           </tbody>
         </table>
       </div>
+      @if (dataCreditos().count > 0) {
       <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4"
         aria-label="Table navigation">
-        <section class="flex items-center flex-col md:flex-row md:space-x-4">
+        <section
+          class="flex items-start md:items-center flex-col-reverse w-full md:w-auto mb-4 md:mb-0 md:flex-row md:space-x-4">
           <div class="flex items-center">
             <label for="rowsPerPage"
               class="mr-3 text-sm font-normal block w-full text-nowrap text-gray-500 dark:text-gray-400">Filas
@@ -213,14 +219,14 @@
               <option [value]="50">50</option>
             </select>
           </div>
-          <div>
+          <div class="self-center">
             <span
               class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
               <span class="font-semibold text-gray-900 dark:text-white">{{itemsShowed()}}</span> de <span
                 class="font-semibold text-gray-900 dark:text-white">{{dataCreditos().count}}</span> totales</span>
           </div>
         </section>
-        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+        <ul class="inline-flex mx-auto md:mx-0 -space-x-px rtl:space-x-reverse text-sm h-8">
           <li>
             <a (click)="previousPage()" [ngClass]="actualPage !== 1 ? 'cursor-pointer' : 'cursor-not-allowed'"
               class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Anterior</a>
@@ -238,6 +244,7 @@
           </li>
         </ul>
       </nav>
+      }
     </div>
   </div>
 </ion-content>

@@ -7,7 +7,6 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
-  ToastController,
   IonButton,
   IonIcon,
   IonInput,
@@ -25,6 +24,7 @@ import { addIcons } from 'ionicons';
 import { search } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-cargar-pago',
@@ -72,8 +72,9 @@ export class CargarPagoPage implements OnDestroy {
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
   private modalCtrl = inject(ModalController);
-  private toastCtrl = inject(ToastController);
+
   private creditosService = inject(CreditosService);
+  private notificationsService = inject(NotificationsService);
 
   private subscriptions = new Subscription();
 
@@ -133,38 +134,21 @@ export class CargarPagoPage implements OnDestroy {
         };
         this.subscriptions.add(
           this.creditosService.cargarPago(pago).subscribe(async (credito) => {
-            const toast = await this.toastCtrl.create({
-              position: 'top',
-              duration: 3000,
-              message: 'Pago cargado exitosamente',
-            });
-
-            await toast.present();
-
-            toast.onDidDismiss().then(() => {
-              this.creditosService.getCreditos();
-              this.router.navigate(['./dashboard/creditos/listado']);
-              this.nuevoPago.reset();
-            });
+            this.notificationsService.presentSuccessToast(
+              'Pago cargado exitosamente'
+            );
+            this.creditosService.getCreditos();
+            this.nuevoPago.reset();
+            this.router.navigate(['./dashboard/creditos/listado']);
           })
         );
       } catch (error) {
-        const toast = await this.toastCtrl.create({
-          position: 'top',
-          duration: 3000,
-          message: 'Error al cargar el pago',
-        });
-
-        await toast.present();
+        this.notificationsService.presentErrorToast('Error al cargar el pago');
       }
     } else {
-      const toast = await this.toastCtrl.create({
-        position: 'top',
-        duration: 3000,
-        message: 'Formulario inválido',
-      });
-
-      await toast.present();
+      this.notificationsService.presentWarningToast(
+        'Formulario inválido. Complete los campos requeridos'
+      );
     }
   }
 }

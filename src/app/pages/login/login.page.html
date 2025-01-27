@@ -4,37 +4,24 @@
       <ion-card-header>
         <ion-card-title class="text-center"> Iniciar Sesión </ion-card-title>
       </ion-card-header>
-      <!-- <ion-grid>
-        <ion-row>
-          <ion-col size-md="3" size="12" class="ion-padding ion-blue-bkg">
-            <img
-              src="https://images.prismic.io/ionicframeworkcom/ac68e1d9-9887-4e5a-9820-9290d06638de_ionic+logo+white+on+blue.png"
-              alt="Ionic logo" loading="lazy" />
-          </ion-col>
-          <ion-col size-md="9" size="12" class="welcome">
-
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
       <ion-card-content class="loginFormContainer">
-
-        <form [formGroup]="loginForm" (ngSubmit)="login()">
-          <ion-input required label="DNI" labelPlacement="floating" fill="solid" formControlName="dni" type="number"
-            class="loginInput bg-transparent rounded-lg"></ion-input>
-          <ion-input required label="Contraseña" labelPlacement="floating" fill="solid" formControlName="password"
-            type="password" class="loginInput bg-transparent rounded-lg"></ion-input>
-
-          <!-- <ion-item>
-            <ion-input required labelPlacement="floating" formControlName="Usuario" type="text">
-              <ion-label slot="label">Usuario <ion-text color="danger">*</ion-text></ion-label>
-            </ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-input required labelPlacement="floating" formControlName="password" type="password">
-              <ion-label slot="label">Contraseña <ion-text color="danger">*</ion-text></ion-label>
-            </ion-input>
-          </ion-item> -->
-          <ion-button (click)="login()" expand="block" class="loginButton" color="primary">Ingresar</ion-button>
+        <form [formGroup]="loginForm" (ngSubmit)="login()" class="space-y-4">
+          <div>
+            <label for="dni" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">DNI</label>
+            <input type="number" formControlName="dni" id="dni" required
+              class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <div>
+            <label for="password"
+              class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña</label>
+            <input type="password" formControlName="password" id="password" required
+              class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          </div>
+          <!-- <button
+            class="block w-full px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800"
+            type="submit" (click)="login()">Ingresar</button> -->
+          <input type="submit" value="Ingresar"
+            class="block w-full px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
         </form>
       </ion-card-content>
     </ion-card>

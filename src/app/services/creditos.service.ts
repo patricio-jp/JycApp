@@ -11,6 +11,8 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { catchError, of, Observable, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { LoadingIndicatorService } from './loading-indicator.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +21,8 @@ export class CreditosService {
   constructor() {}
 
   private httpClient = inject(HttpClient);
+  private loadingIndicator = inject(LoadingIndicatorService);
+  private notificationsService = inject(NotificationsService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/creditos/`;
 
@@ -103,14 +107,17 @@ export class CreditosService {
         params[key] = value;
       });
     }
-    console.log(params);
+    //console.log(params);
+    this.loadingIndicator.loadingOn();
     this.httpClient
       .get<CreditoAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
-          this.errorSignal.set('Error al cargar los créditos');
-          this.loadingSignal.set(false);
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar los créditos'
+          );
           return of({
             data: [],
             count: 0,
@@ -122,9 +129,9 @@ export class CreditosService {
           data: creditos.data,
           count: creditos.count,
         });
-        this.loadingSignal.set(false);
+        this.loadingIndicator.loadingOff();
         this.errorSignal.set(null);
-        console.log(creditos);
+        //console.log(creditos);
       });
   }
 

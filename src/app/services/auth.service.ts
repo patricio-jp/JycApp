@@ -14,6 +14,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { IS_PUBLIC } from '../interceptors/jwt.interceptor';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Rol, Usuario } from '../interfaces/usuario';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,7 @@ export class AuthService {
   private httpClient = inject(HttpClient);
   private router = inject(Router);
   private jwtHelper = inject(JwtHelperService);
+  private notificationsService = inject(NotificationsService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/auth`;
 
@@ -92,6 +94,9 @@ export class AuthService {
         catchError((error) => {
           if (error.status === 401) {
             // Handle invalid credentials
+            this.notificationsService.presentErrorToast(
+              'Credenciales inválidas'
+            );
             console.error('Invalid credentials');
           }
           return of();
@@ -141,6 +146,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     this.router.navigate(['/login']);
   }
 }

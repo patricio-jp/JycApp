@@ -5,11 +5,9 @@ import {
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonLoading,
   IonPopover,
   ModalController,
   ActionSheetController,
-  ToastController,
 } from '@ionic/angular/standalone';
 import {
   Cliente,
@@ -24,6 +22,7 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ClienteInfoComponent } from '../detalle-cliente/cliente-info/cliente-info.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-listado-clientes',
@@ -36,7 +35,6 @@ import { FormsModule } from '@angular/forms';
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonLoading,
     FaIconComponent,
     CommonModule,
     RouterModule,
@@ -49,12 +47,12 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   }
 
   private clientesService = inject(ClientesService);
+  private notificationsService = inject(NotificationsService);
   private router = inject(Router);
   private subscriptions = new Subscription();
 
   private modalCtrl = inject(ModalController);
   private actionSheetCtrl = inject(ActionSheetController);
-  private toastCtrl = inject(ToastController);
 
   dataClientes = computed(() => this.clientesService.dataClientes());
   listadoClientes = computed(() => this.clientesService.listadoClientes());
@@ -216,12 +214,9 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
             .deleteCliente(cliente.id)
             .subscribe(async (cliente) => {
               if (cliente) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Cliente eliminado correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Cliente eliminado correctamente'
+                );
                 this.clientesService.getClientes();
               }
             })
@@ -232,12 +227,9 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
             .forceDeleteCliente(cliente.id)
             .subscribe(async (cliente) => {
               if (cliente) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Cliente eliminado correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Cliente eliminado definitivamente'
+                );
                 this.clientesService.getClientes();
               }
             })
@@ -280,12 +272,9 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
             .restoreCliente(cliente.id)
             .subscribe(async (cliente) => {
               if (cliente) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Cliente restablecido correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Cliente restablecido correctamente'
+                );
                 this.clientesService.getClientes();
               }
             })

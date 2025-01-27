@@ -9,6 +9,8 @@ import {
   EstadoCliente,
 } from '../interfaces/cliente';
 import { environment } from 'src/environments/environment';
+import { LoadingIndicatorService } from './loading-indicator.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -17,6 +19,8 @@ export class ClientesService {
   constructor() {}
 
   private httpClient = inject(HttpClient);
+  private loadingIndicator = inject(LoadingIndicatorService);
+  private notificationsService = inject(NotificationsService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/clientes/`;
 
@@ -73,13 +77,16 @@ export class ClientesService {
         params[key] = value;
       });
     }
+    this.loadingIndicator.loadingOn();
     this.httpClient
       .get<ClienteAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
-          this.errorSignal.set('Error al cargar los clientes');
-          this.loadingSignal.set(false);
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar los clientes'
+          );
           return of({
             data: [],
             count: 0,
@@ -91,9 +98,8 @@ export class ClientesService {
           data: clientes.data,
           count: clientes.count,
         });
-        console.log(this.listadoClientes());
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
+        //console.log(this.listadoClientes());
+        this.loadingIndicator.loadingOff();
       });
   }
 

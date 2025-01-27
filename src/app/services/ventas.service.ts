@@ -12,6 +12,8 @@ import { catchError, of, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LocalFile } from '../interfaces/files';
 import { FileService } from './files.service';
+import { LoadingIndicatorService } from './loading-indicator.service';
+import { NotificationsService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +23,8 @@ export class VentasService {
 
   private httpClient = inject(HttpClient);
   private fileService = inject(FileService);
+  private loadingIndicator = inject(LoadingIndicatorService);
+  private notificationsService = inject(NotificationsService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/ventas`;
 
@@ -99,14 +103,17 @@ export class VentasService {
       });
     }
     //const params = { filter, page, pageSize };
-    console.log(params);
+    //console.log(params);
+    this.loadingIndicator.loadingOn();
     this.httpClient
       .get<VentasAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
-          this.errorSignal.set('Error al cargar las ventas');
-          this.loadingSignal.set(false);
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar las ventas'
+          );
           return of({
             data: [],
             count: 0,
@@ -118,9 +125,8 @@ export class VentasService {
           data: ventas.data,
           count: ventas.count,
         });
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
-        console.log(this.dataVentas());
+        this.loadingIndicator.loadingOff();
+        //console.log(this.dataVentas());
       });
   }
 

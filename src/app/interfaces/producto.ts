@@ -39,6 +39,10 @@ export interface Inventario {
   id_producto?: number;
 }
 
+export interface ProductosFilter {
+  searchTerm?: string;
+  mostrarEliminados?: boolean;
+}
 /* @Injectable({
   providedIn: 'root',
 })

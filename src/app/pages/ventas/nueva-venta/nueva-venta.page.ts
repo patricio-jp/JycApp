@@ -8,11 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
-import {
-  ModalController,
-  ToastController,
-  Platform,
-} from '@ionic/angular/standalone';
+import { ModalController } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
 import {
   add,
@@ -30,7 +26,6 @@ import {
   EstadoOperacion,
 } from 'src/app/interfaces/operaciones';
 import { Periodo } from 'src/app/interfaces/credito';
-import { ProductosService } from 'src/app/services/productos.service';
 import { Producto } from 'src/app/interfaces/producto';
 import { Cliente } from 'src/app/interfaces/cliente';
 import { ClienteSelectorComponent } from './cliente-selector/cliente-selector.component';
@@ -45,6 +40,7 @@ import {
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { LocalFile } from 'src/app/interfaces/files';
 import { FileService } from 'src/app/services/files.service';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 const IMAGE_DIR = 'stored-comprobantes';
 
@@ -75,14 +71,12 @@ export class NuevaVentaPage implements OnDestroy {
 
   private formBuilder = inject(FormBuilder);
   private router = inject(Router);
-  private toastCtrl = inject(ToastController);
   private modalCtrl = inject(ModalController);
   private subscriptions = new Subscription();
-  private plt = inject(Platform);
 
   private ventasService = inject(VentasService);
-  private productosService = inject(ProductosService);
   private filesService = inject(FileService);
+  private notificationsService = inject(NotificationsService);
 
   condicionOperacion = CondicionOperacion;
 
@@ -347,39 +341,22 @@ export class NuevaVentaPage implements OnDestroy {
           (
             await this.ventasService.createVenta(venta, this.images[0])
           ).subscribe(async (nuevaVta) => {
-            const toast = await this.toastCtrl.create({
-              position: 'top',
-              duration: 3000,
-              message: 'Venta cargada exitosamente',
-            });
-
-            await toast.present();
-
-            toast.onDidDismiss().then(() => {
-              this.nuevaVenta.reset();
-              this.ventasService.getVentas();
-              this.router.navigate(['./dashboard/ventas/listado']);
-            });
+            this.notificationsService.presentToast(
+              'Venta cargada exitosamente'
+            );
+            this.nuevaVenta.reset();
             this.deleteImage(this.images[0]);
+            this.ventasService.getVentas();
+            this.router.navigate(['./dashboard/ventas/listado']);
           })
         );
       } catch (error) {
-        const toast = await this.toastCtrl.create({
-          position: 'top',
-          duration: 3000,
-          message: 'Error al crear la venta',
-        });
-
-        await toast.present();
+        this.notificationsService.presentErrorToast('Error al cargar la venta');
       }
     } else {
-      const toast = await this.toastCtrl.create({
-        position: 'top',
-        duration: 3000,
-        message: 'Formulario inválido',
-      });
-
-      await toast.present();
+      this.notificationsService.presentWarningToast(
+        'Complete todos los campos requeridos'
+      );
     }
   }
 

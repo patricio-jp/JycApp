@@ -17,6 +17,7 @@ import { trashOutline } from 'ionicons/icons';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { NotificationsService } from 'src/app/services/notifications.service';
 
 @Component({
   selector: 'app-nuevo-cliente',
@@ -38,6 +39,7 @@ export class NuevoClientePage implements OnDestroy {
 
   private formBuilder = inject(FormBuilder);
   private clientesService = inject(ClientesService);
+  private notificationsService = inject(NotificationsService);
   private router = inject(Router);
 
   nuevoCliente = this.formBuilder.group({
@@ -114,11 +116,18 @@ export class NuevoClientePage implements OnDestroy {
       };
       this.subscriptions.add(
         this.clientesService.createCliente(cliente).subscribe((newCliente) => {
+          this.notificationsService.presentSuccessToast(
+            'Cliente creado exitosamente'
+          );
           //console.log(newCliente);
           this.clientesService.getClientes();
           this.nuevoCliente.reset();
           this.router.navigate(['./dashboard/clientes/listado']);
         })
+      );
+    } else {
+      this.notificationsService.presentWarningToast(
+        'Por favor complete los campos obligatorios'
       );
     }
   }

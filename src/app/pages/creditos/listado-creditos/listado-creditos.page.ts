@@ -1,11 +1,17 @@
-import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  effect,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonLoading,
   ModalController,
   ActionSheetController,
   ToastController,
@@ -45,7 +51,6 @@ import { EstadoCarton } from 'src/app/interfaces/carton';
     IonHeader,
     IonTitle,
     IonToolbar,
-    IonLoading,
     CommonModule,
     FaIconComponent,
     FormsModule,
@@ -54,6 +59,10 @@ import { EstadoCarton } from 'src/app/interfaces/carton';
 export class ListadoCreditosPage implements OnInit, OnDestroy {
   constructor() {
     addIcons({ informationCircleOutline });
+
+    effect(() => {
+      this.loadingSignal();
+    });
   }
 
   private creditosService = inject(CreditosService);

@@ -4,9 +4,12 @@ import {
   CreateProductoDTO,
   Producto,
   ProductosAPIResponse,
+  ProductosFilter,
 } from '../interfaces/producto';
 import { catchError, of, take, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { NotificationsService } from './notifications.service';
+import { LoadingIndicatorService } from './loading-indicator.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +18,8 @@ export class ProductosService {
   constructor() {}
 
   private httpClient = inject(HttpClient);
+  private loadingIndicator = inject(LoadingIndicatorService);
+  private notificationsService = inject(NotificationsService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/productos/`;
 
@@ -27,14 +32,27 @@ export class ProductosService {
 
   errorSignal = signal<string | null>(null);
 
-  getProductos() {
+  getProductos(
+    pageSize: number = 10,
+    page: number = 1,
+    filters?: ProductosFilter
+  ) {
+    const params: any = { page, pageSize };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    this.loadingIndicator.loadingOn();
     this.httpClient
-      .get<ProductosAPIResponse>(this.apiEndpoint)
+      .get<ProductosAPIResponse>(this.apiEndpoint, { params })
       .pipe(
         take(1),
         catchError((error) => {
-          this.errorSignal.set('Error al cargar los productos');
-          this.loadingSignal.set(false);
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar los productos'
+          );
           return of({
             data: [],
             count: 0,
@@ -46,9 +64,8 @@ export class ProductosService {
           data: productos.data,
           count: productos.count,
         });
-        this.loadingSignal.set(false);
-        this.errorSignal.set(null);
-        console.log(this.dataProductos());
+        this.loadingIndicator.loadingOff();
+        //console.log(this.dataProductos());
       });
   }
 
