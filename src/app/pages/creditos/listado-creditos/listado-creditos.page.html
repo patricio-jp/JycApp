@@ -89,7 +89,8 @@
                           <option value="1">En Dudas</option>
                           <option value="2">Listo (para llevar)</option>
                           <option value="3">Separado</option>
-                          <option value="4">Finalizado o Anulado</option>
+                          <option value="4">Llevado</option>
+                          <option value="5">Finalizado o Anulado</option>
                         </select>
                       </div>
                       <div>
@@ -175,7 +176,12 @@
               <td class="px-4 py-3">{{estadosCreditos[credito.estado]}}</td>
               <td class="px-4 py-3">{{estadosCarton[credito.carton.estado]}}</td>
               <td class="px-4 py-3">{{credito.carton.fechaCarton | date: 'dd/MM/YYYY'}}</td>
-              <td class="p-2 space-x-2">
+              <td class="p-2 space-x-2 whitespace-nowrap">
+                <button
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block"
+                  (click)="gestionCarton(credito)" title="Actualizar estado de cartón">
+                  <fa-icon [icon]="['far', 'clipboard']"></fa-icon>
+                </button>
                 <button
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block lg:hidden"
                   (click)="viewDetails(credito)" title="Detalles">

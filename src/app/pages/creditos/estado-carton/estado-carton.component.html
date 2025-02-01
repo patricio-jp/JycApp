@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Actualizar estado de cartón</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (credito) {
+  <div class="p-4 space-y-2 rounded-md bg-primary-900">
+    <h3 class="font-bold text-lg text-center">Actualizar cartón {{credito.venta.comprobante}}</h3>
+    <p><span class="text-bold">Estado actual: </span>{{estadosCartones[credito.carton.estado]}}</p>
+    @if (grupoCarton.length > 1) {
+    <hr class="my-4">
+    <h4 class="font-bold text-base">Grupo de cartones</h4>
+    <ul class="list-item">
+      @for (carton of grupoCarton; track $index) {
+      <li [className]="carton.id === credito.carton.id ? 'font-bold' : ''">{{carton.id === credito.carton.id ? '[*] ' :
+        ''}}{{carton.credito.venta.comprobante}} -
+        Estado: {{estadosCartones[carton.estado]}}</li>
+      }
+    </ul>
+    }
+
+  </div>
+  <form [formGroup]="estadoNuevo" class="mt-4 space-y-4">
+    <div>
+      <label for="estadoCarton" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cartón</label>
+      <select id="estadoCarton" formControlName="estado"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option [value]="0">Pendiente (no hecho)</option>
+        <option [value]="1">En Dudas</option>
+        <option [value]="2">Listo (para llevar)</option>
+        <option [value]="3">Separado</option>
+        <option [value]="4">Llevado</option>
+        <option [value]="5">Finalizado o Anulado</option>
+      </select>
+    </div>
+    <div>
+      <label for="fechaCarton" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado
+        desde:</label>
+      <ion-datetime-button datetime="fechaCarton"></ion-datetime-button>
+      <ion-modal [keepContentsMounted]="true" id="dateModal">
+        <ng-template>
+          <ion-datetime id="fechaCarton" presentation="YYYY-MM-DD" formControlName="fechaCarton"></ion-datetime>
+        </ng-template>
+      </ion-modal>
+    </div>
+    @if (grupoCarton.length > 1) {
+
+    <div class="flex items-center mb-4">
+      <input id="actualizarGrupo" type="checkbox" formControlName="actualizarGrupo"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+      <label for="actualizarGrupo" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Actualizar todo el
+        grupo</label>
+    </div>
+    }
+  </form>
+  }
+</ion-content>

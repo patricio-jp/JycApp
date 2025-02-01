@@ -13,6 +13,7 @@ import { catchError, of, Observable, take } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingIndicatorService } from './loading-indicator.service';
 import { NotificationsService } from './notifications.service';
+import { CambiarEstadoCartonDTO, EstadoCarton } from '../interfaces/carton';
 
 @Injectable({
   providedIn: 'root',
@@ -145,6 +146,13 @@ export class CreditosService {
 
   updateCredito(id: number, credito: Credito): Observable<Credito> {
     return this.httpClient.put<Credito>(this.apiEndpoint + id, credito);
+  }
+
+  updateCartonStatus(idCredito: number, estado: CambiarEstadoCartonDTO) {
+    return this.httpClient.patch(
+      `${this.apiEndpoint + idCredito}/estadoCarton`,
+      estado
+    );
   }
 
   cargarPago(pago: CargarPagoDTO) {

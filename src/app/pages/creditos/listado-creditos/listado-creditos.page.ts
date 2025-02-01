@@ -35,7 +35,14 @@ import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { CreditoInfoComponent } from '../detalle-credito/credito-info/credito-info.component';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
-import { EstadoCarton } from 'src/app/interfaces/carton';
+import {
+  CambiarEstadoCartonDTO,
+  EstadoCarton,
+} from 'src/app/interfaces/carton';
+import { EstadoCartonComponent } from '../estado-carton/estado-carton.component';
+import { NotificationsService } from 'src/app/services/notifications.service';
+import { CartonesService } from 'src/app/services/cartones.service';
+import { GrupoCartonComponent } from '../grupo-carton/grupo-carton.component';
 
 @Component({
   selector: 'app-listado-creditos',
@@ -66,6 +73,8 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   }
 
   private creditosService = inject(CreditosService);
+  private cartonesService = inject(CartonesService);
+  private notificationsService = inject(NotificationsService);
 
   private modalCtrl = inject(ModalController);
   private actionSheetCtrl = inject(ActionSheetController);
@@ -255,12 +264,9 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
             .deleteCredito(credito.id)
             .subscribe(async (credito) => {
               if (credito) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Credito eliminado correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Crédito eliminado correctamente'
+                );
                 this.creditosService.getCreditos();
               }
             })
@@ -271,12 +277,9 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
             .forceDeleteCredito(credito.id)
             .subscribe(async (credito) => {
               if (credito) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Credito eliminado correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Crédito eliminado correctamente'
+                );
                 this.creditosService.getCreditos();
               }
             })
@@ -319,14 +322,161 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
             .restoreCredito(credito.id)
             .subscribe(async (credito) => {
               if (credito) {
-                const toast = await this.toastCtrl.create({
-                  position: 'top',
-                  message: 'Credito restablecido correctamente',
-                  duration: 3000,
-                });
-                await toast.present();
+                this.notificationsService.presentSuccessToast(
+                  'Crédito restablecido correctamente'
+                );
                 this.creditosService.getCreditos();
               }
+            })
+        );
+      }
+    }
+  }
+
+  async gestionCarton(credito: Credito) {
+    let sheetButtons = [];
+    let buttonGrupo = {
+      text: 'Asignar cartón a grupo',
+      role: 'selected',
+      data: {
+        action: 'asignarAGrupo',
+      },
+    };
+
+    if (credito.carton.grupoCartones) {
+      sheetButtons.push({
+        text: 'Mostrar info del grupo de cartones',
+        role: 'selected',
+        data: {
+          action: 'mostrarGrupo',
+        },
+      });
+      buttonGrupo.text = 'Eliminar cartón del grupo';
+      buttonGrupo.role = 'destructive';
+      buttonGrupo.data.action = 'eliminarDeGrupo';
+    }
+    sheetButtons.push(buttonGrupo);
+
+    const sheet = await this.actionSheetCtrl.create({
+      header: `Acciones sobre el cartón del crédito ${credito.venta.comprobante}`,
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cambiar estado del cartón',
+          role: 'selected',
+          data: {
+            action: 'cambiarEstado',
+          },
+        },
+        ...sheetButtons,
+      ],
+    });
+
+    await sheet.present();
+
+    const { data, role } = await sheet.onWillDismiss();
+    console.log('data: ', data, role);
+
+    if (role === 'destructive' && data.action === 'eliminarDeGrupo') {
+      this.grupoCarton(credito, 'eliminarDeGrupo');
+    } else if (role === 'selected') {
+      if (data.action === 'asignarAGrupo' || data.action === 'mostrarGrupo') {
+        this.grupoCarton(credito, data.action);
+      } else if (data.action === 'cambiarEstado') {
+        this.actualizarEstadoCarton(credito);
+      }
+    }
+  }
+
+  async actualizarEstadoCarton(credito: Credito) {
+    const modal = await this.modalCtrl.create({
+      component: EstadoCartonComponent,
+      componentProps: { credito },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data, role);
+    if (role === 'confirm' && data) {
+      const estado: CambiarEstadoCartonDTO = {
+        estado: Number(data.estado),
+        fechaCarton: data.fechaCarton
+          ? data.fechaCarton
+          : new Date().toISOString().split('T')[0],
+        actualizarGrupo: data.actualizarGrupo,
+      };
+      this.subscriptions.add(
+        this.creditosService
+          .updateCartonStatus(credito.id, estado)
+          .subscribe(() => {
+            this.notificationsService.presentSuccessToast(
+              'Estado del/los cartón/es actualizado/s correctamente'
+            );
+            this.applyFiltersAndPagination();
+          })
+      );
+    }
+  }
+
+  async grupoCarton(
+    credito: Credito,
+    action: 'mostrarGrupo' | 'asignarAGrupo' | 'eliminarDeGrupo'
+  ) {
+    if (action === 'eliminarDeGrupo') {
+      const sheet = await this.actionSheetCtrl.create({
+        header: `Seguro desea eliminar el cartón del grupo?`,
+        buttons: [
+          {
+            text: 'Si, eliminar',
+            role: 'destructive',
+          },
+          {
+            text: 'No, cancelar',
+            role: 'cancel',
+          },
+        ],
+      });
+
+      await sheet.present();
+
+      const { data, role } = await sheet.onWillDismiss();
+      if (role === 'destructive') {
+        this.subscriptions.add(
+          this.cartonesService
+            .eliminarCartonDeGrupo(credito.carton.id)
+            .subscribe(() => {
+              this.notificationsService.presentSuccessToast(
+                'Cartón eliminado del grupo correctamente'
+              );
+              this.applyFiltersAndPagination();
+            })
+        );
+      }
+    } else {
+      const modal = await this.modalCtrl.create({
+        component: GrupoCartonComponent,
+        componentProps: { credito, action },
+        breakpoints: [0.5, 1],
+        initialBreakpoint: 1,
+      });
+
+      modal.present();
+
+      const { data, role } = await modal.onWillDismiss();
+      console.log(data, role);
+      if (role === 'confirm' && data) {
+        const { idCarton, idGrupo } = data;
+        this.subscriptions.add(
+          this.cartonesService
+            .asignarCartonAGrupo(idCarton, idGrupo)
+            .subscribe(() => {
+              this.notificationsService.presentSuccessToast(
+                'Cartón añadido al grupo correctamente'
+              );
+              this.applyFiltersAndPagination();
             })
         );
       }

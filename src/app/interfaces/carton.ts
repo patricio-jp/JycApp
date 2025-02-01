@@ -14,9 +14,23 @@ export interface Carton {
   estado: EstadoCarton;
   fechaCarton?: Date | null;
   credito: Credito;
+  grupoCartones?: GrupoCartones;
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
+}
+
+export interface CartonAPIResponse {
+  data: Carton[];
+  count: number;
+}
+
+export interface CartonesFilter {
+  estado?: EstadoCarton;
+  fechaDesde?: Date;
+  fechaHasta?: Date;
+  searchTerm?: string;
+  mostrarEliminados?: boolean;
 }
 
 export interface GrupoCartones {
@@ -26,4 +40,19 @@ export interface GrupoCartones {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;
+}
+
+export interface CreateGrupoCartonesDTO {
+  alias?: string;
+}
+
+export interface GrupoCartonesAPIResponse {
+  data: GrupoCartones[];
+  count: number;
+}
+
+export interface CambiarEstadoCartonDTO {
+  estado: EstadoCarton;
+  fechaCarton?: Date;
+  actualizarGrupo?: boolean;
 }

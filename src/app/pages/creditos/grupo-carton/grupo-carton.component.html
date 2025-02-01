@@ -1,0 +1,124 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Asignar cartón a grupo</ion-title>
+    @if (action === 'asignarAGrupo') {
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
+    </ion-buttons>
+    }
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  @if (credito) {
+  <div class="p-4 space-y-2 rounded-md bg-primary-900">
+    <h3 class="font-bold text-lg text-center">Cartón seleccionado</h3>
+    <div>
+      <div>
+        <p>Crédito: {{ credito.venta.comprobante }} - Fecha Inicio: {{credito.fechaInicio | date: 'dd/MM/yyy'}}
+        </p>
+        <p>{{credito.cantidadCuotas}} cuotas ({{periodos[credito.periodo]}}) de {{credito.montoCuota | currency: 'ARS'}}
+        </p>
+      </div>
+      <div>
+        <strong>Productos:</strong>
+        @for (producto of credito.venta.productos; track $index) {
+        <div class="ml-2">- {{ producto.producto.nombre }}</div>
+        }
+      </div>
+      <div>Cliente: {{ credito.venta.cliente?.apellido + ", " + credito.venta.cliente?.nombre }}</div>
+    </div>
+  </div>
+  <hr class="my-4">
+  @if (!grupoCreado && action === 'asignarAGrupo') {
+  <div class="flex items-center mb-4">
+    <input id="crearNuevo" type="checkbox" [disabled]="grupoCreado" [(ngModel)]="crearNuevo"
+      [ngClass]="grupoCreado ? 'cursor-not-allowed' : ''"
+      class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+    <label for="crearNuevo" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Crear nuevo grupo</label>
+  </div>
+  <hr class="my-4">
+  }
+  }
+  @if (crearNuevo) {
+  <form [formGroup]="nuevoGrupo" class="space-y-4">
+    <h3 class="font-bold text-xl">Nuevo grupo de cartones</h3>
+    <div>
+      <label for="aliasGrupo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Alias de
+        grupo</label>
+      <input type="text" id="aliasGrupo" formControlName="alias"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <button type="button" (click)="crearGrupo()"
+      class="flex items-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+      <fa-icon class="mr-2" [icon]="['fas', 'plus']"></fa-icon>
+      Crear grupo
+    </button>
+  </form>
+  } @else {
+  @if (grupoSeleccionado) {
+  <div class="p-4 space-y-2 rounded-md bg-success-800">
+    <h3 class="font-bold text-lg text-center">Grupo seleccionado</h3>
+    <div>
+      <p><span class="font-bold">Grupo:</span> {{grupoSeleccionado.alias ? grupoSeleccionado.alias : 'id ' +
+        grupoSeleccionado.id}}</p>
+    </div>
+    <div>
+      <strong>Cartones en el grupo:</strong>
+      <ul class="list-disc list-inside space-y-2">
+        @for (carton of grupoSeleccionado.cartones; track $index) {
+        <li class="list-item">
+          <p>Crédito: {{ carton.credito.venta.comprobante }} - Fecha Inicio: {{carton.credito.fechaInicio | date:
+            'dd/MM/yyy'}}
+          </p>
+          <p>Cliente: {{ carton.credito.venta.cliente?.apellido + ", " + carton.credito.venta.cliente?.nombre }}</p>
+          <p>{{carton.credito.cantidadCuotas}} cuotas ({{periodos[carton.credito.periodo]}}) de
+            {{carton.credito.montoCuota | currency: 'ARS' :
+            'symbol' : '1.2-2'}}
+          </p>
+        </li>
+        } @empty {
+        <li>No existen cartones en este grupo</li>
+        }
+      </ul>
+    </div>
+  </div>
+  }
+  @if (action === 'asignarAGrupo') {
+  <hr class="my-4">
+  <ion-searchbar placeholder="Buscar alias o cartón de otro grupo" inputmode="text" type="text"
+    (ionChange)="searchGrupo($event)" [debounce]="250" showClearButton="focus" enterkeyhint="Buscar"
+    class="bg-transparent border-0"></ion-searchbar>
+  <ion-list>
+    <ion-item *ngFor="let result of searchResults()" (click)="selectGrupo(result)">
+      <ion-label>
+        <div>
+          <p><span class="font-bold">Grupo:</span> {{result.alias ? result.alias : 'id ' + result.id}}</p>
+        </div>
+        <div>
+          <strong>Cartones en el grupo:</strong>
+          <ul class="list-disc list-inside space-y-2">
+            @for (carton of result.cartones; track $index) {
+            <li class="list-item">
+              <p>Crédito: {{ carton.credito.venta.comprobante }} - Fecha Inicio: {{carton.credito.fechaInicio | date:
+                'dd/MM/yyy'}}
+              </p>
+              <p>Cliente: {{ carton.credito.venta.cliente?.apellido + ", " + carton.credito.venta.cliente?.nombre }}</p>
+              <p>{{carton.credito.cantidadCuotas}} cuotas ({{periodos[carton.credito.periodo]}}) de
+                {{carton.credito.montoCuota | currency: 'ARS' :
+                'symbol' : '1.2-2'}}
+              </p>
+            </li>
+            } @empty {
+            <li>No existen cartones en este grupo</li>
+            }
+          </ul>
+        </div>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  }
+  }
+</ion-content>

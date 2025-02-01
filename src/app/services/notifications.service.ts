@@ -1,5 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { AlertController, ToastController } from '@ionic/angular/standalone';
+import {
+  AlertController,
+  ToastController,
+  ToastButton,
+} from '@ionic/angular/standalone';
 
 @Injectable({
   providedIn: 'root',
@@ -18,43 +22,63 @@ export class NotificationsService {
     await alert.present();
   }
 
-  async presentToast(message: string) {
+  async presentToast(
+    message: string,
+    duration: number = 3000,
+    buttons?: ToastButton[]
+  ) {
     const toast = await this.toastCtrl.create({
       message,
-      duration: 3000,
+      duration,
       position: 'top',
+      buttons,
     });
 
     await toast.present();
   }
 
-  async presentErrorToast(message: string) {
+  async presentErrorToast(
+    message: string,
+    duration: number = 3000,
+    buttons?: ToastButton[]
+  ) {
     const toast = await this.toastCtrl.create({
       message,
-      duration: 3000,
+      duration,
       position: 'top',
+      buttons,
       color: 'danger',
     });
 
     await toast.present();
   }
 
-  async presentWarningToast(message: string) {
+  async presentWarningToast(
+    message: string,
+    duration: number = 3000,
+    buttons?: ToastButton[]
+  ) {
     const toast = await this.toastCtrl.create({
       message,
-      duration: 3000,
+      duration,
       position: 'top',
+      buttons,
       color: 'warning',
     });
 
     await toast.present();
   }
 
-  async presentSuccessToast(message: string) {
+  async presentSuccessToast(
+    message: string,
+    duration: number = 3000,
+    buttons?: ToastButton[]
+  ) {
     const toast = await this.toastCtrl.create({
       message,
-      duration: 3000,
+      duration,
       position: 'top',
+      buttons,
       color: 'success',
     });
 
