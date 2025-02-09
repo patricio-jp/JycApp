@@ -5,6 +5,7 @@ import {
   CreateVentaDTO,
   EstadoOperacion,
   Venta,
+  VentaAPICounter,
   VentasAPIResponse,
   VentasFilter,
 } from '../interfaces/operaciones';
@@ -37,51 +38,16 @@ export class VentasService {
 
   errorSignal = signal<string | null>(null);
 
-  cantVentasTotales = computed(() => this.listadoVentas().length);
+  cantVentasTotales = signal<number>(0);
 
-  cantVentasPendientes = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.estado === EstadoOperacion.Pendiente
-      ).length
-  );
-  cantVentasParaEntrega = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.estado === EstadoOperacion.ParaEntregar
-      ).length
-  );
-  cantVentasPagadas = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.estado === EstadoOperacion.Pagado
-      ).length
-  );
-  cantVentasEntregadas = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.estado === EstadoOperacion.Entregado
-      ).length
-  );
-  cantVentasAnuladas = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.estado === EstadoOperacion.Anulado
-      ).length
-  );
+  cantVentasPendientes = signal<number>(0);
+  cantVentasParaEntrega = signal<number>(0);
+  cantVentasPagadas = signal<number>(0);
+  cantVentasEntregadas = signal<number>(0);
+  cantVentasAnuladas = signal<number>(0);
 
-  cantVentasACredito = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.condicion === CondicionOperacion.CTA_CTE
-      ).length
-  );
-  cantVentasAlContado = computed(
-    () =>
-      this.listadoVentas().filter(
-        (venta) => venta.condicion === CondicionOperacion.CONTADO
-      ).length
-  );
+  cantVentasACredito = signal<number>(0);
+  cantVentasAlContado = signal<number>(0);
 
   getVentas(pageSize: number = 10, page: number = 1, filters?: VentasFilter) {
     /* let filter = '';
@@ -127,6 +93,59 @@ export class VentasService {
         });
         this.loadingIndicator.loadingOff();
         //console.log(this.dataVentas());
+      });
+  }
+
+  getCounters(filters?: VentasFilter) {
+    const params: any = { counterQuery: true };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    this.loadingIndicator.loadingOn();
+    this.httpClient
+      .get<VentaAPICounter>(this.apiEndpoint, { params })
+      .pipe(
+        take(1),
+        catchError((error) => {
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar las ventas'
+          );
+          return of([]);
+        })
+      )
+      .subscribe((response) => {
+        if (Array.isArray(response)) {
+          return;
+        }
+        this.cantVentasTotales.set(response.count);
+        response.data.forEach((counter) => {
+          const estadoMap = {
+            [EstadoOperacion.Pendiente]: this.cantVentasPendientes,
+            [EstadoOperacion.ParaEntregar]: this.cantVentasParaEntrega,
+            [EstadoOperacion.Entregado]: this.cantVentasEntregadas,
+            [EstadoOperacion.Pagado]: this.cantVentasPagadas,
+            [EstadoOperacion.Anulado]: this.cantVentasAnuladas,
+          };
+
+          const condicionMap = {
+            [CondicionOperacion.CONTADO]: this.cantVentasAlContado,
+            [CondicionOperacion.CTA_CTE]: this.cantVentasACredito,
+          };
+
+          if (estadoMap[counter.estado as EstadoOperacion]) {
+            estadoMap[Number(counter.estado) as EstadoOperacion].set(
+              counter.count
+            );
+          }
+
+          if (condicionMap[counter.condicion]) {
+            condicionMap[counter.condicion].set(counter.count);
+          }
+        });
+        this.loadingIndicator.loadingOff();
       });
   }
 

@@ -72,8 +72,8 @@ export class HomePage implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.clientesService.getClientes();
-    this.ventasService.getVentas();
-    this.creditosService.getCreditos();
+    this.clientesService.getCounters();
+    this.ventasService.getCounters();
+    this.creditosService.getCounters();
   }
 }

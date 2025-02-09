@@ -55,6 +55,11 @@ export interface ClienteAPIResponse {
   count: number;
 }
 
+export interface ClienteAPICounter {
+  data: { estado: EstadoCliente; count: number }[];
+  count: number;
+}
+
 export interface ClientesFilter {
   searchTerm?: string; // Usado para campos simples de la entidad
   domicilio?: string;

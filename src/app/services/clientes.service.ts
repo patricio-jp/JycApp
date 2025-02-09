@@ -3,6 +3,7 @@ import { Injectable, computed, inject, signal } from '@angular/core';
 import { catchError, Observable, of, take } from 'rxjs';
 import {
   Cliente,
+  ClienteAPICounter,
   ClienteAPIResponse,
   ClientesFilter,
   CreateClienteDTO,
@@ -33,38 +34,12 @@ export class ClientesService {
 
   errorSignal = signal<string | null>(null);
 
-  cantClientesTotales = computed(() => this.listadoClientes().length);
-
-  cantPendientes = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.AConfirmar
-      ).length
-  );
-  cantActivos = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Activo
-      ).length
-  );
-  cantInactivos = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Inactivo
-      ).length
-  );
-  cantConDeuda = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.ConDeuda
-      ).length
-  );
-  cantIncobrables = computed(
-    () =>
-      this.listadoClientes().filter(
-        (cliente) => cliente.estado === EstadoCliente.Incobrable
-      ).length
-  );
+  cantClientesTotales = signal<number>(0);
+  cantPendientes = signal<number>(0);
+  cantActivos = signal<number>(0);
+  cantInactivos = signal<number>(0);
+  cantConDeuda = signal<number>(0);
+  cantIncobrables = signal<number>(0);
 
   getClientes(
     pageSize: number = 10,
@@ -99,6 +74,49 @@ export class ClientesService {
           count: clientes.count,
         });
         //console.log(this.listadoClientes());
+        this.loadingIndicator.loadingOff();
+      });
+  }
+
+  getCounters(filters?: ClientesFilter) {
+    const params: any = { counterQuery: true };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    this.loadingIndicator.loadingOn();
+    this.httpClient
+      .get<ClienteAPICounter>(this.apiEndpoint, { params })
+      .pipe(
+        take(1),
+        catchError((error) => {
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar los clientes'
+          );
+          return of([]);
+        })
+      )
+      .subscribe((response) => {
+        if (Array.isArray(response)) {
+          return;
+        }
+        this.cantClientesTotales.set(response.count);
+        response.data.forEach((counter) => {
+          const estadoMap = {
+            [EstadoCliente.AConfirmar]: this.cantPendientes,
+            [EstadoCliente.Activo]: this.cantActivos,
+            [EstadoCliente.Inactivo]: this.cantInactivos,
+            [EstadoCliente.ConDeuda]: this.cantConDeuda,
+            [EstadoCliente.Incobrable]: this.cantIncobrables,
+          };
+
+          const signal = estadoMap[counter.estado as EstadoCliente];
+          if (signal) {
+            signal.set(counter.count);
+          }
+        });
         this.loadingIndicator.loadingOff();
       });
   }

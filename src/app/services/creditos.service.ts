@@ -3,6 +3,7 @@ import {
   CargarPagoDTO,
   CreateCreditoDTO,
   Credito,
+  CreditoAPICounter,
   CreditoAPIResponse,
   CreditosFilter,
   EstadoCredito,
@@ -36,66 +37,24 @@ export class CreditosService {
 
   errorSignal = signal<string | null>(null);
 
-  cantCreditosTotales = computed(() => this.listadoCreditos().length);
+  cantCreditosTotales = signal<number>(0);
 
-  cantCreditosPendientes = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) => credito.estado === EstadoCredito.Pendiente
-      ).length
-  );
-  cantCreditosActivos = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) => credito.estado === EstadoCredito.Activo
-      ).length
-  );
-  cantCreditosPagados = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) => credito.estado === EstadoCredito.Pagado
-      ).length
-  );
-  cantCreditosEnDeuda = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) => credito.estado === EstadoCredito.EnDeuda
-      ).length
-  );
-  cantCreditosAnulados = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) => credito.estado === EstadoCredito.Anulado
-      ).length
-  );
+  cantCreditosPendientes = signal<number>(0);
+  cantCreditosActivos = signal<number>(0);
+  cantCreditosPagados = signal<number>(0);
+  cantCreditosEnDeuda = signal<number>(0);
+  cantCreditosAnulados = signal<number>(0);
 
-  cantCreditosActivosSemanales = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) =>
-          credito.estado !== EstadoCredito.Anulado &&
-          credito.estado !== EstadoCredito.Pagado &&
-          credito.periodo === Periodo.Semanal
-      ).length
-  );
-  cantCreditosActivosQuincenales = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) =>
-          credito.estado !== EstadoCredito.Anulado &&
-          credito.estado !== EstadoCredito.Pagado &&
-          credito.periodo === Periodo.Quincenal
-      ).length
-  );
-  cantCreditosActivosMensuales = computed(
-    () =>
-      this.listadoCreditos().filter(
-        (credito) =>
-          credito.estado !== EstadoCredito.Anulado &&
-          credito.estado !== EstadoCredito.Pagado &&
-          credito.periodo === Periodo.Mensual
-      ).length
-  );
+  cantCreditosActivosSemanales = signal<number>(0);
+  cantCreditosActivosQuincenales = signal<number>(0);
+  cantCreditosActivosMensuales = signal<number>(0);
+
+  cantCartonesPendientes = signal<number>(0);
+  cantCartonesListos = signal<number>(0);
+  cantCartonesEnDudas = signal<number>(0);
+  cantCartonesLlevados = signal<number>(0);
+  cantCartonesSeparados = signal<number>(0);
+  cantCartonesFinalizados = signal<number>(0);
 
   getCreditos(
     pageSize: number = 10,
@@ -133,6 +92,63 @@ export class CreditosService {
         this.loadingIndicator.loadingOff();
         this.errorSignal.set(null);
         //console.log(creditos);
+      });
+  }
+
+  getCounters(filters?: CreditosFilter) {
+    const params: any = { counterQuery: true };
+    if (filters) {
+      Object.entries(filters).forEach(([key, value]) => {
+        params[key] = value;
+      });
+    }
+    this.loadingIndicator.loadingOn();
+    this.httpClient
+      .get<CreditoAPICounter>(this.apiEndpoint, { params })
+      .pipe(
+        take(1),
+        catchError((error) => {
+          this.loadingIndicator.loadingOff();
+          this.notificationsService.presentErrorToast(
+            'Error al cargar los créditos'
+          );
+          return of([]);
+        })
+      )
+      .subscribe((response) => {
+        if (Array.isArray(response)) {
+          return;
+        }
+        this.cantCreditosTotales.set(response.count);
+        response.data.forEach((counter) => {
+          const estadoCreditoMap = {
+            [EstadoCredito.Pendiente]: this.cantCreditosPendientes,
+            [EstadoCredito.Activo]: this.cantCreditosActivos,
+            [EstadoCredito.EnDeuda]: this.cantCreditosEnDeuda,
+            [EstadoCredito.Pagado]: this.cantCreditosPagados,
+            [EstadoCredito.Anulado]: this.cantCreditosAnulados,
+          };
+
+          const periodoMap = {
+            [Periodo.Mensual]: this.cantCreditosActivosMensuales,
+            [Periodo.Quincenal]: this.cantCreditosActivosQuincenales,
+            [Periodo.Semanal]: this.cantCreditosActivosSemanales,
+          };
+
+          const estadoCartonMap = {
+            [EstadoCarton.Pendiente]: this.cantCartonesPendientes,
+            [EstadoCarton.EnDudas]: this.cantCartonesEnDudas,
+            [EstadoCarton.Listo]: this.cantCartonesListos,
+            [EstadoCarton.Separado]: this.cantCartonesSeparados,
+            [EstadoCarton.Llevado]: this.cantCartonesLlevados,
+            [EstadoCarton.Finalizado]: this.cantCartonesFinalizados,
+          };
+
+          estadoCreditoMap[counter.estadoCredito]?.set(counter.count);
+          periodoMap[counter.periodo]?.set(counter.count);
+          estadoCartonMap[counter.estadoCarton]?.set(counter.count);
+        });
+        this.loadingIndicator.loadingOff();
       });
   }
 

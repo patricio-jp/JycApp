@@ -51,6 +51,15 @@ export interface VentasAPIResponse {
   count: number;
 }
 
+export interface VentaAPICounter {
+  data: {
+    estado: EstadoOperacion;
+    condicion: CondicionOperacion;
+    count: number;
+  }[];
+  count: number;
+}
+
 export interface CreateVentaDTO {
   fecha: Date | string;
   comprobante?: string;

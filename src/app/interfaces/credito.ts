@@ -82,3 +82,13 @@ export interface CreditoAPIResponse {
   data: Credito[];
   count: number;
 }
+
+export interface CreditoAPICounter {
+  data: {
+    estadoCredito: EstadoCredito;
+    periodo: Periodo;
+    estadoCarton: EstadoCarton;
+    count: number;
+  }[];
+  count: number;
+}
