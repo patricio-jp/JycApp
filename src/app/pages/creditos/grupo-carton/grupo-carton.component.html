@@ -3,7 +3,7 @@
     <ion-buttons slot="start">
       <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
-    <ion-title>Asignar cartón a grupo</ion-title>
+    <ion-title>{{title()}}</ion-title>
     @if (action === 'asignarAGrupo') {
     <ion-buttons slot="end">
       <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
@@ -13,7 +13,7 @@
 </ion-header>
 <ion-content class="ion-padding">
   @if (credito) {
-  <div class="p-4 space-y-2 rounded-md bg-primary-900">
+  <div class="p-4 space-y-2 rounded-md text-white bg-primary-900">
     <h3 class="font-bold text-lg text-center">Cartón seleccionado</h3>
     <div>
       <div>
@@ -59,7 +59,7 @@
   </form>
   } @else {
   @if (grupoSeleccionado) {
-  <div class="p-4 space-y-2 rounded-md bg-success-800">
+  <div class="p-4 space-y-2 rounded-md text-white bg-success-800">
     <h3 class="font-bold text-lg text-center">Grupo seleccionado</h3>
     <div>
       <p><span class="font-bold">Grupo:</span> {{grupoSeleccionado.alias ? grupoSeleccionado.alias : 'id ' +

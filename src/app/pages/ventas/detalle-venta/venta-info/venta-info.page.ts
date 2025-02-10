@@ -85,10 +85,6 @@ export class VentaInfoPage implements OnInit, OnDestroy {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  confirm() {
-    return this.modalCtrl.dismiss(null, 'confirm');
-  }
-
   async showComprobante(comprobanteBlob: string) {
     const modal = await this.modalCtrl.create({
       id: 'imageModal',

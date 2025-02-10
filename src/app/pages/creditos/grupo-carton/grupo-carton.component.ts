@@ -88,6 +88,12 @@ export class GrupoCartonComponent implements OnInit, OnDestroy {
     alias: [''],
   });
 
+  title = computed(() =>
+    this.action === 'asignarAGrupo'
+      ? 'Asignar cartón a grupo'
+      : 'Detalles del grupo de cartones'
+  );
+
   constructor() {}
 
   ngOnInit() {

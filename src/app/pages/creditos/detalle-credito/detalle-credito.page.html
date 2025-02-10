@@ -1,4 +1,4 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="true" class="print:hidden">
   <ion-toolbar>
     <ion-title>Detalle</ion-title>
   </ion-toolbar>
@@ -10,17 +10,17 @@
       <ion-title size="large">Detalle</ion-title>
     </ion-toolbar>
   </ion-header> -->
-  <ion-card>
+  <ion-card class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
     <ion-card-header>
-      <ion-card-title>Detalle</ion-card-title>
+      <ion-card-title class="font-bold">Detalle</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       @if (credito) {
-      <div class="space-y-2">
+      <div class="space-y-2 lg:columns-2 print:columns-2">
         <p><span class="font-bold">Crédito N°: </span>{{credito.venta.comprobante}}</p>
         <p><span class="font-bold">Cliente: </span>{{credito.venta.cliente?.apellido + ", " +
           credito.venta.cliente?.nombre}}</p>
-        <p><span class="font-bold">Fecha Inicio: </span>{{credito.fechaInicio | date}}</p>
+        <p><span class="font-bold">Fecha Inicio: </span>{{credito.fechaInicio | date: 'dd/MM/YYYY'}}</p>
         <p><span class="font-bold">Cant. de cuotas: </span>{{credito.cantidadCuotas}}</p>
         <p><span class="font-bold">Período: </span>{{periodos[credito.periodo]}}</p>
         <p><span class="font-bold">Monto cuota: </span>{{credito.montoCuota | currency: 'ARS'}}</p>
@@ -28,10 +28,9 @@
         <p><span class="font-bold">Estado: </span>{{estadosCreditos[credito.estado]}}</p>
       </div>
       <hr class="my-4">
-      <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-          <thead
-            class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <div class="relative overflow-x-auto print:overflow-hidden print:w-full">
+        <table class="w-full text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 print:bg-gray-200 dark:bg-gray-700">
             <tr>
               <th class="px-4 py-3">Cuota N°</th>
               <th class="px-4 py-3">Fecha Venc.</th>
@@ -44,13 +43,14 @@
           </thead>
           <tbody class="text-center">
             @for (cuota of credito.cuotas; track cuota.id) {
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr
+              class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-800">
               <td class="px-4 py-3">{{cuota.cuotaNro}}</td>
-              <td class="px-4 py-3">{{cuota.fechaVencimiento | date}}</td>
+              <td class="px-4 py-3">{{cuota.fechaVencimiento | date: 'dd/MM/YYYY'}}</td>
               <td class="px-4 py-3">{{cuota.montoCuota | currency: 'ARS'}}</td>
               <td class="px-4 py-3">{{estadosCuota[cuota.estado]}}</td>
-              <td class="px-4 py-3">{{cuota.montoPagado | currency: 'ARS'}}</td>
-              <td class="px-4 py-3">{{cuota.fechaPago | date}}</td>
+              <td class="px-4 py-3">{{cuota.montoPagado != 0 ? (cuota.montoPagado | currency: 'ARS') : '-'}}</td>
+              <td class="px-4 py-3">{{cuota.fechaPago | date: 'dd/MM/YYYY'}}</td>
               <td class="px-4 py-3"></td>
             </tr>
             }

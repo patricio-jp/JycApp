@@ -1,12 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button color="medium" (click)="cancel()">Cerrar</ion-button>
     </ion-buttons>
     <ion-title>Detalle</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -28,13 +25,12 @@
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-      <thead
-        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-4 py-3">ID</th>
           <th scope="col" class="px-4 py-3">Código</th>
-          <th scope="col" class="px-4 py-3">Nombre</th>
+          <th scope="col" class="px-4 py-3">Producto</th>
           <th scope="col" class="px-4 py-3">Cantidad</th>
           <th scope="col" class="px-4 py-3">Precio Unitario</th>
           <th scope="col" class="px-4 py-3">Subtotal</th>
@@ -43,10 +39,11 @@
       </thead>
       <tbody class="text-center">
         @for (detalle of venta.productos; track $index) {
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
           <td class="px-4 py-3">{{detalle.producto.id}}</td>
           <td class="px-4 py-3">{{detalle.producto.codigo}}</td>
-          <td class="px-4 py-3 text-left">{{detalle.producto.nombre}}</td>
+          <td class="px-4 py-3 text-left whitespace-nowrap">{{detalle.producto.nombre}}</td>
           <td class="px-4 py-3">{{detalle.cantidad}}</td>
           <td class="px-4 py-3">{{detalle.precioUnitario | currency: 'ARS'}}</td>
           <td class="px-4 py-3">{{(detalle.cantidad * detalle.precioUnitario) | currency: 'ARS'}}</td>
@@ -63,12 +60,12 @@
       Financiación asociada
       <!-- <a class="text-primary-600 hover:underline"
         routerLink="/dashboard/creditos/detalle/{{venta.financiacion[0].id}}">Detalles</a> -->
-      <ion-button (click)="viewCreditoDetails(venta.financiacion[0])" fill="clear" shape="round">
+      <a (click)="viewCreditoDetails(venta.financiacion[0])" class="text-primary-700 ml-3 text-base">
         Detalles
-      </ion-button>
+      </a>
     </h3>
-    <table class="w-full mt-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-      <thead class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full mt-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <thead class="text-xs text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th scope="col" class="px-4 py-3">ID</th>
           <th scope="col" class="px-4 py-3">Fecha Inicio</th>
@@ -82,7 +79,8 @@
       </thead>
       <tbody class="text-center">
         @for (credito of venta.financiacion; track $index) {
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
           <td class="px-4 py-3">{{credito.id}}</td>
           <td class="px-4 py-3">{{credito.fechaInicio | date}}</td>
           <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>

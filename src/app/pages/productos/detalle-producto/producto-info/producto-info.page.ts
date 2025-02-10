@@ -4,8 +4,6 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonTitle,
   ModalController,
@@ -28,8 +26,6 @@ import { Producto } from 'src/app/interfaces/producto';
     IonButton,
     IonContent,
     IonTitle,
-    IonCard,
-    IonCardContent,
   ],
 })
 export class ProductoInfoPage {
@@ -41,9 +37,5 @@ export class ProductoInfoPage {
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    return this.modalCtrl.dismiss(null, 'confirm');
   }
 }

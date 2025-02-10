@@ -1,6 +1,5 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonHeader,
@@ -19,7 +18,6 @@ import {
   EstadoCuota,
   Periodo,
 } from 'src/app/interfaces/credito';
-import { CreditoInfoComponent } from './credito-info/credito-info.component';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -37,7 +35,6 @@ import { Subscription } from 'rxjs';
     IonCardHeader,
     IonCardTitle,
     IonCardContent,
-    CreditoInfoComponent,
   ],
 })
 export class DetalleCreditoPage implements OnDestroy {

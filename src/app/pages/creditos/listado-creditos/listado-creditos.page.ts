@@ -5,6 +5,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -87,19 +88,40 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   listadoCreditos = computed(() => this.creditosService.listadoCreditos());
   loadingSignal = computed(() => this.creditosService.loadingSignal());
 
-  actualPage: number = 1;
+  actualPage = signal(1);
   pageSize: number = 10;
   totalPages = computed(() => {
     const totalCreditos = this.dataCreditos().count;
     return Math.ceil(totalCreditos / this.pageSize);
   });
   arrayPages = computed(() => {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+    const range = 3;
+    const totalPages = this.totalPages();
+    const currentPage = this.actualPage();
+
+    const start = Math.max(1, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push('...');
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      pages.push('...');
+    }
+
+    return pages;
   });
   itemsShowed = computed(() => {
-    const start = (this.actualPage - 1) * this.pageSize + 1;
+    const start = (this.actualPage() - 1) * this.pageSize + 1;
     const end = Math.min(
-      this.actualPage * this.pageSize,
+      this.actualPage() * this.pageSize,
       this.dataCreditos().count
     );
     return `${start} - ${end}`;
@@ -127,7 +149,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   applyFiltersAndPagination() {
     this.creditosService.getCreditos(
       this.pageSize,
-      this.actualPage,
+      this.actualPage(),
       this.filters
     );
   }
@@ -138,22 +160,22 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    if (this.actualPage !== this.totalPages()) {
-      this.actualPage++;
+    if (this.actualPage() < this.totalPages()) {
+      this.actualPage.set(this.actualPage() + 1);
       this.applyFiltersAndPagination();
     }
   }
 
   previousPage() {
-    if (this.actualPage > 1) {
-      this.actualPage--;
+    if (this.actualPage() > 1) {
+      this.actualPage.set(this.actualPage() - 1);
       this.applyFiltersAndPagination();
     }
   }
 
   goToPage(page: number) {
-    if (this.actualPage !== page) {
-      this.actualPage = page;
+    if (this.actualPage() !== page) {
+      this.actualPage.set(page);
       this.applyFiltersAndPagination();
     }
   }
@@ -184,7 +206,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
       )
     );
     console.log(this.filters);
-    this.actualPage = 1; // Reset to first page on new filter
+    this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
 
@@ -196,7 +218,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
     this.fechaVencCuotaFilter = undefined;
     this.eliminadosFilter = false;
     this.filters = {};
-    this.actualPage = 1; // Reset to first page on clear filters
+    this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
   }
 

@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import {
   Credito,
   EstadoCredito,
@@ -10,8 +10,6 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonTitle,
   ModalController,
@@ -31,8 +29,6 @@ import { CommonModule } from '@angular/common';
     IonButton,
     IonContent,
     IonTitle,
-    IonCard,
-    IonCardContent,
   ],
 })
 export class CreditoInfoComponent {
@@ -48,9 +44,5 @@ export class CreditoInfoComponent {
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
-  }
-
-  confirm() {
-    return this.modalCtrl.dismiss(null, 'confirm');
   }
 }

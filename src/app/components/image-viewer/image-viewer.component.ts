@@ -11,7 +11,7 @@ import {
   IonIcon,
 } from '@ionic/angular/standalone';
 import { addIcons } from 'ionicons';
-import { shareOutline } from 'ionicons/icons';
+import { share, shareOutline } from 'ionicons/icons';
 
 @Component({
   selector: 'app-image-viewer',
@@ -34,7 +34,7 @@ export class ImageViewerComponent {
   private modalCtrl = inject(ModalController);
 
   constructor() {
-    addIcons({ shareOutline });
+    addIcons({ share, shareOutline });
   }
 
   cancel() {

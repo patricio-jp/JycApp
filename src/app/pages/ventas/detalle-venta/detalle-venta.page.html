@@ -10,14 +10,14 @@
       <ion-title size="large">Detalle</ion-title>
     </ion-toolbar>
   </ion-header> -->
-  <ion-card>
+  <ion-card class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
     <ion-card-header>
-      <ion-card-title>Detalle</ion-card-title>
+      <ion-card-title class="font-bold">Detalle</ion-card-title>
     </ion-card-header>
     <ion-card-content>
       @if (venta) {
       <div class="space-y-2 lg:flex lg:space-y-0 lg:space-x-4">
-        <div class="lg:w-1/2">
+        <div class="lg:w-1/2 lg:columns-2 print:columns-2">
           <p><span class="font-bold">Venta N°: </span>{{venta.comprobante}}</p>
           <p><span class="font-bold">Cliente: </span>{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</p>
           <p><span class="font-bold">Fecha: </span>{{venta.fecha | date}}</p>
@@ -35,13 +35,13 @@
       </div>
       <hr class="my-4">
       <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-          <thead
-            class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <ion-card-title>Productos</ion-card-title>
+        <table class="w-max mx-auto text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
               <th scope="col" class="px-4 py-3">ID</th>
               <th scope="col" class="px-4 py-3">Código</th>
-              <th scope="col" class="px-4 py-3">Nombre</th>
+              <th scope="col" class="px-4 py-3">Producto</th>
               <th scope="col" class="px-4 py-3">Cantidad</th>
               <th scope="col" class="px-4 py-3">Precio Unitario</th>
               <th scope="col" class="px-4 py-3">Subtotal</th>
@@ -50,7 +50,8 @@
           </thead>
           <tbody class="text-center">
             @for (detalle of venta.productos; track $index) {
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr
+              class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
               <td class="px-4 py-3">{{detalle.producto.id}}</td>
               <td class="px-4 py-3">{{detalle.producto.codigo}}</td>
               <td class="px-4 py-3 text-left">{{detalle.producto.nombre}}</td>
@@ -71,8 +72,8 @@
           <a class="text-primary-600 hover:underline"
             routerLink="/dashboard/creditos/detalle/{{venta.financiacion[0].id}}">Detalles</a>
         </ion-card-title>
-        <table class="w-full mt-4 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-          <thead class="text-xs text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-max mx-auto mt-4 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          <thead class="text-xs text-center uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
               <th scope="col" class="px-4 py-3">ID</th>
               <th scope="col" class="px-4 py-3">Fecha Inicio</th>
@@ -86,7 +87,8 @@
           </thead>
           <tbody class="text-center">
             @for (credito of venta.financiacion; track $index) {
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+            <tr
+              class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
               <td class="px-4 py-3">{{credito.id}}</td>
               <td class="px-4 py-3">{{credito.fechaInicio | date}}</td>
               <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>

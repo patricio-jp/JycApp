@@ -1,4 +1,11 @@
-import { Component, OnDestroy, OnInit, computed, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -16,8 +23,6 @@ import {
 } from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { Router, RouterModule } from '@angular/router';
-import { addIcons } from 'ionicons';
-import { chevronUp } from 'ionicons/icons';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { ClienteInfoComponent } from '../detalle-cliente/cliente-info/cliente-info.component';
 import { Subscription } from 'rxjs';
@@ -42,9 +47,7 @@ import { NotificationsService } from 'src/app/services/notifications.service';
   ],
 })
 export class ListadoClientesPage implements OnInit, OnDestroy {
-  constructor() {
-    addIcons({ chevronUp });
-  }
+  constructor() {}
 
   private clientesService = inject(ClientesService);
   private notificationsService = inject(NotificationsService);
@@ -60,19 +63,40 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
 
   estadoClientes = EstadoCliente;
 
-  actualPage: number = 1;
+  actualPage = signal(1);
   pageSize: number = 10;
   totalPages = computed(() => {
     const totalVentas = this.dataClientes().count;
     return Math.ceil(totalVentas / this.pageSize);
   });
   arrayPages = computed(() => {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+    const range = 3;
+    const totalPages = this.totalPages();
+    const currentPage = this.actualPage();
+
+    const start = Math.max(1, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push('...');
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      pages.push('...');
+    }
+
+    return pages;
   });
   itemsShowed = computed(() => {
-    const start = (this.actualPage - 1) * this.pageSize + 1;
+    const start = (this.actualPage() - 1) * this.pageSize + 1;
     const end = Math.min(
-      this.actualPage * this.pageSize,
+      this.actualPage() * this.pageSize,
       this.dataClientes().count
     );
     return `${start} - ${end}`;
@@ -94,7 +118,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   applyFiltersAndPagination() {
     this.clientesService.getClientes(
       this.pageSize,
-      this.actualPage,
+      this.actualPage(),
       this.filters
     );
   }
@@ -105,22 +129,22 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    if (this.actualPage !== this.totalPages()) {
-      this.actualPage++;
+    if (this.actualPage() < this.totalPages()) {
+      this.actualPage.set(this.actualPage() + 1);
       this.applyFiltersAndPagination();
     }
   }
 
   previousPage() {
-    if (this.actualPage > 1) {
-      this.actualPage--;
+    if (this.actualPage() > 1) {
+      this.actualPage.set(this.actualPage() - 1);
       this.applyFiltersAndPagination();
     }
   }
 
   goToPage(page: number) {
-    if (this.actualPage !== page) {
-      this.actualPage = page;
+    if (this.actualPage() !== page) {
+      this.actualPage.set(page);
       this.applyFiltersAndPagination();
     }
   }
@@ -142,7 +166,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
       )
     );
     console.log(this.filters);
-    this.actualPage = 1; // Reset to first page on new filter
+    this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
 
@@ -153,7 +177,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
     this.aparicionesFilter = undefined;
     this.elminadosFilter = undefined;
     this.filters = {};
-    this.actualPage = 1; // Reset to first page on clear filters
+    this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
   }
 

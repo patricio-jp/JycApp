@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import {
@@ -65,19 +72,40 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
   listadoVentas = computed(() => this.ventasService.listadoVentas());
   loadingSignal = computed(() => this.ventasService.loadingSignal());
 
-  actualPage: number = 1;
+  actualPage = signal(1);
   pageSize: number = 10;
   totalPages = computed(() => {
     const totalVentas = this.dataVentas().count;
     return Math.ceil(totalVentas / this.pageSize);
   });
   arrayPages = computed(() => {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+    const range = 3;
+    const totalPages = this.totalPages();
+    const currentPage = this.actualPage();
+
+    const start = Math.max(1, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push('...');
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      pages.push('...');
+    }
+
+    return pages;
   });
   itemsShowed = computed(() => {
-    const start = (this.actualPage - 1) * this.pageSize + 1;
+    const start = (this.actualPage() - 1) * this.pageSize + 1;
     const end = Math.min(
-      this.actualPage * this.pageSize,
+      this.actualPage() * this.pageSize,
       this.dataVentas().count
     );
     return `${start} - ${end}`;
@@ -97,7 +125,11 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
   }
 
   applyFiltersAndPagination() {
-    this.ventasService.getVentas(this.pageSize, this.actualPage, this.filters);
+    this.ventasService.getVentas(
+      this.pageSize,
+      this.actualPage(),
+      this.filters
+    );
   }
 
   searchVentas(event: any) {
@@ -106,22 +138,22 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    if (this.actualPage !== this.totalPages()) {
-      this.actualPage++;
+    if (this.actualPage() < this.totalPages()) {
+      this.actualPage.set(this.actualPage() + 1);
       this.applyFiltersAndPagination();
     }
   }
 
   previousPage() {
-    if (this.actualPage > 1) {
-      this.actualPage--;
+    if (this.actualPage() > 1) {
+      this.actualPage.set(this.actualPage() - 1);
       this.applyFiltersAndPagination();
     }
   }
 
   goToPage(page: number) {
-    if (this.actualPage !== page) {
-      this.actualPage = page;
+    if (this.actualPage() !== page) {
+      this.actualPage.set(page);
       this.applyFiltersAndPagination();
     }
   }
@@ -144,7 +176,7 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
       )
     );
     console.log(this.filters);
-    this.actualPage = 1; // Reset to first page on new filter
+    this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
 
@@ -156,7 +188,7 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
     this.productoFilter = undefined;
     this.eliminadosFilter = false;
     this.filters = {};
-    this.actualPage = 1; // Reset to first page on clear filters
+    this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
   }
 

@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <div class="grid gap-2 lg:grid-cols-3 lg:gap-4">
+    <div class="space-y-2 lg:columns-3 lg:space-y-4">
       <p><span class="font-bold">Crédito N°: </span>{{selectedCredito.venta.comprobante}}</p>
       <p><span class="font-bold">Cliente: </span>{{selectedCredito.venta.cliente?.apellido + ", " +
         selectedCredito.venta.cliente?.nombre}}</p>
@@ -47,39 +47,39 @@
     </div>
     <hr class="my-4">
     <div class="relative overflow-x-auto">
-      <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-        <thead
-          class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <table class="w-max mx-auto text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+        <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
           <tr>
-            <th class="px-4 py-3">Cuota N°</th>
-            <th class="px-4 py-3">Fecha Venc.</th>
-            <th class="px-4 py-3">Monto</th>
-            <th class="px-4 py-3">Estado</th>
-            <th class="px-4 py-3">Monto Pagado</th>
-            <th class="px-4 py-3">Fecha Pago</th>
+            <th class="py-3">Cuota N°</th>
+            <th class="py-3">Fecha Venc.</th>
+            <th class="py-3">Monto</th>
+            <th class="py-3">Estado</th>
+            <th class="py-3">Monto Pagado</th>
+            <th class="py-3">Fecha Pago</th>
           </tr>
         </thead>
         <tbody class="text-center">
           @for (cuota of selectedCredito.cuotas; track cuota.id) {
-          <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-            <td class="px-4 py-3">{{cuota.cuotaNro}}</td>
-            <td class="px-4 py-3">{{cuota.fechaVencimiento | date: 'dd/MM/yyyy'}}</td>
-            <td class="px-4 py-3">{{cuota.montoCuota | currency: 'ARS'}}</td>
-            <td class="px-4 py-3">{{estadosCuota[cuota.estado]}}</td>
-            <td class="px-4 py-3">{{cuota.montoPagado | currency: 'ARS'}}</td>
-            <td class="px-4 py-3">{{cuota.fechaPago | date}}</td>
+          <tr
+            class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
+            <td class="py-3">{{cuota.cuotaNro}}</td>
+            <td class="py-3">{{cuota.fechaVencimiento | date: 'dd/MM/yyyy'}}</td>
+            <td class="py-3">{{cuota.montoCuota | currency: 'ARS'}}</td>
+            <td class="py-3">{{estadosCuota[cuota.estado]}}</td>
+            <td class="py-3">{{cuota.montoPagado | currency: 'ARS'}}</td>
+            <td class="py-3">{{cuota.fechaPago | date}}</td>
           </tr>
           }
         </tbody>
         <tfoot class="text-center">
           <tr class="text-gray-900 dark:text-white">
-            <td colspan="6" class="px-4 py-3">* Si una cuota fue pagada parcialmente, se cargará el pago para completar
+            <td colspan="6" class="py-3">* Si una cuota fue pagada parcialmente, se cargará el pago para completar
               dicha cuota, y el saldo (en caso de haber) será computado para la/s cuota/s siguientes</td>
           </tr>
         </tfoot>
       </table>
     </div>
     }
-    <ion-button expand="block" shape="round" (click)="cargarPago()">Cargar Pago</ion-button>
+    <ion-button expand="block" (click)="cargarPago()">Cargar Pago</ion-button>
   </form>
 </ion-content>

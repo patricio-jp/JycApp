@@ -1,12 +1,9 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+      <ion-button color="medium" (click)="cancel()">Cerrar</ion-button>
     </ion-buttons>
     <ion-title>Detalle</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -23,10 +20,9 @@
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">
-    <ion-label>Historial de Precios</ion-label>
-    <table class="w-full text-gray-500 dark:text-gray-400 whitespace-nowrap">
-      <thead
-        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <ion-label class="text-lg">Historial de Precios</ion-label>
+    <table class="w-full text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-3">Desde</th>
           <th class="px-4 py-3">Hasta</th>
@@ -35,7 +31,8 @@
       </thead>
       <tbody class="text-center">
         @for (precio of producto.precios; track precio.id) {
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
           <td class="px-4 py-3">{{precio.fechaInicio | date}}</td>
           <td class="px-4 py-3">{{precio.fechaFin | date}}</td>
           <td class="px-4 py-3">{{precio.precioUnitario | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</td>
@@ -46,10 +43,9 @@
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">
-    <ion-label>Historial de Costos</ion-label>
-    <table class="w-full text-gray-500 dark:text-gray-400 whitespace-nowrap">
-      <thead
-        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <ion-label class="text-lg">Historial de Costos</ion-label>
+    <table class="w-full text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-3">Desde</th>
           <th class="px-4 py-3">Hasta</th>
@@ -58,7 +54,8 @@
       </thead>
       <tbody class="text-center">
         @for (costo of producto.costos; track costo.id) {
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
           <td class="px-4 py-3">{{costo.fechaInicio | date}}</td>
           <td class="px-4 py-3">{{costo.fechaFin | date}}</td>
           <td class="px-4 py-3">{{costo.precioUnitario | currency: 'ARS' : 'symbol': '1.2-2' : 'es-AR'}}</td>

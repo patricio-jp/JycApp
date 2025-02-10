@@ -61,10 +61,6 @@ export class ClienteInfoComponent implements OnInit, OnDestroy {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  confirm() {
-    return this.modalCtrl.dismiss(null, 'confirm');
-  }
-
   async ventaDetails(venta: Venta) {
     const modal = await this.modalCtrl.create({
       component: VentaInfoPage,

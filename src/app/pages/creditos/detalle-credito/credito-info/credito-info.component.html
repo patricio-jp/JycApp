@@ -4,9 +4,6 @@
       <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
     </ion-buttons>
     <ion-title>Detalle</ion-title>
-    <ion-buttons slot="end">
-      <ion-button (click)="confirm()" [strong]="true">Confirm</ion-button>
-    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -24,9 +21,8 @@
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">
-    <table class="w-full text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
-      <thead
-        class="text-xs whitespace-nowrap text-center text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+    <table class="w-full text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-3">Cuota N°</th>
           <th class="px-4 py-3">Fecha Venc.</th>
@@ -34,20 +30,18 @@
           <th class="px-4 py-3">Estado</th>
           <th class="px-4 py-3">Monto Pagado</th>
           <th class="px-4 py-3">Fecha Pago</th>
-          <th class="px-4 py-3"></th>
-          <th class="px-4 py-3 whitespace-nowrap"></th>
         </tr>
       </thead>
       <tbody class="text-center">
         @for (cuota of credito.cuotas; track cuota.id) {
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
           <td class="px-4 py-3">{{cuota.cuotaNro}}</td>
           <td class="px-4 py-3">{{cuota.fechaVencimiento | date}}</td>
           <td class="px-4 py-3">{{cuota.montoCuota | currency: 'ARS'}}</td>
           <td class="px-4 py-3">{{estadosCuota[cuota.estado]}}</td>
           <td class="px-4 py-3">{{cuota.montoPagado | currency: 'ARS'}}</td>
           <td class="px-4 py-3">{{cuota.fechaPago | date}}</td>
-          <td class="px-4 py-3"></td>
         </tr>
         }
       </tbody>

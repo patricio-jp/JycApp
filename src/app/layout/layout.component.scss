@@ -1,4 +1,19 @@
 ion-item.selected {
   --background: var(--ion-color-primary);
-  --color: var(--ion-color-dark);
+  --color: var(--ion-color-light);
+}
+
+ion-item.selected ion-icon {
+  color: var(--ion-color-light);
+}
+
+@media(prefers-color-scheme: dark) {
+  ion-item.selected {
+    --background: var(--ion-color-primary);
+    --color: var(--ion-color-dark);
+  }
+
+  ion-item.selected ion-icon {
+    color: var(--ion-color-dark);
+  }
 }
