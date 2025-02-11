@@ -44,3 +44,23 @@ export interface CreateUsuarioDTO {
   saldo?: number;
   observaciones?: string;
 }
+
+export interface UsuarioAPIResponse {
+  data: Usuario[];
+  count: number;
+}
+
+export interface UsuarioAPICounter {
+  data: {
+    rol: Rol;
+    count: number;
+  }[];
+  count: number;
+}
+
+export interface UsuariosFilter {
+  searchTerm?: string;
+  domicilio?: string;
+  rol?: Rol;
+  mostrarEliminados?: boolean;
+}

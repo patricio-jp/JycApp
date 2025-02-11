@@ -1,13 +1,222 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>listadoUsuarios</ion-title>
+    <ion-title>Listado de Usuarios</ion-title>
   </ion-toolbar>
 </ion-header>
-
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">listadoUsuarios</ion-title>
+      <ion-title size="large">Listado de Usuarios</ion-title>
     </ion-toolbar>
   </ion-header>
+  <div class="relative overflow-hidden pt-4 px-4">
+    <div class="relative bg-gray-100 shadow-md dark:bg-gray-800 sm:rounded-lg">
+      <div class="relative print:hidden shadow-md sm:rounded-lg">
+        <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
+          <div class="w-full md:w-1/3">
+            <form class="flex items-center">
+              <label for="simple-search" class="sr-only">Buscar</label>
+              <div class="relative w-full">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                  <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor"
+                    viewbox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd"
+                      d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </div>
+                <!-- TO-DO -->
+                <input type="text" id="simple-search" (change)="searchUsuarios($event)"
+                  class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="Buscar" required="">
+              </div>
+            </form>
+          </div>
+          <div
+            class="flex flex-col items-stretch justify-end w-full space-y-2 md:w-2/3 md:flex-row md:space-y-0 md:items-center md:space-x-3">
+            <button type="button" routerLink="../nuevo"
+              class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+              <fa-icon class="mr-2" [icon]="['fas', 'plus']"></fa-icon>
+              Nuevo Usuario
+            </button>
+            <div class="flex items-center w-full space-x-3 md:w-auto">
+              <button id="filterDropdown"
+                class="flex items-center justify-center w-full px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg md:w-auto focus:outline-none hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+                type="button">
+                <fa-icon class="mr-2" [icon]="['fas', 'filter']"></fa-icon>
+                Filter
+                <fa-icon class="ml-2" [icon]="['fas', 'angle-down']"></fa-icon>
+              </button>
+              <!-- Dropdown menu -->
+              <ion-popover trigger="filterDropdown" id="filterDropdown" triggerAction="click" size="auto">
+                <ng-template>
+                  <ion-content class="max-w-72 md:max-w-max ion-padding">
+                    <p class="text-center font-bold mb-3">[EXPERIMENTAL] Los filtros no funcionan por el momento, o
+                      pueden tener un comportamiento inadecuado. No utilizar</p>
+                    <section class="grid grid-cols-1 md:grid-cols-3 items-center gap-3">
+                      <div>
+                        <label for="domicilioFilter"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Domicilio</label>
+                        <input type="text" id="domicilioFilter" [(ngModel)]="domicilioFilter"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                      </div>
+                      <div>
+                        <label for="rolFilter"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
+                        <select id="rolFilter" [(ngModel)]="rolFilter"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option [value]="undefined">--- Todos ---</option>
+                          <option value="3">Administrador</option>
+                          <option value="2">Supervisor</option>
+                          <option value="1">Cobrador</option>
+                          <option value="0">Vendedor</option>
+                        </select>
+                      </div>
+                      <div class="flex items-center mb-4">
+                        <input id="eliminadosFilter" type="checkbox" [(ngModel)]="elminadosFilter"
+                          class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="eliminadosFilter"
+                          class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Mostrar eliminados</label>
+                      </div>
+                    </section>
+                    <nav
+                      class="flex flex-col md:flex-row mt-4 items-center justify-end space-y-3 md:space-y-0 md:space-x-2">
+                      <button type="button" (click)="clearFilters()"
+                        class="flex items-center text-gray-900 hover:text-white border border-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-gray-600 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800">
+                        <fa-icon class="mr-2" [icon]="['fas', 'filter-circle-xmark']"></fa-icon>
+                        Eliminar filtros
+                      </button>
+                      <button type="button" (click)="applyFilters()"
+                        class="flex items-center text-blue-700 hover:text-white border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+                        <fa-icon class="mr-2" [icon]="['fas', 'check']"></fa-icon>
+                        Aplicar filtros
+                      </button>
+                    </nav>
+                  </ion-content>
+                </ng-template>
+              </ion-popover>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="relative overflow-x-auto">
+        <table class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-300">
+          <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700">
+            <tr>
+              <th scope="col" class="px-4 py-3">ID</th>
+              <th scope="col" class="px-4 py-3">DNI</th>
+              <th scope="col" class="px-4 py-3 min-w-44">Apellido y Nombre</th>
+              <th scope="col" class="px-4 py-3">Teléfonos</th>
+              <th scope="col" class="px-4 py-3">Domicilio</th>
+              <th scope="col" class="px-4 py-3">Barrio</th>
+              <th scope="col" class="px-4 py-3">Localidad</th>
+              <th scope="col" class="px-4 py-3">Rol</th>
+              <th scope="col" class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody id="usuariosBody">
+            @for (usuario of listadoUsuarios(); track usuario.id) {
+            <tr [ngClass]="usuario.deletedAt ? 'text-red-600 dark:text-red-700' : ''"
+              class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
+              <td class="px-4 py-3">{{usuario.id}}</td>
+              <td class="px-4 py-3">{{usuario.dni}}</td>
+              <td class="px-4 py-3 whitespace-nowrap">{{usuario.apellido + ', ' + usuario.nombre}}</td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                @for (telefono of usuario.telefonos; track $index) {
+                {{telefono.telefono}}<br>
+                }
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                @for (domicilio of usuario.domicilios; track $index) {
+                {{domicilio.direccion}}<br>
+                }
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                @for (domicilio of usuario.domicilios; track $index) {
+                {{domicilio.barrio}}<br>
+                }
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                @for (domicilio of usuario.domicilios; track $index) {
+                {{domicilio.localidad}}<br>
+                }
+              </td>
+              <td class="px-4 py-3">{{rolesUsuarios[usuario.rol]}}</td>
+              <td class="p-2 space-x-2 whitespace-nowrap">
+                <button
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block lg:hidden"
+                  (click)="usuarioDetails(usuario.id)">
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+                <button (click)="usuarioDesktopDetails(usuario.id)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:inline-block">
+                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+                @if (usuario.deletedAt) {
+                <button (click)="restoreUsuario(usuario)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'trash-arrow-up']"></fa-icon>
+                </button>
+                } @else {
+                <button (click)="deleteUsuario(usuario)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'trash']"></fa-icon>
+                </button>
+                }
+              </td>
+            </tr>
+            }
+            @empty {
+            <tr>
+              <td colspan="10" class="text-center py-4">No hay usuarios para mostrar</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      @if (dataUsuarios().count > 0) {
+      <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between p-4"
+        aria-label="Table navigation">
+        <section
+          class="flex items-start md:items-center flex-col-reverse w-full md:w-auto mb-4 md:mb-0 md:flex-row md:space-x-4">
+          <div class="flex items-center">
+            <label for="rowsPerPage"
+              class="mr-3 text-sm font-normal block w-full text-nowrap text-gray-700 dark:text-gray-300">Filas
+              por página</label>
+            <select id="rowsPerPage" [(ngModel)]="pageSize" (change)="applyFiltersAndPagination()"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="25">25</option>
+              <option [value]="50">50</option>
+            </select>
+          </div>
+          <div class="self-center">
+            <span
+              class="text-sm font-normal text-gray-700 dark:text-gray-300 mb-4 md:mb-0 block w-full md:inline md:w-auto">Mostrando
+              <span class="font-semibold text-gray-900 dark:text-white">{{itemsShowed()}}</span> de <span
+                class="font-semibold text-gray-900 dark:text-white">{{dataUsuarios().count}}</span> totales</span>
+          </div>
+        </section>
+        <ul class="inline-flex mx-auto md:mx-0 -space-x-px rtl:space-x-reverse text-sm h-8">
+          <li>
+            <a (click)="previousPage()" [ngClass]="actualPage() !== 1 ? 'cursor-pointer' : 'cursor-not-allowed'"
+              class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-700 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">Anterior</a>
+          </li>
+          @for (page of arrayPages(); track $index) {
+          <li>
+            <a (click)="goToPage(page !== '...' ? +page : actualPage())"
+              [ngClass]="actualPage() === $index+1 ? 'cursor-default' : 'cursor-pointer'"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">{{page}}</a>
+          </li>
+          }
+          <li>
+            <a (click)="nextPage()" [ngClass]="actualPage() !== totalPages() ? 'cursor-pointer' : 'cursor-not-allowed'"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">Siguiente</a>
+          </li>
+        </ul>
+      </nav>
+      }
+    </div>
+  </div>
 </ion-content>
