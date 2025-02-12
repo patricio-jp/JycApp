@@ -9,46 +9,46 @@ JyC APP Checklist
   [ ] Eliminar producto
 
 [ ] Ventas (completo)
-  [ ] Crear venta
-  [ ] Listado de ventas
-  [ ] Detalle de venta
+  [*] Crear venta
+  [*] Listado de ventas
+  [*] Detalle de venta
   [ ] Modificar venta
     [ ] Modificar datos de venta
     [ ] Modificar productos
     [ ] Modificar financiación (crédito)
-  [ ] Eliminar venta
+  [*] Eliminar venta
 
 [ ] Créditos (completo)
   [ ] Crear crédito (creado desde la creación de venta o desde modificación de crédito)
   [*] Listado de créditos
   [*] Detalle de crédito
   [ ] Modificar crédito (implica la anulación del vigente y creación de nuevo)
-  [ ] Cargar pago a crédito
+  [*] Cargar pago a crédito
   [ ] Eliminar crédito (a confirmar)
 
 [ ] Clientes (completo)
   [*] Crear cliente
   [*] Listado de clientes
-  [ ] Detalle de cliente
+  [*] Detalle de cliente
   [ ] Cargar pago de cliente (con elección sobre a que crédito computar el pago en caso de varios vigentes)
   [ ] Modificar cliente
     [ ] Asignar cobrador
     [ ] Asignar vendedor (impl. a futuro, para comisiones por ventas)
-  [ ] Eliminar cliente
+  [*] Eliminar cliente
 
 [ ] Usuarios (completo) [Admin]
   [ ] Crear usuario
-  [ ] Listado de usuarios
+  [*] Listado de usuarios
   [ ] Detalle de usuario
   [ ] Modificar usuario
-  [ ] Eliminar usuario
+  [*] Eliminar usuario
 
 [ ] Otros
-  [ ] Login
+  [*] Login
 
 
 [---] BUGS
-  [ ] [Mobile] Al acceder al detalle del crédito desde el detalle de una venta, no se muestra la info.
+  [*] [Mobile] Al acceder al detalle del crédito desde el detalle de una venta, no se muestra la info.
   [ ] Al cargar un pago, no se actualiza la info y es necesario forzar refresco de página
   [ ] Al crear un producto, no se actualiza el listado de todos los productos
   [ ] Al hacer una petición POST (crear algo), los formularios no se resetean (no se elimina el componente), lo cual fuerza la necesidad de refrescar la página, haciendo que se haga una petición de token-refresh innecesaria
