@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'https://jycapp.duckdns.org',
-  //apiBaseUrl: 'http://localhost:3000',
+  //apiBaseUrl: 'https://jycapp.duckdns.org',
+  apiBaseUrl: 'http://localhost:3000',
 };
 
 /*

@@ -1,4 +1,11 @@
-import { Component, computed, inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -49,19 +56,40 @@ export class InventarioPage implements OnInit, OnDestroy {
   listadoProductos = computed(() => this.productsService.listadoProductos());
   loadingSignal = computed(() => this.productsService.loadingSignal());
 
-  actualPage: number = 1;
+  actualPage = signal(1);
   pageSize: number = 10;
   totalPages = computed(() => {
     const totalProductos = this.dataProductos().count;
     return Math.ceil(totalProductos / this.pageSize);
   });
   arrayPages = computed(() => {
-    return Array.from({ length: this.totalPages() }, (_, i) => i + 1);
+    const range = 3;
+    const totalPages = this.totalPages();
+    const currentPage = this.actualPage();
+
+    const start = Math.max(1, currentPage - range);
+    const end = Math.min(totalPages, currentPage + range);
+
+    const pages = [];
+
+    if (start > 1) {
+      pages.push('...');
+    }
+
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+
+    if (end < totalPages) {
+      pages.push('...');
+    }
+
+    return pages;
   });
   itemsShowed = computed(() => {
-    const start = (this.actualPage - 1) * this.pageSize + 1;
+    const start = (this.actualPage() - 1) * this.pageSize + 1;
     const end = Math.min(
-      this.actualPage * this.pageSize,
+      this.actualPage() * this.pageSize,
       this.dataProductos().count
     );
     return `${start} - ${end}`;
@@ -79,7 +107,7 @@ export class InventarioPage implements OnInit, OnDestroy {
   applyFiltersAndPagination() {
     this.productsService.getProductos(
       this.pageSize,
-      this.actualPage,
+      this.actualPage(),
       this.filters
     );
   }
@@ -90,22 +118,22 @@ export class InventarioPage implements OnInit, OnDestroy {
   }
 
   nextPage() {
-    if (this.actualPage !== this.totalPages()) {
-      this.actualPage++;
+    if (this.actualPage() < this.totalPages()) {
+      this.actualPage.set(this.actualPage() + 1);
       this.applyFiltersAndPagination();
     }
   }
 
   previousPage() {
-    if (this.actualPage > 1) {
-      this.actualPage--;
+    if (this.actualPage() > 1) {
+      this.actualPage.set(this.actualPage() - 1);
       this.applyFiltersAndPagination();
     }
   }
 
   goToPage(page: number) {
-    if (this.actualPage !== page) {
-      this.actualPage = page;
+    if (this.actualPage() !== page) {
+      this.actualPage.set(page);
       this.applyFiltersAndPagination();
     }
   }
@@ -123,14 +151,14 @@ export class InventarioPage implements OnInit, OnDestroy {
       )
     );
     console.log(this.filters);
-    this.actualPage = 1; // Reset to first page on new filter
+    this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
 
   clearFilters() {
     this.elminadosFilter = undefined;
     this.filters = {};
-    this.actualPage = 1; // Reset to first page on clear filters
+    this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
   }
 

@@ -157,18 +157,18 @@
         </section>
         <ul class="inline-flex mx-auto md:mx-0 -space-x-px rtl:space-x-reverse text-sm h-8">
           <li>
-            <a (click)="previousPage()" [ngClass]="actualPage !== 1 ? 'cursor-pointer' : 'cursor-not-allowed'"
+            <a (click)="previousPage()" [ngClass]="actualPage() !== 1 ? 'cursor-pointer' : 'cursor-not-allowed'"
               class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-700 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">Anterior</a>
           </li>
           @for (page of arrayPages(); track $index) {
           <li>
-            <a (click)="goToPage($index+1)" [ngClass]="actualPage === $index+1 ? 'cursor-default' : 'cursor-pointer'"
-              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">{{$index
-              + 1}}</a>
+            <a (click)="goToPage(page !== '...' ? +page : actualPage())"
+              [ngClass]="actualPage() === $index+1 ? 'cursor-default' : 'cursor-pointer'"
+              class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">{{page}}</a>
           </li>
           }
           <li>
-            <a (click)="nextPage()" [ngClass]="actualPage !== totalPages() ? 'cursor-pointer' : 'cursor-not-allowed'"
+            <a (click)="nextPage()" [ngClass]="actualPage() !== totalPages() ? 'cursor-pointer' : 'cursor-not-allowed'"
               class="flex items-center justify-center px-3 h-8 leading-tight text-gray-700 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white">Siguiente</a>
           </li>
         </ul>
