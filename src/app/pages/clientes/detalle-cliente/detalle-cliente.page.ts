@@ -18,6 +18,7 @@ import { EstadoOperacion, Venta } from 'src/app/interfaces/operaciones';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.page';
 import { Subscription } from 'rxjs';
+import { ResumenClienteComponent } from './resumen-cliente/resumen-cliente.component';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -77,5 +78,14 @@ export class DetalleClientePage implements OnDestroy {
 
   ventaDesktopDetails(id?: number) {
     this.router.navigate(['./dashboard/ventas/detalle', id]);
+  }
+
+  async generarResumen() {
+    const modal = await this.modalCtrl.create({
+      component: ResumenClienteComponent,
+      componentProps: { cliente: this.cliente },
+    });
+
+    modal.present();
   }
 }

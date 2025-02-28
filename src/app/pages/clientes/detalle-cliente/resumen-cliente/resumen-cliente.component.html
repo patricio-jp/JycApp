@@ -1,31 +1,65 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Detalle de cliente</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content class="ion-padding">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Detalle de cliente</ion-title>
-    </ion-toolbar>
-  </ion-header>
   <ion-card class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
     <ion-card-header>
       <ion-card-title>Detalle de cliente</ion-card-title>
-      <button (click)="generarResumen()"
-        class="ml-3 flex items-center text-blue-700 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Resumen</button>
     </ion-card-header>
     <ion-card-content>
       @if (cliente) {
-      <div class="space-y-2 lg:columns-3">
-        <p><span class="font-bold">ID: </span>{{cliente.id}}</p>
-        <p><span class="font-bold">Apellido y Nombre: </span>{{cliente.apellido}}, {{cliente.nombre}}</p>
-        <p><span class="font-bold">DNI: </span>{{cliente.dni}}</p>
-        <p><span class="font-bold">Fecha de Nacimiento: </span>{{cliente.fechaNacimiento | date }}</p>
-        <p><span class="font-bold">Estado: </span>{{estadosCliente[cliente.estado]}}</p>
-        <p><span class="font-bold">Saldo: </span>{{cliente.saldo | currency : 'ARS'}}</p>
-        <p><span class="font-bold">Observaciones: </span>{{cliente.observaciones}}</p>
+      <div class="space-y-2">
+        <table>
+          <tr>
+            <th class="font-bold">DNI:</th>
+            <td>{{cliente.dni}}</td>
+          </tr>
+          <tr>
+            <th class="font-bold">Nombre:</th>
+            <td>{{cliente.apellido}}, {{cliente.nombre}}</td>
+          </tr>
+          <tr>
+            <th class="font-bold">Fecha de Nac.:</th>
+            <td>{{cliente.fechaNacimiento | date }}</td>
+          </tr>
+          <tr>
+            <th class="font-bold">Teléfono:</th>
+            <td>
+              @for (telefono of cliente.telefonos; track $index) {
+              @if (telefono.telefono) {
+              {{telefono.telefono}}<br>
+              }
+              }
+            </td>
+          </tr>
+          <tr>
+            <th class="font-bold">Dirección:</th>
+            <td>
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.direccion) {
+              {{domicilio.direccion}}<br>
+              }
+              }
+            </td>
+          </tr>
+          <tr>
+            <th class="font-bold">Barrio:</th>
+            <td>
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.barrio) {
+              {{domicilio.barrio}}<br>
+              }
+              }
+            </td>
+          </tr>
+          <tr>
+            <th class="font-bold">Localidad:</th>
+            <td>
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.localidad) {
+              {{domicilio.localidad}}<br>
+              }
+              }
+            </td>
+          </tr>
+        </table>
       </div>
       <hr class="my-4">
       <div class="relative overflow-x-auto">
@@ -39,11 +73,9 @@
               <th class="px-4 py-3">Condición</th>
               <th class="px-4 py-3">Total</th>
               <th class="px-4 py-3">Estado</th>
-              <th class="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
-            @if (cliente.ventas!.length > 0) {
             @for (venta of cliente.ventas; track venta.id) {
             <tr
               class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
@@ -58,21 +90,8 @@
               <td class="px-4 py-3 text-center">{{venta.condicion}}</td>
               <td class="px-4 py-3">{{venta.total | currency: 'ARS'}}</td>
               <td class="px-4 py-3 text-center">{{estadosVenta[venta.estado]}}</td>
-              <td class="p-2">
-                <button
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 lg:hidden"
-                  (click)="ventaDetails(venta)">
-                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                </button>
-                <button
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:block"
-                  (click)="ventaDesktopDetails(venta.id)">
-                  <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
-                </button>
-              </td>
             </tr>
-            }
-            } @else {
+            } @empty {
             <tr
               class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
               <td class="px-4 py-3 text-center" colspan="7">El cliente no tiene ventas asociadas a él</td>

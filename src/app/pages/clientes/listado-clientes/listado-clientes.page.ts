@@ -28,6 +28,7 @@ import { ClienteInfoComponent } from '../detalle-cliente/cliente-info/cliente-in
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { EditarClienteComponent } from '../editar-cliente/editar-cliente.component';
 
 @Component({
   selector: 'app-listado-clientes',
@@ -196,6 +197,34 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
     modal.present();
 
     const { data, role } = await modal.onWillDismiss();
+  }
+
+  async editarCliente(cliente: Cliente) {
+    const modal = await this.modalCtrl.create({
+      component: EditarClienteComponent,
+      componentProps: { cliente },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+    console.log(data);
+    if (role === 'confirm' && data) {
+      this.subscriptions.add(
+        this.clientesService
+          .updateCliente(data.id, data)
+          .subscribe(async (cliente) => {
+            if (cliente) {
+              this.notificationsService.presentSuccessToast(
+                'Cliente actualizado correctamente'
+              );
+              this.clientesService.getClientes();
+            }
+          })
+      );
+    }
   }
 
   async deleteCliente(cliente: Cliente) {

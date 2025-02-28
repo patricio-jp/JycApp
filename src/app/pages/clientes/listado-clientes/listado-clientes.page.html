@@ -25,7 +25,6 @@
                       clip-rule="evenodd" />
                   </svg>
                 </div>
-                <!-- TO-DO -->
                 <input type="text" id="simple-search" (change)="searchClientes($event)"
                   class="block w-full p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
                   placeholder="Buscar" required="">
@@ -143,17 +142,23 @@
               </td>
               <td class="px-4 py-3 whitespace-nowrap">
                 @for (domicilio of cliente.domicilios; track $index) {
+                @if (domicilio.direccion) {
                 {{domicilio.direccion}}<br>
                 }
-              </td>
-              <td class="px-4 py-3 whitespace-nowrap">
-                @for (domicilio of cliente.domicilios; track $index) {
-                {{domicilio.barrio}}<br>
                 }
               </td>
               <td class="px-4 py-3 whitespace-nowrap">
                 @for (domicilio of cliente.domicilios; track $index) {
+                @if (domicilio.barrio) {
+                {{domicilio.barrio}}<br>
+                }
+                }
+              </td>
+              <td class="px-4 py-3 whitespace-nowrap">
+                @for (domicilio of cliente.domicilios; track $index) {
+                @if (domicilio.localidad) {
                 {{domicilio.localidad}}<br>
+                }
                 }
               </td>
               <td class="px-4 py-3">{{estadoClientes[cliente.estado]}}</td>
@@ -169,21 +174,29 @@
               <td class="p-2 space-x-2 whitespace-nowrap">
                 <button
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block lg:hidden"
-                  (click)="clienteDetails(cliente.id)">
+                  (click)="clienteDetails(cliente.id)" title="Ver Detalles">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
                 </button>
                 <button (click)="clienteDesktopDetails(cliente.id)"
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:inline-block">
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:inline-block"
+                  title="Ver Detalles">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+                <button (click)="editarCliente(cliente)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block"
+                  title="Editar">
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                 </button>
                 @if (cliente.deletedAt) {
                 <button (click)="restoreCliente(cliente)"
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block"
+                  title="Restablecer">
                   <fa-icon [icon]="['fas', 'trash-arrow-up']"></fa-icon>
                 </button>
                 } @else {
                 <button (click)="deleteCliente(cliente)"
-                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block"
+                  title="Eliminar">
                   <fa-icon [icon]="['fas', 'trash']"></fa-icon>
                 </button>
                 }

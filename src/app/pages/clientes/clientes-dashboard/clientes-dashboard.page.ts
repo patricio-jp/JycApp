@@ -37,6 +37,6 @@ export class ClientesDashboardPage implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.clientesService.getClientes();
+    this.clientesService.getCounters();
   }
 }
