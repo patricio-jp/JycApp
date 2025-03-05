@@ -165,9 +165,11 @@
             <tr
               class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
               <td class="px-4 py-3">{{credito.id}}</td>
-              <td class="px-4 py-3 text-left">{{credito.venta.cliente?.apellido + ', '
-                + credito.venta.cliente?.nombre}}</td>
-              <td class="px-4 py-3">{{credito.venta.comprobante}}</td>
+              <td class="px-4 py-3 text-left"><a class="underline underline-offset-2 hover:cursor-pointer"
+                  (click)="clienteDetails(credito.venta.cliente!.id)">{{credito.venta.cliente?.apellido + ", " +
+                  credito.venta.cliente?.nombre}}</a></td>
+              <td class="px-4 py-3"><a class="underline underline-offset-2 hover:cursor-pointer"
+                  (click)="ventaDetails(credito.venta)">{{credito.venta.comprobante}}</a></td>
               <td class="px-4 py-3">{{credito.fechaInicio | date: 'dd/MM/YYYY'}}</td>
               <td class="px-4 py-3">{{credito.cantidadCuotas}}</td>
               <td class="px-4 py-3">{{periodos[credito.periodo]}}</td>

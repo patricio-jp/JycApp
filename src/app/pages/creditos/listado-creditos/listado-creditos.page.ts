@@ -44,6 +44,9 @@ import { EstadoCartonComponent } from '../estado-carton/estado-carton.component'
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { CartonesService } from 'src/app/services/cartones.service';
 import { GrupoCartonComponent } from '../grupo-carton/grupo-carton.component';
+import { ClienteInfoComponent } from '../../clientes/detalle-cliente/cliente-info/cliente-info.component';
+import { Venta } from 'src/app/interfaces/operaciones';
+import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.page';
 
 @Component({
   selector: 'app-listado-creditos',
@@ -238,6 +241,32 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
 
   viewDesktopDetails(id?: number) {
     this.router.navigate(['./dashboard/creditos/detalle', id]);
+  }
+
+  async clienteDetails(id?: number) {
+    const modal = await this.modalCtrl.create({
+      component: ClienteInfoComponent,
+      componentProps: { clienteID: id },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+  }
+
+  async ventaDetails(venta: Venta) {
+    const modal = await this.modalCtrl.create({
+      component: VentaInfoPage,
+      componentProps: { venta: venta },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 0.5,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
   }
 
   cargarPagoACredito(credito: Credito) {

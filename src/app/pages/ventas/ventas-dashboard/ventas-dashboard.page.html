@@ -10,4 +10,38 @@
       <ion-title size="large">Ventas</ion-title>
     </ion-toolbar>
   </ion-header>
+  <section class="grid md:grid-cols-4 gap-5 grid-rows-2 items-center justify-center">
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de Ventas</h4>
+      <p class="text-4xl text-right">{{cantVentasTotales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Pagadas</h4>
+      <p class="text-4xl text-right">{{cantVentasPagadas()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas pendientes</h4>
+      <p class="text-4xl text-right">{{cantVentasPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Para Entrega</h4>
+      <p class="text-4xl text-right">{{cantVentasParaEntrega()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Entregadas</h4>
+      <p class="text-4xl text-right">{{cantVentasEntregadas()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas Anuladas</h4>
+      <p class="text-4xl text-right">{{cantVentasAnuladas()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas al Contado</h4>
+      <p class="text-4xl text-right">{{cantVentasAlContado()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Ventas a Crédito</h4>
+      <p class="text-4xl text-right">{{cantVentasACredito()}}</p>
+    </div>
+  </section>
 </ion-content>

@@ -151,7 +151,9 @@
               <td class="px-4 py-3 text-center">{{venta.id}}</td>
               <td class="px-4 py-3 text-center">{{venta.fecha | date : 'dd/MM/YYYY'}}</td>
               <td class="px-4 py-3 text-center whitespace-nowrap">{{venta.comprobante}}</td>
-              <td class="px-4 py-3 whitespace-nowrap">{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</td>
+              <td class="px-4 py-3 whitespace-nowrap"><a class="underline underline-offset-2 hover:cursor-pointer"
+                  (click)="clienteDetails(venta.cliente!.id)">{{venta.cliente?.apellido + ", " +
+                  venta.cliente?.nombre}}</a></td>
               <td class="px-4 py-3 whitespace-nowrap">
                 @for (detalle of venta.productos; track $index) {
                 {{detalle.cantidad !== 1 ? detalle.cantidad + ' ' : ''}}{{detalle.producto.nombre}}<br>

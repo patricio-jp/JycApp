@@ -165,9 +165,11 @@
               <td class="px-4 py-3 whitespace-nowrap">
                 @for (venta of cliente.ventas; track $index; let even = $even) {
                 @if (even) {
-                {{venta.comprobante}}
+                <a class="underline underline-offset-2 hover:cursor-pointer"
+                  (click)="ventaDetails(venta)">{{venta.comprobante}} </a>
                 } @else {
-                - {{venta.comprobante}}<br>
+                - <a class="underline underline-offset-2 hover:cursor-pointer"
+                  (click)="ventaDetails(venta)">{{venta.comprobante}}</a><br>
                 }
                 }
               </td>

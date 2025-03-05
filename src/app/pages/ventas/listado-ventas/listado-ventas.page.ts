@@ -33,6 +33,7 @@ import { VentaInfoPage } from '../detalle-venta/venta-info/venta-info.page';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { ClienteInfoComponent } from '../../clientes/detalle-cliente/cliente-info/cliente-info.component';
 
 @Component({
   selector: 'app-listado-ventas',
@@ -192,10 +193,17 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
     this.applyFiltersAndPagination();
   }
 
-  async clientDetails(cliente: Cliente) {
-    /* const modal = await this.modalCtrl.create({
-      component: Cliente
-    }) */
+  async clienteDetails(id?: number) {
+    const modal = await this.modalCtrl.create({
+      component: ClienteInfoComponent,
+      componentProps: { clienteID: id },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
   }
 
   async ventaDetails(venta: Venta) {

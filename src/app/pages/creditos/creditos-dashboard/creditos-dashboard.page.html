@@ -10,4 +10,67 @@
       <ion-title size="large">creditosDashboard</ion-title>
     </ion-toolbar>
   </ion-header>
+  <section class="grid md:grid-cols-3 gap-5 grid-rows-5 items-center justify-center">
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de créditos totales</h4>
+      <p class="text-4xl text-right">{{cantCreditosTotales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos activos</h4>
+      <p class="text-4xl text-right">{{cantCreditosActivos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos pendientes</h4>
+      <p class="text-4xl text-right">{{cantCreditosPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos con deuda</h4>
+      <p class="text-4xl text-right">{{cantCreditosEnDeuda()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos ya pagados</h4>
+      <p class="text-4xl text-right">{{cantCreditosPagados()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos anulados</h4>
+      <p class="text-4xl text-right">{{cantCreditosAnulados()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Semanales</h4>
+      <p class="text-4xl text-right">{{cantCreditosSemanales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Quincenales</h4>
+      <p class="text-4xl text-right">{{cantCreditosQuincenales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Créditos Mensuales</h4>
+      <p class="text-4xl text-right">{{cantCreditosMensuales()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones llevados</h4>
+      <p class="text-4xl text-right">{{cantCartonesLlevados()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones listos para llevar</h4>
+      <p class="text-4xl text-right">{{cantCartonesListos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones pendientes</h4>
+      <p class="text-4xl text-right">{{cantCartonesPendientes()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones con Dudas</h4>
+      <p class="text-4xl text-right">{{cantCartonesEnDudas()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones finalizados (pagados o anulados)</h4>
+      <p class="text-4xl text-right">{{cantCartonesFinalizados()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cartones separados</h4>
+      <p class="text-4xl text-right">{{cantCartonesSeparados()}}</p>
+    </div>
+  </section>
+
 </ion-content>

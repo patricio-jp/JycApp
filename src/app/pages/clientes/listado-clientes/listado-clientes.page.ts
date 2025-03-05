@@ -29,6 +29,8 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { EditarClienteComponent } from '../editar-cliente/editar-cliente.component';
+import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.page';
+import { Venta } from 'src/app/interfaces/operaciones';
 
 @Component({
   selector: 'app-listado-clientes',
@@ -190,6 +192,19 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
     const modal = await this.modalCtrl.create({
       component: ClienteInfoComponent,
       componentProps: { clienteID: id },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 0.5,
+    });
+
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+  }
+
+  async ventaDetails(venta: Venta) {
+    const modal = await this.modalCtrl.create({
+      component: VentaInfoPage,
+      componentProps: { venta: venta },
       breakpoints: [0.5, 1],
       initialBreakpoint: 0.5,
     });
