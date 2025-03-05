@@ -68,3 +68,28 @@ ion-popover#filterDropdown {
 ion-modal {
   --width: 100%;
 }
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    overflow: auto !important;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    height: auto; /* Asegura que se centre verticalmente */
+  }
+
+  #resumenCliente {
+    transform: scale(0.9); /* Ajusta la escala al 90% */
+    transform-origin: top center; /* Centra el contenido */
+    width: 100%;
+    max-width: 100%;
+    margin-top: 10mm;
+  }
+
+  @page {
+    margin: 10mm 5mm 10mm 5mm;
+    size: A4;
+  }
+}

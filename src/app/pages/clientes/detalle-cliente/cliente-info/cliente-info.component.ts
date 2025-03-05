@@ -15,6 +15,8 @@ import { EstadoOperacion, Venta } from 'src/app/interfaces/operaciones';
 import { VentaInfoPage } from 'src/app/pages/ventas/detalle-venta/venta-info/venta-info.page';
 import { ClientesService } from 'src/app/services/clientes.service';
 import { Subscription } from 'rxjs';
+import { EstadoCredito, Periodo } from 'src/app/interfaces/credito';
+import { ResumenClienteComponent } from '../resumen-cliente/resumen-cliente.component';
 
 @Component({
   selector: 'app-cliente-info',
@@ -44,6 +46,8 @@ export class ClienteInfoComponent implements OnInit, OnDestroy {
 
   estadosCliente = EstadoCliente;
   estadosVenta = EstadoOperacion;
+  periodos = Periodo;
+  estadosCredito = EstadoCredito;
 
   constructor() {}
 
@@ -72,5 +76,14 @@ export class ClienteInfoComponent implements OnInit, OnDestroy {
     modal.present();
 
     const { data, role } = await modal.onWillDismiss();
+  }
+
+  async generarResumen() {
+    const modal = await this.modalCtrl.create({
+      component: ResumenClienteComponent,
+      componentProps: { cliente: this.cliente },
+    });
+
+    modal.present();
   }
 }

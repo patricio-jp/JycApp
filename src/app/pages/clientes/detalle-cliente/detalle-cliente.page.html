@@ -11,11 +11,17 @@
     </ion-toolbar>
   </ion-header>
   <ion-card class="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-300">
-    <ion-card-header>
-      <ion-card-title>Detalle de cliente</ion-card-title>
+    <div class="w-full p-4 flex items-center">
+      <h2 class="text-2xl font-bold">Detalle de cliente</h2>
       <button (click)="generarResumen()"
-        class="ml-3 flex items-center text-blue-700 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">Resumen</button>
-    </ion-card-header>
+        class="ml-6 inline-flex items-center text-blue-700 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+        <fa-icon class="mr-2" [icon]="['fas', 'file-invoice']"></fa-icon>
+        Generar Resumen
+      </button>
+    </div>
+    <!-- <ion-card-header>
+      <ion-card-title>Detalle de cliente</ion-card-title>
+    </ion-card-header> -->
     <ion-card-content>
       @if (cliente) {
       <div class="space-y-2 lg:columns-3">
@@ -29,7 +35,8 @@
       </div>
       <hr class="my-4">
       <div class="relative overflow-x-auto">
-        <table class="w-full text-gray-700 dark:text-gray-300 whitespace-nowrap">
+        <table class="mx-auto text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          <caption class="text-xl font-bold mb-3">Ventas</caption>
           <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
               <th class="px-4 py-3">ID</th>
@@ -71,6 +78,53 @@
                 </button>
               </td>
             </tr>
+            }
+            } @else {
+            <tr
+              class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
+              <td class="px-4 py-3 text-center" colspan="7">El cliente no tiene ventas asociadas a él</td>
+            </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      <hr class="my-4">
+      <div class="relative overflow-x-auto">
+        <table class="mx-auto text-gray-700 dark:text-gray-300 whitespace-nowrap">
+          <caption class="text-xl font-bold mb-3">Créditos</caption>
+          <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
+            <tr>
+              <th class="px-4 py-3">ID</th>
+              <th class="px-4 py-3">Fecha de inicio</th>
+              <th class="px-4 py-3">Nota</th>
+              <th class="px-4 py-3">Producto/s</th>
+              <th class="px-4 py-3">Cant. cuotas</th>
+              <th class="px-4 py-3">Período</th>
+              <th class="px-4 py-3">Monto cuota</th>
+              <th class="px-4 py-3">Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (cliente.ventas!.length > 0) {
+            @for (venta of cliente.ventas; track venta.id) {
+            @for (credito of venta.financiacion; track $index) {
+
+            <tr
+              class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
+              <td class="px-4 py-3 text-center">{{credito.id}}</td>
+              <td class="px-4 py-3 text-center">{{credito.fechaInicio | date: 'dd/MM/YYYY'}}</td>
+              <td class="px-4 py-3 text-center">{{venta.comprobante}}</td>
+              <td class="px-4 py-3">
+                @for (detalle of venta.productos; track $index) {
+                {{detalle.cantidad !== 1 ? detalle.cantidad + ' ' : ''}}{{detalle.producto.nombre}}<br>
+                }
+              </td>
+              <td class="px-4 py-3 text-center">{{credito.cantidadCuotas}}</td>
+              <td class="px-4 py-3 text-center">{{periodos[credito.periodo]}}</td>
+              <td class="px-4 py-3">{{credito.montoCuota| currency: 'ARS'}}</td>
+              <td class="px-4 py-3 text-center">{{estadosCredito[credito.estado]}}</td>
+            </tr>
+            }
             }
             } @else {
             <tr

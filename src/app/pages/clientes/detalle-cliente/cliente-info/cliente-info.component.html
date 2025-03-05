@@ -4,6 +4,9 @@
       <ion-button color="medium" (click)="cancel()">Cerrar</ion-button>
     </ion-buttons>
     <ion-title>Detalle</ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="primary" (click)="generarResumen()">Resumen</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -19,7 +22,8 @@
   </div>
   <hr class="my-4">
   <div class="relative overflow-x-auto">
-    <table class="w-full text-gray-700 dark:text-gray-300 whitespace-nowrap">
+    <table class="mx-auto text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <caption class="text-left text-xl font-bold mb-3">Ventas</caption>
       <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
         <tr>
           <th class="px-4 py-3">ID</th>
@@ -56,6 +60,52 @@
             </button>
           </td>
         </tr>
+        }
+        } @else {
+        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">
+          <td class="px-4 py-3 text-center" colspan="7">El cliente no tiene ventas asociadas a él</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <hr class="my-4">
+  <div class="relative overflow-x-auto">
+    <table class="mx-auto text-gray-700 dark:text-gray-300 whitespace-nowrap">
+      <caption class="text-left text-xl font-bold mb-3">Créditos</caption>
+      <thead class="text-xs whitespace-nowrap text-center uppercase bg-gray-200 dark:bg-gray-700">
+        <tr>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Fecha de inicio</th>
+          <th class="px-4 py-3">Nota</th>
+          <th class="px-4 py-3">Producto/s</th>
+          <th class="px-4 py-3">Cant. cuotas</th>
+          <th class="px-4 py-3">Período</th>
+          <th class="px-4 py-3">Monto cuota</th>
+          <th class="px-4 py-3">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @if (cliente.ventas!.length > 0) {
+        @for (venta of cliente.ventas; track venta.id) {
+        @for (credito of venta.financiacion; track $index) {
+
+        <tr
+          class="odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
+          <td class="px-4 py-3 text-center">{{credito.id}}</td>
+          <td class="px-4 py-3 text-center">{{credito.fechaInicio | date: 'dd/MM/YYYY'}}</td>
+          <td class="px-4 py-3 text-center">{{venta.comprobante}}</td>
+          <td class="px-4 py-3">
+            @for (detalle of venta.productos; track $index) {
+            {{detalle.cantidad !== 1 ? detalle.cantidad + ' ' : ''}}{{detalle.producto.nombre}}<br>
+            }
+          </td>
+          <td class="px-4 py-3 text-center">{{credito.cantidadCuotas}}</td>
+          <td class="px-4 py-3 text-center">{{periodos[credito.periodo]}}</td>
+          <td class="px-4 py-3">{{credito.montoCuota| currency: 'ARS'}}</td>
+          <td class="px-4 py-3 text-center">{{estadosCredito[credito.estado]}}</td>
+        </tr>
+        }
         }
         } @else {
         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-200 dark:hover:bg-gray-700">

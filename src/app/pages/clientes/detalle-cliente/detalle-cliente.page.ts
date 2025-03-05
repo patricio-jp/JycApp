@@ -7,8 +7,6 @@ import {
   IonTitle,
   IonToolbar,
   IonCard,
-  IonCardHeader,
-  IonCardTitle,
   IonCardContent,
   ModalController,
 } from '@ionic/angular/standalone';
@@ -19,6 +17,7 @@ import { ClientesService } from 'src/app/services/clientes.service';
 import { VentaInfoPage } from '../../ventas/detalle-venta/venta-info/venta-info.page';
 import { Subscription } from 'rxjs';
 import { ResumenClienteComponent } from './resumen-cliente/resumen-cliente.component';
+import { EstadoCredito, Periodo } from 'src/app/interfaces/credito';
 
 @Component({
   selector: 'app-detalle-cliente',
@@ -32,8 +31,6 @@ import { ResumenClienteComponent } from './resumen-cliente/resumen-cliente.compo
     IonTitle,
     IonToolbar,
     IonCard,
-    IonCardHeader,
-    IonCardTitle,
     IonCardContent,
     FaIconComponent,
   ],
@@ -50,6 +47,8 @@ export class DetalleClientePage implements OnDestroy {
 
   estadosCliente = EstadoCliente;
   estadosVenta = EstadoOperacion;
+  periodos = Periodo;
+  estadosCredito = EstadoCredito;
 
   constructor() {
     const clienteID = Number(this.route.snapshot.params['id']);
