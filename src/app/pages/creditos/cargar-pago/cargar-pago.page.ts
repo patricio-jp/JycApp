@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnDestroy } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
@@ -43,14 +43,26 @@ import { NotificationsService } from 'src/app/services/notifications.service';
     ReactiveFormsModule,
   ],
 })
-export class CargarPagoPage implements OnDestroy {
+export class CargarPagoPage implements OnInit, OnDestroy {
   @Input() credito?: Credito;
 
   constructor() {
-    addIcons({
-      search,
-    });
+    addIcons({ search });
+  }
 
+  ngOnInit() {
+    this.populateCreditoByRouter();
+  }
+
+  ionViewDidEnter() {
+    this.populateCreditoByRouter();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
+  populateCreditoByRouter() {
     const navigation = this.router.getCurrentNavigation();
 
     if (navigation?.extras.state) {
@@ -63,10 +75,6 @@ export class CargarPagoPage implements OnDestroy {
         });
       }
     }
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   private formBuilder = inject(FormBuilder);

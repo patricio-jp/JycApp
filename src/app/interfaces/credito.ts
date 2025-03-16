@@ -43,7 +43,7 @@ export interface CreateCreditoDTO {
 }
 
 export interface CreditosFilter {
-  estadoCredito?: EstadoCredito;
+  estadoCredito?: EstadoCredito | EstadoCredito[];
   periodo?: Periodo;
   estadoCarton?: EstadoCarton;
   fechaVencCuota?: Date | string;

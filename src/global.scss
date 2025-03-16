@@ -69,6 +69,41 @@ ion-modal {
   --width: 100%;
 }
 
+ion-searchbar.searchBar {
+  background: transparent;
+  --tw-text-opacity: 1;
+  --tw-bg-opacity: 1;
+  --background: rgb(249 250 251 / var(--tw-bg-opacity));
+  --box-shadow: 0;
+  --border-radius: 0.5rem;
+  --color: rgb(17 24 39 / var(--tw-text-opacity));
+  --icon-color: rgb(17 24 39 / var(--tw-text-opacity));
+  @apply border-0;
+}
+
+ion-searchbar.searchBar .searchbar-input.sc-ion-searchbar-md {
+  --tw-border-opacity: 1;
+  border: 1px solid rgb(209 213 219 / var(--tw-border-opacity));
+}
+
+@media (prefers-color-scheme: dark) {
+  ion-searchbar.searchBar {
+    --tw-text-opacity: 1;
+    --tw-bg-opacity: 1;
+    --background: rgb(31 41 55 / var(--tw-bg-opacity));
+    --box-shadow: 0;
+    --border-radius: 0.5rem;
+    --color: rgb(255 255 255 / var(--tw-text-opacity));
+    --icon-color: rgb(255 255 255 / var(--tw-text-opacity));
+    --placeholder-color: rgb(156 163 175 / var(--tw-text-opacity));
+  }
+
+  ion-searchbar.searchBar .searchbar-input.sc-ion-searchbar-md {
+    --tw-border-opacity: 1;
+    border: 1px solid rgb(75 85 99 / var(--tw-border-opacity));
+  }
+}
+
 @media print {
   body {
     margin: 0;

@@ -32,12 +32,13 @@
   <hr class="my-4">
   }
   <ion-searchbar placeholder="Buscar crédito o cliente" inputmode="text" type="text" (ionChange)="searchCredito($event)"
-    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="bg-transparent border-0"></ion-searchbar>
+    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="searchBar"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let result of searchResults" (click)="select(result)">
+    <ion-item *ngFor="let result of listadoCreditos()" (click)="select(result)">
       <ion-label>
         <div>
-          <p>Crédito: {{ result.venta.comprobante }} - Fecha Inicio: {{result.fechaInicio | date: 'dd/MM/yyy'}}
+          <p><strong>Crédito:</strong> {{ result.venta.comprobante }} - Fecha Inicio: {{result.fechaInicio | date:
+            'dd/MM/yyy'}}
           </p>
           <p>{{result.cantidadCuotas}} cuotas ({{periodos[result.periodo]}}) de {{result.montoCuota | currency: 'ARS' :
             'symbol' : '1.2-2'}}
@@ -46,10 +47,11 @@
         <div>
           <strong>Productos:</strong>
           @for (producto of result.venta.productos; track $index) {
-          <div class="ml-2">- {{ producto.producto.nombre }}</div>
+          <div class="ml-2">- {{ producto.cantidad }} {{ producto.producto.nombre }}</div>
           }
         </div>
-        <div>Cliente: {{ result.venta.cliente?.apellido + ", " + result.venta.cliente?.nombre }}</div>
+        <div><strong>Cliente:</strong> {{ result.venta.cliente?.apellido + ", " +
+          result.venta.cliente?.nombre }}</div>
       </ion-label>
     </ion-item>
   </ion-list>
