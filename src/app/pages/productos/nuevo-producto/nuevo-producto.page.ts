@@ -122,7 +122,7 @@ export class NuevoProductoPage implements OnDestroy {
                 );
               this.productsService.getProductos();
               this.nuevoProducto.reset();
-              this.router.navigate(['./dashboard/productos/inventario']);
+              this.router.navigate(['./productos/inventario']);
             })
         );
       } catch (error) {

@@ -5,11 +5,6 @@ import { Rol } from './interfaces/usuario';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full',
-  },
-  {
     path: 'login',
     loadComponent: () =>
       import('./pages/login/login.page').then((m) => m.LoginPage),
@@ -17,7 +12,7 @@ export const routes: Routes = [
     title: 'Iniciar Sesión - JyC Amoblamientos',
   },
   {
-    path: 'dashboard',
+    path: '',
     loadComponent: () =>
       import('./layout/layout.component').then((m) => m.LayoutComponent),
     children: [
@@ -33,7 +28,7 @@ export const routes: Routes = [
           import('./pages/clientes/clientes.page').then((m) => m.ClientesPage),
         children: [
           {
-            path: '',
+            path: 'dashboard',
             loadComponent: () =>
               import(
                 './pages/clientes/clientes-dashboard/clientes-dashboard.page'
@@ -66,6 +61,11 @@ export const routes: Routes = [
               ).then((m) => m.DetalleClientePage),
             title: 'Detalle de cliente - JyC Amoblamientos',
           },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/clientes/dashboard',
+          },
         ],
       },
       {
@@ -74,7 +74,7 @@ export const routes: Routes = [
           import('./pages/creditos/creditos.page').then((m) => m.CreditosPage),
         children: [
           {
-            path: '',
+            path: 'dashboard',
             loadComponent: () =>
               import(
                 './pages/creditos/creditos-dashboard/creditos-dashboard.page'
@@ -113,6 +113,11 @@ export const routes: Routes = [
             canActivate: [roleGuard],
             data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Cobrador] },
           },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/creditos/dashboard',
+          },
         ],
       },
       {
@@ -121,7 +126,7 @@ export const routes: Routes = [
           import('./pages/ventas/ventas.page').then((m) => m.VentasPage),
         children: [
           {
-            path: '',
+            path: 'dashboard',
             loadComponent: () =>
               import(
                 './pages/ventas/ventas-dashboard/ventas-dashboard.page'
@@ -160,6 +165,11 @@ export const routes: Routes = [
             canActivate: [roleGuard],
             data: { roles: [Rol.Administrador, Rol.Supervisor, Rol.Vendedor] },
           },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/ventas/dashboard',
+          },
         ],
       },
       {
@@ -170,7 +180,7 @@ export const routes: Routes = [
           ),
         children: [
           {
-            path: '',
+            path: 'dashboard',
             loadComponent: () =>
               import(
                 './pages/productos/productos-dashboard/productos-dashboard.page'
@@ -209,6 +219,11 @@ export const routes: Routes = [
             canActivate: [roleGuard],
             data: { roles: [Rol.Administrador, Rol.Supervisor] },
           },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/productos/dashboard',
+          },
         ],
       },
       {
@@ -217,7 +232,7 @@ export const routes: Routes = [
           import('./pages/usuarios/usuarios.page').then((m) => m.UsuariosPage),
         children: [
           {
-            path: '',
+            path: 'dashboard',
             loadComponent: () =>
               import(
                 './pages/usuarios/usuarios-dashboard/usuarios-dashboard.page'
@@ -245,6 +260,11 @@ export const routes: Routes = [
             title: 'Nuevo usuario - JyC Amoblamientos',
             canActivate: [roleGuard],
             data: { roles: [Rol.Administrador, Rol.Supervisor] },
+          },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/usuarios/dashboard',
           },
         ],
       },

@@ -220,7 +220,7 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
   }
 
   ventaDesktopDetails(id?: number) {
-    this.router.navigate(['./dashboard/ventas/detalle', id]);
+    this.router.navigate(['./ventas/detalle', id]);
   }
 
   async deleteVenta(venta: Venta) {

@@ -119,7 +119,7 @@ export class VentaInfoPage implements OnInit, OnDestroy {
   }
 
   cargarPagoACredito(credito: Credito) {
-    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+    this.router.navigate(['./creditos/cargar-pago'], {
       state: { credito },
     });
   }

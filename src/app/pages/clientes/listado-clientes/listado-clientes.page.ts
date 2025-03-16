@@ -185,7 +185,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
   }
 
   clienteDesktopDetails(id?: number) {
-    this.router.navigate(['./dashboard/clientes/detalle/', id]);
+    this.router.navigate(['./clientes/detalle/', id]);
   }
 
   async clienteDetails(id?: number) {

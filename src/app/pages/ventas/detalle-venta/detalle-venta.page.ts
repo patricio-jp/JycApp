@@ -91,11 +91,11 @@ export class DetalleVentaPage implements OnDestroy {
   }
 
   viewDesktopCreditoDetails(id?: number) {
-    this.router.navigate(['./dashboard/creditos/detalle', id]);
+    this.router.navigate(['./creditos/detalle', id]);
   }
 
   cargarPagoACredito(credito: Credito) {
-    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+    this.router.navigate(['./creditos/cargar-pago'], {
       state: { credito },
     });
   }

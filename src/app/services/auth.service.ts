@@ -105,7 +105,7 @@ export class AuthService {
           const loginSuccessData = data as LoginSuccess;
           this.storeTokens(loginSuccessData);
           this.scheduleTokenRefresh(loginSuccessData.access_token);
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/']);
         })
       );
   }

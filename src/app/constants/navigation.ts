@@ -3,37 +3,37 @@ import { NavLink } from '../interfaces/navLinks';
 export const navLinks: NavLink[] = [
   {
     title: 'Inicio',
-    url: '/dashboard',
+    url: '/',
     icon_md: 'home',
     icon_ios: 'home-outline',
   },
   {
     title: 'Clientes',
-    url: '/dashboard/clientes',
+    url: '/clientes',
     icon_md: 'people',
     icon_ios: 'people-outline',
   },
   {
     title: 'Ventas',
-    url: '/dashboard/ventas',
+    url: '/ventas',
     icon_md: 'cash',
     icon_ios: 'cash-outline',
   },
   {
     title: 'Créditos',
-    url: '/dashboard/creditos',
+    url: '/creditos',
     icon_md: 'pricetags',
     icon_ios: 'pricetags-outline',
   },
   {
     title: 'Productos',
-    url: '/dashboard/productos',
+    url: '/productos',
     icon_md: 'cube',
     icon_ios: 'cube-outline',
   },
   {
     title: 'Usuarios',
-    url: '/dashboard/usuarios',
+    url: '/usuarios',
     icon_md: 'hammer',
     icon_ios: 'hammer-outline',
   },

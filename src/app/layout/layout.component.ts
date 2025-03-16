@@ -101,7 +101,7 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     //console.log(window.location.pathname);
-    const basePath = '/dashboard';
+    const basePath = '/';
     if (window.location.pathname.startsWith(basePath)) {
       const subPath = window.location.pathname.slice(basePath.length);
       //console.log(subPath);

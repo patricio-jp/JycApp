@@ -177,7 +177,7 @@ export class InventarioPage implements OnInit, OnDestroy {
   }
 
   viewDesktopDetails(id?: number) {
-    this.router.navigate(['./dashboard/productos/detalle', id]);
+    this.router.navigate(['./productos/detalle', id]);
   }
 
   ngOnDestroy(): void {

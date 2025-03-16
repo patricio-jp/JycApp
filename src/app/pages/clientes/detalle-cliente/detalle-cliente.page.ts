@@ -76,7 +76,7 @@ export class DetalleClientePage implements OnDestroy {
   }
 
   ventaDesktopDetails(id?: number) {
-    this.router.navigate(['./dashboard/ventas/detalle', id]);
+    this.router.navigate(['./ventas/detalle', id]);
   }
 
   async generarResumen() {

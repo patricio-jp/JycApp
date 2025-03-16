@@ -347,7 +347,7 @@ export class NuevaVentaPage implements OnDestroy {
             this.nuevaVenta.reset();
             this.deleteImage(this.images[0]);
             this.ventasService.getVentas();
-            this.router.navigate(['./dashboard/ventas/listado']);
+            this.router.navigate(['./ventas/listado']);
           })
         );
       } catch (error) {

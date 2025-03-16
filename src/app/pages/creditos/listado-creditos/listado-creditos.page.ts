@@ -240,7 +240,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   }
 
   viewDesktopDetails(id?: number) {
-    this.router.navigate(['./dashboard/creditos/detalle', id]);
+    this.router.navigate(['./creditos/detalle', id]);
   }
 
   async clienteDetails(id?: number) {
@@ -270,7 +270,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
   }
 
   cargarPagoACredito(credito: Credito) {
-    this.router.navigate(['./dashboard/creditos/cargar-pago'], {
+    this.router.navigate(['./creditos/cargar-pago'], {
       state: { credito },
     });
   }
