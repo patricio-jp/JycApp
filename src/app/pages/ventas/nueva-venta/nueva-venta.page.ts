@@ -81,7 +81,7 @@ export class NuevaVentaPage implements OnDestroy {
   condicionOperacion = CondicionOperacion;
 
   hasDiscount: boolean = false;
-  hasCredito: boolean = false;
+  hasCredito: boolean = true;
   entregado: boolean = false;
 
   images: LocalFile[] = [];
@@ -89,11 +89,11 @@ export class NuevaVentaPage implements OnDestroy {
   nuevaVenta = this.formBuilder.group({
     fecha: [new Date().toISOString().substring(0, 10), Validators.required],
     cliente_id: [0, Validators.required],
-    cliente: [''],
+    cliente: ['', Validators.required],
     subtotal: [0, Validators.min(0)],
     descuento: [0, Validators.min(0)],
     total: [0, [Validators.required, Validators.min(0)]],
-    condicion: [CondicionOperacion.CONTADO, Validators.required],
+    condicion: [CondicionOperacion.CTA_CTE, Validators.required],
     productos: this.formBuilder.array(
       [
         /* this.formBuilder.group({
@@ -114,7 +114,7 @@ export class NuevaVentaPage implements OnDestroy {
       montoCuota: [0, [Validators.required, Validators.min(0)]],
       periodo: [Periodo.Mensual, Validators.required],
     }),
-    comprobante: [null],
+    comprobante: [null, Validators.required],
     observaciones: [null],
     fechaEntrega: [new Date().toISOString().substring(0, 10)],
     estado: [EstadoOperacion.Pendiente],
@@ -303,9 +303,9 @@ export class NuevaVentaPage implements OnDestroy {
       const venta: CreateVentaDTO = {
         fecha: this.nuevaVenta.get('fecha')?.value ?? new Date(),
         cliente_id: Number(this.nuevaVenta.get('cliente_id')?.value) ?? 0,
-        subtotal: Number(this.nuevaVenta.get('subtotal')?.value) ?? 0,
+        subtotal: Number(this.nuevaVenta.get('subtotal')?.value) || 0,
         descuento: Number(this.nuevaVenta.get('descuento')?.value) ?? undefined,
-        total: Number(this.nuevaVenta.get('total')?.value) ?? 0,
+        total: Number(this.nuevaVenta.get('total')?.value) || 0,
         condicion:
           this.nuevaVenta.get('condicion')?.value ??
           (this.hasCredito
@@ -314,7 +314,7 @@ export class NuevaVentaPage implements OnDestroy {
         productos: this.productos.controls.map((control) => ({
           id_producto: Number(control.get('producto_id')?.value),
           cantidad: Number(control.get('cantidad')?.value),
-          precioUnitario: Number(control.get('precioUnitario')?.value),
+          precioUnitario: Number(control.get('precioUnitario')?.value) || 0,
         })),
         financiacion: this.hasCredito
           ? {

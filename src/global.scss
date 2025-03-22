@@ -104,6 +104,12 @@ ion-searchbar.searchBar .searchbar-input.sc-ion-searchbar-md {
   }
 }
 
+/* Forms validation */
+.ng-touched.ng-invalid {
+  @apply border-red-600 placeholder-red-900;
+  @apply focus:ring-red-600 focus:border-red-600;
+}
+
 @media print {
   body {
     margin: 0;

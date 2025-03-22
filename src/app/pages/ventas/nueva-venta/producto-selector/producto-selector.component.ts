@@ -5,8 +5,6 @@ import {
   IonToolbar,
   IonButtons,
   IonButton,
-  IonCard,
-  IonCardContent,
   IonContent,
   IonTitle,
   ModalController,
@@ -15,7 +13,7 @@ import {
   IonList,
   IonItem,
 } from '@ionic/angular/standalone';
-import { Producto } from 'src/app/interfaces/producto';
+import { Producto, ProductosFilter } from 'src/app/interfaces/producto';
 import { ProductosService } from 'src/app/services/productos.service';
 
 @Component({
@@ -35,8 +33,6 @@ import { ProductosService } from 'src/app/services/productos.service';
     IonButton,
     IonContent,
     IonTitle,
-    IonCard,
-    IonCardContent,
   ],
 })
 export class ProductoSelectorComponent {
@@ -44,19 +40,17 @@ export class ProductoSelectorComponent {
   private productosService = inject(ProductosService);
 
   listadoProductos = computed(() => this.productosService.listadoProductos());
-  searchResults: Producto[] = [];
 
   constructor() {
     this.productosService.getProductos();
   }
 
-  onSearchChange($event: any) {
-    const query = $event.target.value.toLowerCase();
-    this.searchResults = this.listadoProductos().filter(
-      (producto) =>
-        producto.codigo.toLowerCase().includes(query) ||
-        producto.nombre.toLowerCase().includes(query)
-    );
+  searchProducto($event: any) {
+    const query = $event.target.value;
+    const searchFilter: ProductosFilter = {
+      searchTerm: query,
+    };
+    this.productosService.getProductos(0, 0, searchFilter);
   }
 
   select(producto: Producto) {

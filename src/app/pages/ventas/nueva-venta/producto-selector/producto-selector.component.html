@@ -10,10 +10,10 @@
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-  <ion-searchbar placeholder="Buscar producto" inputmode="text" type="text" (ionChange)="onSearchChange($event)"
-    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="bg-transparent border-0"></ion-searchbar>
+  <ion-searchbar placeholder="Buscar producto" inputmode="text" type="text" (ionChange)="searchProducto($event)"
+    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="searchBar"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let result of searchResults" (click)="select(result)">
+    <ion-item *ngFor="let result of listadoProductos()" (click)="select(result)">
       <ion-label>
         Código: {{ result.codigo }}<br>
         Nombre: {{ result.nombre }}

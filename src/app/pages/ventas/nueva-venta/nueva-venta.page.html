@@ -12,9 +12,10 @@
   </ion-header>
   <form [formGroup]="nuevaVenta" class="p-4 grid gap-4">
     <div class="grid gap-4 lg:grid-cols-4">
-      <div class="col-span-4 lg:col-span-1">
-        <ion-input label="Fecha" type="date" class="bg-transparent rounded-md w-full"
-          formControlName="fecha"></ion-input>
+      <div class="col-span-4 lg:col-span-1 flex items-center space-x-3">
+        <label for="fecha" class="block text-sm font-medium text-gray-900 dark:text-white">Fecha</label>
+        <input type="date" id="fecha" formControlName="fecha"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       </div>
       <div class="col-span-4 lg:col-span-2 flex space-x-2 items-center">
         <ion-input formControlName="cliente" readonly="true" label="Cliente:" class="w-full"></ion-input>
@@ -23,9 +24,11 @@
           Buscar cliente
         </ion-button>
       </div>
-      <div class="col-span-4 lg:col-span-1">
-        <ion-input label="Comprobante" type="text" class="bg-transparent rounded-md w-full"
-          formControlName="comprobante"></ion-input>
+      <div class="col-span-4 lg:col-span-1 flex items-center space-x-3">
+        <label for="comprobante" class="block whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">Nota
+          n°</label>
+        <input type="text" id="comprobante" formControlName="comprobante"
+          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
       </div>
       <div class="col-span-4 lg:col-span-3 w-full overflow-x-auto relative">
         <div class="relative overflow-x-auto">
@@ -43,7 +46,8 @@
             </thead>
             <tbody>
               @for (producto of productos.controls; track $index) {
-              <tr class="text-center">
+              <tr
+                class="text-center odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
                 <td class="px-4 py-3">{{ producto.get('producto')?.value.id }}</td>
                 <td class="px-4 py-3">
                   {{producto.get('producto')?.value.codigo}}
@@ -71,6 +75,14 @@
                   <ion-button (click)="removeProducto(producto.get('producto_id')?.value)" color="danger" fill="clear">
                     <ion-icon name="trash-outline"></ion-icon>
                   </ion-button>
+                </td>
+              </tr>
+              }
+              @empty {
+              <tr
+                class="text-center odd:bg-white even:bg-primary-200 border-b dark:odd:bg-gray-900 dark:even:bg-blue-900 dark:border-gray-700">
+                <td colspan="7" class="px-4 py-3">
+                  Agregue productos desde el botón "Agregar Producto"
                 </td>
               </tr>
               }
@@ -107,9 +119,9 @@
             <label for="periodo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Periodo</label>
             <select id="periodo" formControlName="periodo"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-              <option value="0">Mensual</option>
-              <option value="1">Quincenal</option>
-              <option value="2">Semanal</option>
+              <option [value]="0">Mensual</option>
+              <option [value]="1">Quincenal</option>
+              <option [value]="2">Semanal</option>
             </select>
           </div>
         </div>
@@ -182,8 +194,9 @@
         </div>
       </div>
       <div class="col-span-4 lg:col-span-3">
-        <ion-input label="Observaciones" type="text" class="bg-transparent rounded-md w-full"
-          formControlName="observaciones"></ion-input>
+        <label for="observaciones" class="block font-medium text-gray-900 dark:text-white">Observaciones</label>
+        <textarea id="observaciones" formControlName="observaciones"
+          class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
       </div>
       <div class="col-span-4 lg:col-span-1 mx-auto space-y-4">
         @for (image of images; track $index) {

@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input } from '@angular/core';
+import { Component, computed, inject, Input, ViewChild } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -13,7 +13,11 @@ import {
   IonItem,
 } from '@ionic/angular/standalone';
 import { CommonModule } from '@angular/common';
-import { Cliente } from 'src/app/interfaces/cliente';
+import {
+  Cliente,
+  ClientesFilter,
+  EstadoCliente,
+} from 'src/app/interfaces/cliente';
 import { ClientesService } from 'src/app/services/clientes.service';
 
 @Component({
@@ -37,31 +41,29 @@ import { ClientesService } from 'src/app/services/clientes.service';
 })
 export class ClienteSelectorComponent {
   @Input() cliente?: Cliente;
+  @ViewChild(IonContent) modalContent!: IonContent;
 
   private modalCtrl = inject(ModalController);
   private clientesService = inject(ClientesService);
 
   listadoClientes = computed(() => this.clientesService.listadoClientes());
-  searchResults: Cliente[] = [];
 
-  constructor() {
-    this.clientesService.getClientes();
-    this.searchResults = [...this.listadoClientes()];
-  }
+  estadosCliente = EstadoCliente;
 
-  onSearchChange($event: any) {
+  constructor() {}
+
+  searchCliente($event: any) {
     //console.log($event.target.value);
-    const query = $event.target.value.toLowerCase();
-    this.searchResults = this.listadoClientes().filter(
-      (cliente) =>
-        cliente.dni.toString().toLowerCase().includes(query) ||
-        cliente.apellido?.toLowerCase().includes(query) ||
-        cliente.nombre.toLowerCase().includes(query)
-    );
+    const query = $event.target.value;
+    const searchFilter: ClientesFilter = {
+      searchTerm: query,
+    };
+    this.clientesService.getClientes(0, 0, searchFilter);
   }
 
   select(cliente: Cliente) {
     this.cliente = cliente;
+    this.modalContent.scrollToTop();
   }
 
   cancel() {

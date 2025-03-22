@@ -13,20 +13,101 @@
   @if (cliente) {
   <div class="p-4 space-y-2 rounded-md text-white bg-primary-900">
     <h3 class="font-bold text-lg text-center">Cliente seleccionado</h3>
-    <p>
-      DNI: {{ cliente.dni }}<br>
-      {{ cliente.apellido + ", " + cliente.nombre }}
-    </p>
+    <p><strong>{{ cliente.apellido + ", " + cliente.nombre }} - DNI: </strong>{{ cliente.dni }}</p>
+    <div class="relative overflow-x-auto">
+      <table class="text-sm text-gray-700 dark:text-gray-300">
+        <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700">
+          <tr>
+            <th scope="col" class="px-4 py-3">Teléfonos</th>
+            <th scope="col" class="px-4 py-3">Domicilio</th>
+            <th scope="col" class="px-4 py-3">Barrio</th>
+            <th scope="col" class="px-4 py-3">Localidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="px-4 py-3 whitespace-nowrap">
+              @for (telefono of cliente.telefonos; track $index) {
+              {{telefono.telefono}}<br>
+              }
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.direccion) {
+              {{domicilio.direccion}}<br>
+              }
+              }
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.barrio) {
+              {{domicilio.barrio}}<br>
+              }
+              }
+            </td>
+            <td class="px-4 py-3 whitespace-nowrap">
+              @for (domicilio of cliente.domicilios; track $index) {
+              @if (domicilio.localidad) {
+              {{domicilio.localidad}}<br>
+              }
+              }
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
   <hr class="my-4">
   }
-  <ion-searchbar placeholder="Buscar cliente" inputmode="text" type="text" (ionChange)="onSearchChange($event)"
-    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="bg-transparent border-0"></ion-searchbar>
+  <ion-searchbar placeholder="Buscar cliente" inputmode="text" type="text" (ionChange)="searchCliente($event)"
+    [debounce]="250" showClearButton="focus" enterkeyhint="Buscar" class="searchBar"></ion-searchbar>
   <ion-list>
-    <ion-item *ngFor="let result of searchResults" (click)="select(result)">
+    <ion-item *ngFor="let result of listadoClientes()" (click)="select(result)">
       <ion-label>
-        DNI: {{ result.dni }}<br>
-        {{ result.apellido + ", " + result.nombre }}
+        <p class="text-2xl"><strong>{{ result.apellido + ", " + result.nombre }} - DNI: </strong>{{ result.dni }}
+        </p>
+        <div class="relative mt-3 overflow-x-auto">
+          <table class="text-sm text-gray-700 dark:text-gray-300">
+            <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700">
+              <tr>
+                <th scope="col" class="px-4 py-3">Teléfonos</th>
+                <th scope="col" class="px-4 py-3">Domicilio</th>
+                <th scope="col" class="px-4 py-3">Barrio</th>
+                <th scope="col" class="px-4 py-3">Localidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  @for (telefono of result.telefonos; track $index) {
+                  {{telefono.telefono}}<br>
+                  }
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  @for (domicilio of result.domicilios; track $index) {
+                  @if (domicilio.direccion) {
+                  {{domicilio.direccion}}<br>
+                  }
+                  }
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  @for (domicilio of result.domicilios; track $index) {
+                  @if (domicilio.barrio) {
+                  {{domicilio.barrio}}<br>
+                  }
+                  }
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  @for (domicilio of result.domicilios; track $index) {
+                  @if (domicilio.localidad) {
+                  {{domicilio.localidad}}<br>
+                  }
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </ion-label>
     </ion-item>
   </ion-list>
