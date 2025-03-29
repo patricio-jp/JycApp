@@ -9,7 +9,7 @@ import {
 import { Login, LoginSuccess, LoginResponse } from '../interfaces/login';
 import { catchError, Observable, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { IS_PUBLIC } from '../interceptors/jwt.interceptor';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -118,7 +118,7 @@ export class AuthService {
   refreshToken(): Observable<LoginResponse | null> {
     const refresh_token = localStorage.getItem('refresh_token');
     if (!refresh_token) {
-      console.error('No refresh token available');
+      //console.error('No refresh token available');
       return of();
     }
 
@@ -147,6 +147,8 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    this.router.navigate(['/login']);
+    if (!this.router.url.includes('/validarPago')) {
+      this.router.navigate(['/login']);
+    }
   }
 }

@@ -1,0 +1,40 @@
+.reciboHeader h3.jycFont {
+  font-family: 'Elephant';
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.reciboHeader h3, .clienteInfo h3, .detalle h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.reciboHeader h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.reciboHeader p.fecha {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.detalle h5 {
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.detalle p.monto {
+  font-size: 1.1rem;
+}
+
+.footer p {
+  font-size: .7rem;
+}
+
+.waterMarkContainer .waterMark {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: rgba(255, 0, 0, 0.3);
+}

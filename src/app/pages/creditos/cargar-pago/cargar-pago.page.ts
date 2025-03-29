@@ -7,8 +7,6 @@ import {
   IonTitle,
   IonToolbar,
   ModalController,
-  IonButton,
-  IonIcon,
   IonInput,
 } from '@ionic/angular/standalone';
 import {
@@ -20,11 +18,12 @@ import {
 } from 'src/app/interfaces/credito';
 import { CreditoSelectorComponent } from './credito-selector/credito-selector.component';
 import { CreditosService } from 'src/app/services/creditos.service';
-import { addIcons } from 'ionicons';
-import { search } from 'ionicons/icons';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { NotificationsService } from 'src/app/services/notifications.service';
+import { FormaPago, Ingreso, Recibo } from 'src/app/interfaces/ingreso';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { VerReciboComponent } from '../../ingresos/ver-recibo/ver-recibo.component';
 
 @Component({
   selector: 'app-cargar-pago',
@@ -32,8 +31,6 @@ import { NotificationsService } from 'src/app/services/notifications.service';
   styleUrls: ['./cargar-pago.page.scss'],
   standalone: true,
   imports: [
-    IonIcon,
-    IonButton,
     IonContent,
     IonHeader,
     IonTitle,
@@ -41,14 +38,13 @@ import { NotificationsService } from 'src/app/services/notifications.service';
     IonInput,
     CommonModule,
     ReactiveFormsModule,
+    FaIconComponent,
   ],
 })
 export class CargarPagoPage implements OnInit, OnDestroy {
   @Input() credito?: Credito;
 
-  constructor() {
-    addIcons({ search });
-  }
+  constructor() {}
 
   ngOnInit() {
     this.populateCreditoByRouter();
@@ -93,6 +89,7 @@ export class CargarPagoPage implements OnInit, OnDestroy {
 
   nuevoPago = this.formBuilder.group({
     monto: [0, Validators.min(0.01)],
+    formaPago: [FormaPago.Efectivo, Validators.required],
     creditoId: [0, Validators.required],
     credito: [''],
     fechaPago: [new Date().toISOString().substring(0, 10)],
@@ -131,24 +128,37 @@ export class CargarPagoPage implements OnInit, OnDestroy {
   async cargarPago() {
     if (this.nuevoPago.valid) {
       try {
-        console.log(this.nuevoPago.value);
+        //console.log(this.nuevoPago.value);
         const pago: CargarPagoDTO = {
           monto: Number(this.nuevoPago.get('monto')?.value),
-          fechaPago: this.nuevoPago.get('fecha')?.value,
+          formaPago: Number(this.nuevoPago.get('formaPago')?.value),
+          fechaPago: this.nuevoPago.get('fechaPago')?.value
+            ? new Date(this.nuevoPago.get('fechaPago')?.value as string)
+            : undefined,
           creditoId:
             this.nuevoPago.get('creditoId')?.value ||
             this.selectedCredito?.id ||
             0,
         };
         this.subscriptions.add(
-          this.creditosService.cargarPago(pago).subscribe(async (credito) => {
-            this.notificationsService.presentSuccessToast(
-              'Pago cargado exitosamente'
-            );
-            this.creditosService.getCreditos();
-            this.nuevoPago.reset();
-            this.router.navigate(['./dashboard/creditos/listado']);
-          })
+          this.creditosService
+            .cargarPago(pago)
+            .subscribe(async (ingreso: Ingreso) => {
+              if (ingreso) {
+                this.notificationsService.presentSuccessToast(
+                  'Pago cargado exitosamente',
+                  3000,
+                  [
+                    {
+                      handler: () => this.verRecibo(ingreso),
+                      text: 'Ver recibo',
+                    },
+                  ]
+                );
+                this.creditosService.getCreditos();
+                this.nuevoPago.reset();
+              }
+            })
         );
       } catch (error) {
         this.notificationsService.presentErrorToast('Error al cargar el pago');
@@ -158,5 +168,24 @@ export class CargarPagoPage implements OnInit, OnDestroy {
         'Formulario inválido. Complete los campos requeridos'
       );
     }
+  }
+
+  async verRecibo(ingreso: Ingreso): Promise<void> {
+    //console.log(ingreso);
+    const modalCredito = await this.modalCtrl.create({
+      component: VerReciboComponent,
+      componentProps: {
+        recibo: {
+          ...ingreso.recibo,
+          ingreso: ingreso,
+        },
+      },
+      initialBreakpoint: 1,
+      breakpoints: [0.5, 1],
+    });
+
+    modalCredito.present();
+    const { data, role } = await modalCredito.onWillDismiss();
+    this.router.navigate(['./dashboard/creditos/listado']);
   }
 }

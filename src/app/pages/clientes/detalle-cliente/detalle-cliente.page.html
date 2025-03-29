@@ -30,7 +30,7 @@
         <p><span class="font-bold">DNI: </span>{{cliente.dni}}</p>
         <p><span class="font-bold">Fecha de Nacimiento: </span>{{cliente.fechaNacimiento | date }}</p>
         <p><span class="font-bold">Estado: </span>{{estadosCliente[cliente.estado]}}</p>
-        <p><span class="font-bold">Saldo: </span>{{cliente.saldo | currency : 'ARS'}}</p>
+        <p><span class="font-bold">Saldo: </span>{{cliente.saldo | currency : 'ARS' : 'symbol' : '1.2-2' : 'es-AR'}}</p>
         <p><span class="font-bold">Observaciones: </span>{{cliente.observaciones}}</p>
       </div>
       <hr class="my-4">

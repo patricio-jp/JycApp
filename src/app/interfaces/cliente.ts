@@ -1,4 +1,5 @@
 import { CreateDomicilioDTO, Domicilio } from './domicilio';
+import { Recibo } from './ingreso';
 import { Venta } from './operaciones';
 import { CreateTelefonoDTO, Telefono } from './telefono';
 import { Usuario } from './usuario';
@@ -28,6 +29,7 @@ export interface Cliente {
   observaciones?: string;
   estado: EstadoCliente;
   ventas?: Venta[];
+  pagos?: Recibo[];
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date | null;

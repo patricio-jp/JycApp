@@ -268,7 +268,53 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'ingresos',
+        loadComponent: () =>
+          import('./pages/ingresos/ingresos.page').then((m) => m.IngresosPage),
+        children: [
+          {
+            path: 'dashboard',
+            loadComponent: () =>
+              import(
+                './pages/ingresos/ingresos-dashboard/ingresos-dashboard.page'
+              ).then((m) => m.IngresosDashboardPage),
+            title: 'Ingresos - JyC Amoblamientos',
+          },
+          {
+            path: 'listado',
+            loadComponent: () =>
+              import(
+                './pages/ingresos/listado-ingresos/listado-ingresos.page'
+              ).then((m) => m.ListadoIngresosPage),
+            title: 'Listado de ingresos - JyC Amoblamientos',
+          },
+          {
+            path: 'nuevo',
+            loadComponent: () =>
+              import('./pages/ingresos/nuevo-ingreso/nuevo-ingreso.page').then(
+                (m) => m.NuevoIngresoPage
+              ),
+            title: 'Nuevo ingreso - JyC Amoblamientos',
+          },
+          {
+            path: '',
+            pathMatch: 'full',
+            redirectTo: '/ingresos/dashboard',
+          },
+        ],
+        canActivate: [roleGuard],
+        data: { roles: [Rol.Administrador, Rol.Supervisor] },
+      },
     ],
     canActivate: [AuthGuardService],
+  },
+  {
+    path: 'validarPago',
+    title: 'Validar Pago - JyC Amoblamientos',
+    loadComponent: () =>
+      import('./pages/ingresos/validar-pago/validar-pago.component').then(
+        (m) => m.ValidarPagoComponent
+      ),
   },
 ];

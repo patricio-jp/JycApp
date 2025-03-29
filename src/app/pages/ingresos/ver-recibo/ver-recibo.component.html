@@ -1,0 +1,85 @@
+@if (!isValidationPage) {
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">Cancel</ion-button>
+    </ion-buttons>
+    <ion-title>Detalle</ion-title>
+  </ion-toolbar>
+</ion-header>
+<div class="flex justify-center space-x-4">
+  <button type="button" (click)="sendViaWhatsapp()"
+    class="flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+    <fa-icon class="mr-2" [icon]="['fab', 'whatsapp']"></fa-icon>
+    Enviar por WhatsApp
+  </button>
+  <button type="button" (click)="printRecibo()"
+    class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+    <fa-icon class="mr-2" [icon]="['fas', 'print']"></fa-icon>
+    Imprimir
+  </button>
+</div>
+}
+@if (recibo) {
+<div id="recibo"
+  class="w-[148mm] h-[210mm] scale-90 mx-auto bg-white dark:bg-zinc-900 border border-black dark:border-gray-600 relative flex flex-col items-center">
+  @if (recibo.deletedAt || recibo.ingreso.deletedAt) {
+  <div class="waterMarkContainer absolute w-full h-full flex justify-center items-center">
+    <p class="waterMark -rotate-45">ANULADO</p>
+  </div>
+  }
+  <section class="reciboHeader w-full px-4 mt-8 grid grid-cols-10">
+    <div class="col-span-4 text-center py-2 px-4 border border-black dark:border-gray-100">
+      <h3 class="jycFont">JyC</h3>
+      <h4 class="uppercase">Amoblamientos</h4>
+    </div>
+    <div class="col-span-2 text-center pt-2">
+      <h3 class="uppercase">Recibo</h3>
+    </div>
+    <div class="col-span-4 text-right self-center p-4">
+      <p class="fecha">FECHA: <span class="font-medium">{{recibo.ingreso.fecha | date : 'dd/MM/YYYY'}}</span>
+      </p>
+    </div>
+  </section>
+  <section class="clienteInfo w-full px-4 mt-6">
+    <div class="w-full px-4 py-1 border border-b-0 border-black dark:border-gray-100">
+      <h3 class="text-center">Cliente</h3>
+    </div>
+    <div class="w-full px-4 py-1 border border-black dark:border-gray-100">
+      <p><span class="font-bold">Apellido y Nombre: </span>{{recibo.cliente.apellido + ', ' +
+        recibo.cliente.nombre}}</p>
+    </div>
+    <div class="w-full px-4 py-1 border border-t-0 border-black dark:border-gray-100">
+      <p><span class="font-bold">DNI: </span>{{recibo.cliente.dni | currency : 'ARS' : '' : '0.0'}}</p>
+    </div>
+  </section>
+  <section class="detalle w-full flex-grow px-4 mt-6">
+    <div class="w-full px-4 py-1 border border-b-0 border-black dark:border-gray-100">
+      <h3 class="text-center">Detalle</h3>
+    </div>
+    <div class="w-full px-4 py-1 border border-black dark:border-gray-100">
+      <p><span class="font-bold">Concepto: </span>{{recibo.ingreso.concepto}}</p>
+    </div>
+    <div class="w-full px-4 py-1 border border-t-0 border-black dark:border-gray-100">
+      <p><span class="font-bold">Forma de pago: </span>{{formasPago[recibo.ingreso.formaPago]}}</p>
+    </div>
+    <div class="w-full mt-8 px-4 py-1 flex flex-col items-end">
+      <div class="text-center px-4">
+        <h5>Monto Pagado</h5>
+        <p class="monto">{{recibo.ingreso.importe | currency : 'ARS' : 'symbol' : '1.2-2' : 'es-AR'}}</p>
+      </div>
+    </div>
+  </section>
+  <section class="footer w-full p-4 mt-1">
+    <div id="qrContainer" class="flex justify-end w-full">
+      <qr-code [value]="qrCodeURL()" errorCorrectionLevel="M"></qr-code>
+    </div>
+    <p class="text-center">{{recibo.uuid}}</p>
+  </section>
+</div>
+} @else {
+<p class="text-center text-lg font-semibold">El código del recibo es erróneo o inválido. No se puede verificar
+  el pago.</p>
+<p class="text-center text-lg font-semibold">Comuníquese con el área administrativa para corroborar su
+  situación.</p>
+}

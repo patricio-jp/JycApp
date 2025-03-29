@@ -1,0 +1,24 @@
+<ion-content class="ion-padding">
+  <div class="card-container">
+    <ion-card class="max-w-6xl mx-auto">
+      <ion-card-header>
+        <ion-card-title class="font-bold text-center">Ver Recibo</ion-card-title>
+      </ion-card-header>
+      <ion-card-content class="text-black dark:text-white">
+        <div class="flex justify-center space-x-4">
+          <button type="button" (click)="sendViaWhatsapp()"
+            class="flex items-center justify-center focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
+            <fa-icon class="mr-2" [icon]="['fab', 'whatsapp']"></fa-icon>
+            Enviar por WhatsApp
+          </button>
+          <button type="button" (click)="printRecibo()"
+            class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+            <fa-icon class="mr-2" [icon]="['fas', 'print']"></fa-icon>
+            Imprimir
+          </button>
+        </div>
+        <app-ver-recibo></app-ver-recibo>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

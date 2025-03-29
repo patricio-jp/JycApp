@@ -1,8 +1,7 @@
 {
   "name": "JycApp",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "https://ionicframework.com/",
+  "version": "1.0.0",
+  "author": "patricio-jp",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -40,6 +39,7 @@
     "@ionic/pwa-elements": "^3.3.0",
     "flowbite": "^2.4.1",
     "ionicons": "^7.2.1",
+    "ng-qrcode": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"
@@ -59,7 +59,7 @@
     "@types/jasmine": "~5.1.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "autoprefixer": "^10.4.19",
+    "autoprefixer": "^10.4.21",
     "eslint": "^8.57.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsdoc": "^48.2.1",
@@ -71,8 +71,8 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "postcss": "^8.4.40",
-    "tailwindcss": "^3.4.7",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.4.17",
     "typescript": "~5.4.0"
   },
   "description": "An Ionic project"

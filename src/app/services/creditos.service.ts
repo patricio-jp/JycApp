@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment';
 import { LoadingIndicatorService } from './loading-indicator.service';
 import { NotificationsService } from './notifications.service';
 import { CambiarEstadoCartonDTO, EstadoCarton } from '../interfaces/carton';
+import { Ingreso } from '../interfaces/ingreso';
 
 @Injectable({
   providedIn: 'root',
@@ -171,9 +172,9 @@ export class CreditosService {
     );
   }
 
-  cargarPago(pago: CargarPagoDTO) {
+  cargarPago(pago: CargarPagoDTO): Observable<Ingreso> {
     const { creditoId } = pago;
-    return this.httpClient.patch(
+    return this.httpClient.patch<Ingreso>(
       `${this.apiEndpoint + creditoId}/cargar-pago`,
       pago
     );

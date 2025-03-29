@@ -38,6 +38,8 @@ import {
   personCircle,
   pricetags,
   pricetagsOutline,
+  wallet,
+  walletOutline,
 } from 'ionicons/icons';
 import { PopoverComponent } from '../components/popover/popover.component';
 import { navLinks } from '../constants/navigation';
@@ -87,6 +89,8 @@ export class LayoutComponent implements OnInit {
       hammerOutline,
       close,
       closeOutline,
+      wallet,
+      walletOutline,
     });
   }
 

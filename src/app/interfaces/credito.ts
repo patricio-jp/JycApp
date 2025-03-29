@@ -1,4 +1,5 @@
 import { Carton, EstadoCarton } from './carton';
+import { FormaPago } from './ingreso';
 import { Venta } from './operaciones';
 
 export enum EstadoCredito {
@@ -36,6 +37,7 @@ export interface CreateCreditoDTO {
   fechaInicio: Date;
   fechaUltimoPago?: Date;
   anticipo?: number;
+  formaPagoAnticipo?: FormaPago;
   cantidadCuotas: number;
   montoCuota: number;
   periodo: Periodo;
@@ -54,6 +56,7 @@ export interface CreditosFilter {
 
 export interface CargarPagoDTO {
   monto: number;
+  formaPago: FormaPago;
   fechaPago?: Date;
   creditoId: number;
 }

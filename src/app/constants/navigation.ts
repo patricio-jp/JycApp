@@ -26,6 +26,12 @@ export const navLinks: NavLink[] = [
     icon_ios: 'pricetags-outline',
   },
   {
+    title: 'Ingresos',
+    url: '/ingresos',
+    icon_md: 'wallet',
+    icon_ios: 'wallet-outline',
+  },
+  {
     title: 'Productos',
     url: '/productos',
     icon_md: 'cube',

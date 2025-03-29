@@ -21,9 +21,12 @@
           <p><span class="font-bold">Venta N°: </span>{{venta.comprobante}}</p>
           <p><span class="font-bold">Cliente: </span>{{venta.cliente?.apellido + ", " + venta.cliente?.nombre}}</p>
           <p><span class="font-bold">Fecha: </span>{{venta.fecha | date}}</p>
-          <p><span class="font-bold">Subtotal: </span>{{venta.subtotal | currency : 'ARS'}}</p>
-          <p><span class="font-bold">Descuento: </span>{{venta.descuento | currency : 'ARS'}}</p>
-          <p><span class="font-bold">Total de Venta: </span>{{venta.total | currency : 'ARS'}}</p>
+          <p><span class="font-bold">Subtotal: </span>{{venta.subtotal | currency : 'ARS' : 'symbol' : '1.2-2' :
+            'es-AR'}}</p>
+          <p><span class="font-bold">Descuento: </span>{{venta.descuento | currency : 'ARS' : 'symbol' : '1.2-2' :
+            'es-AR'}}</p>
+          <p><span class="font-bold">Total de Venta: </span>{{venta.total | currency : 'ARS' : 'symbol' : '1.2-2' :
+            'es-AR'}}</p>
           <p><span class="font-bold">Condición: </span>{{venta.condicion}}</p>
           <p><span class="font-bold">Estado: </span>{{estadosVenta[venta.estado]}}</p>
         </div>
