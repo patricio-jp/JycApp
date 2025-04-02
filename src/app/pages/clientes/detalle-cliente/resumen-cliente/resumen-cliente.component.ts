@@ -46,6 +46,14 @@ export class ResumenClienteComponent {
     const resumenInfo = document.getElementById('resumenCliente');
     if (!resumenInfo) return;
 
+    // Obtener el nombre dinámico del archivo CSS de Angular
+    const styles = Array.from(document.head.getElementsByTagName('link'))
+      .filter(
+        (link) => link.rel === 'stylesheet' && link.href.includes('styles')
+      )
+      .map((link) => `<link rel="stylesheet" href="${link.href}">`)
+      .join('');
+
     const popup = window.open('', '_blank', 'width=800, height=600');
     if (popup) {
       popup.document.open();
@@ -55,7 +63,7 @@ export class ResumenClienteComponent {
             <title>Resumen - ${
               this.cliente.apellido + ', ' + this.cliente.nombre
             }</title>
-            <link rel="stylesheet" href="../../../styles.css"> <!-- Usa tu hoja de estilos -->
+            ${styles}
           </head>
           <body class="relative overflow-y-auto max-w-[210mm] mx-auto" onload="window.print();window.close()">
             ${resumenInfo.innerHTML}

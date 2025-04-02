@@ -94,6 +94,14 @@ export class VerReciboComponent implements OnDestroy {
     imageElement.src = imgQR ? imgQR : '';
     qrContainer.appendChild(imageElement);
 
+    // Obtener el nombre dinámico del archivo CSS de Angular
+    const styles = Array.from(document.head.getElementsByTagName('link'))
+      .filter(
+        (link) => link.rel === 'stylesheet' && link.href.includes('styles')
+      )
+      .map((link) => `<link rel="stylesheet" href="${link.href}">`)
+      .join('');
+
     const popup = window.open('', '_blank', 'width=800, height=600');
     if (popup) {
       popup.document.open();
@@ -101,7 +109,7 @@ export class VerReciboComponent implements OnDestroy {
         <html class="hydrated">
           <head>
             <title>Recibo - ${this.recibo?.uuid}</title>
-            <link rel="stylesheet" href="../../../styles.css">
+            ${styles}
           </head>
           <body class="max-w-[148mm] h-[210mm] mx-auto bg-white relative flex flex-col" onload="window.print();window.close()">
             ${reciboInfo.innerHTML}
