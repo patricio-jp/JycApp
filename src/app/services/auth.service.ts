@@ -15,6 +15,7 @@ import { IS_PUBLIC } from '../interceptors/jwt.interceptor';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Rol, Usuario } from '../interfaces/usuario';
 import { NotificationsService } from './notifications.service';
+import { UsuariosService } from './usuarios.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +27,7 @@ export class AuthService {
   private router = inject(Router);
   private jwtHelper = inject(JwtHelperService);
   private notificationsService = inject(NotificationsService);
+  private usersService = inject(UsuariosService);
 
   private apiEndpoint = `${environment.apiBaseUrl}/auth`;
 
@@ -35,9 +37,24 @@ export class AuthService {
     context: new HttpContext().set(IS_PUBLIC, true),
   };
 
+  private userSignal = signal<Usuario | null>(null);
+
   get user(): WritableSignal<Usuario | null> {
     const token = localStorage.getItem('access_token');
-    return signal(token ? this.jwtHelper.decodeToken(token) : null);
+    const userId = token ? this.jwtHelper.decodeToken(token).sub : null;
+
+    if (this.userSignal()) return this.userSignal;
+
+    if (userId) {
+      this.usersService.getUsuario(userId).subscribe(
+        (user) => this.userSignal.set(user),
+        () => this.userSignal.set(null)
+      );
+    } else {
+      this.userSignal.set(null);
+    }
+
+    return this.userSignal;
   }
 
   isAuthenticated() {
@@ -87,7 +104,7 @@ export class AuthService {
   }
 
   login(body: Login): Observable<LoginResponse> {
-    console.log(body);
+    //console.log(body);
     return this.httpClient
       .post<LoginResponse>(`${this.apiEndpoint}/login`, body, this.CONTEXT)
       .pipe(
@@ -111,8 +128,10 @@ export class AuthService {
   }
 
   storeTokens(data: LoginSuccess): void {
-    localStorage.setItem('access_token', data.access_token);
-    localStorage.setItem('refresh_token', data.refresh_token);
+    if (data.access_token)
+      localStorage.setItem('access_token', data.access_token);
+    if (data.refresh_token)
+      localStorage.setItem('refresh_token', data.refresh_token);
   }
 
   refreshToken(): Observable<LoginResponse | null> {
@@ -123,13 +142,15 @@ export class AuthService {
     }
 
     //console.log('Refreshing token with refresh token:', refresh_token);
+    const options = {
+      headers: {
+        Authorization: `Bearer ${refresh_token}`,
+      },
+      ...this.CONTEXT,
+    };
 
     return this.httpClient
-      .post<LoginResponse>(
-        `${this.apiEndpoint}/token-refresh`,
-        { token: refresh_token },
-        this.CONTEXT
-      )
+      .post<LoginResponse>(`${this.apiEndpoint}/token-refresh`, null, options)
       .pipe(
         catchError((error) => {
           console.error('Error refreshing token:', error);
