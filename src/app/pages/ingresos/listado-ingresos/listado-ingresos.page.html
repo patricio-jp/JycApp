@@ -113,12 +113,36 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-300">
           <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">Fecha</th>
-              <th scope="col" class="px-4 py-3">Cliente</th>
-              <th scope="col" class="px-4 py-3">Concepto</th>
-              <th scope="col" class="px-4 py-3">Monto pagado</th>
-              <th scope="col" class="px-4 py-3">Forma de pago</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('id')">
+                ID
+                <fa-icon *ngIf="sortColumn === 'id'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('fecha')">
+                Fecha
+                <fa-icon *ngIf="sortColumn === 'fecha'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('cliente')">
+                Cliente
+                <fa-icon *ngIf="sortColumn === 'cliente'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('concepto')">
+                Concepto
+                <fa-icon *ngIf="sortColumn === 'concepto'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('importe')">
+                Monto pagado
+                <fa-icon *ngIf="sortColumn === 'importe'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('formaPago')">
+                Forma de pago
+                <fa-icon *ngIf="sortColumn === 'formaPago'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Cod. Recibo</th>
               <th scope="col" class="px-4 py-3"></th>
             </tr>

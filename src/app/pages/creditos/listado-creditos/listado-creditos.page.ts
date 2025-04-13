@@ -145,6 +145,9 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
 
   filters: CreditosFilter = {};
 
+  sortColumn: string = 'id';
+  sortDirection: 'desc' | 'asc' = 'desc';
+
   ngOnInit() {
     this.creditosService.getCreditos();
   }
@@ -200,6 +203,8 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
             .split('T')[0]
         : undefined,
       mostrarEliminados: this.eliminadosFilter ? true : undefined,
+      orderBy: this.sortColumn,
+      orderDir: this.sortDirection,
     };
 
     // Remove undefined values from filters
@@ -208,7 +213,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
         ([_, v]) => v !== undefined && v !== '' && v !== 'undefined'
       )
     );
-    console.log(this.filters);
+    //console.log(this.filters);
     this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
@@ -223,6 +228,16 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
     this.filters = {};
     this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
+  }
+
+  sortTable(field: string) {
+    if (this.sortColumn === field) {
+      this.sortDirection = this.sortDirection === 'desc' ? 'asc' : 'desc';
+    } else {
+      this.sortColumn = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
   }
 
   async viewDetails(credito: Credito) {

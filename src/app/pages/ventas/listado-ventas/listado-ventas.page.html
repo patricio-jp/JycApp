@@ -133,13 +133,33 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-300">
           <thead class="text-xs text-center uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">Fecha</th>
-              <th scope="col" class="px-4 py-3">Nota</th>
-              <th scope="col" class="px-4 py-3">Cliente</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('id')">
+                ID
+                <fa-icon *ngIf="sortColumn === 'id'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('fecha')">
+                Fecha
+                <fa-icon *ngIf="sortColumn === 'fecha'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('comprobante')">
+                Nota
+                <fa-icon *ngIf="sortColumn === 'comprobante'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('cliente')">
+                Cliente
+                <fa-icon *ngIf="sortColumn === 'cliente'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Producto/s</th>
               <th scope="col" class="px-4 py-3">Condición</th>
-              <th scope="col" class="px-4 py-3">Total</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('total')">
+                Total
+                <fa-icon *ngIf="sortColumn === 'total'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Estado</th>
               <th scope="col" class="px-4 py-3"></th>
             </tr>

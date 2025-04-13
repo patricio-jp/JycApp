@@ -69,4 +69,6 @@ export interface ClientesFilter {
   zona?: string;
   apariciones?: string;
   mostrarEliminados?: boolean;
+  orderBy?: string;
+  orderDir?: 'asc' | 'desc';
 }

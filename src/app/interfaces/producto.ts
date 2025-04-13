@@ -42,6 +42,8 @@ export interface Inventario {
 export interface ProductosFilter {
   searchTerm?: string;
   mostrarEliminados?: boolean;
+  orderBy?: string;
+  orderDir?: 'asc' | 'desc';
 }
 /* @Injectable({
   providedIn: 'root',

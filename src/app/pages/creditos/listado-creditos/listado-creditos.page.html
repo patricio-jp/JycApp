@@ -146,14 +146,46 @@
         <table class="w-full text-sm text-gray-700 dark:text-gray-300">
           <thead class="text-xs text-center whitespace-nowrap uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">Cliente</th>
-              <th scope="col" class="px-4 py-3">Crédito n°</th>
-              <th scope="col" class="px-4 py-3">Fecha Inicio</th>
-              <th scope="col" class="px-4 py-3">Cant. cuotas</th>
-              <th scope="col" class="px-4 py-3">Periodo</th>
-              <th scope="col" class="px-4 py-3">Monto Cuota</th>
-              <th scope="col" class="px-4 py-3">Fecha Últ. Pago</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('id')">
+                ID
+                <fa-icon *ngIf="sortColumn === 'id'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('cliente')">
+                Cliente
+                <fa-icon *ngIf="sortColumn === 'cliente'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('credito')">
+                Crédito n°
+                <fa-icon *ngIf="sortColumn === 'credito'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('fechaInicio')">
+                Fecha Inicio
+                <fa-icon *ngIf="sortColumn === 'fechaInicio'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('cantidadCuotas')">
+                Cant. cuotas
+                <fa-icon *ngIf="sortColumn === 'cantidadCuotas'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('periodo')">
+                Periodo
+                <fa-icon *ngIf="sortColumn === 'periodo'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('montoCuota')">
+                Monto Cuota
+                <fa-icon *ngIf="sortColumn === 'montoCuota'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('fechaUltimoPago')">
+                Fecha Últ. Pago
+                <fa-icon *ngIf="sortColumn === 'fechaUltimoPago'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Estado</th>
               <th scope="col" class="px-4 py-3">Cartón</th>
               <th scope="col" class="px-4 py-3">Fecha Cartón</th>

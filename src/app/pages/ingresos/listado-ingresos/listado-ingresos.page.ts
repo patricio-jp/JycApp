@@ -111,6 +111,9 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
 
   filters: IngresosFilter = {};
 
+  sortColumn: string = 'id';
+  sortDirection: 'desc' | 'asc' = 'desc';
+
   ngOnInit() {
     this.ingresosService.getIngresos(10, 1);
   }
@@ -156,6 +159,8 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
       formaPago: this.formaPagoFilter,
       fecha: this.dateFilter,
       mostrarEliminados: this.elminadosFilter ? true : undefined,
+      orderBy: this.sortColumn,
+      orderDir: this.sortDirection,
     };
 
     // Remove undefined values from filters
@@ -164,7 +169,7 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
         ([_, v]) => v !== undefined && v !== '' && v !== 'undefined'
       )
     );
-    console.log(this.filters);
+    //console.log(this.filters);
     this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
@@ -177,6 +182,16 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
     this.filters = {};
     this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
+  }
+
+  sortTable(field: string) {
+    if (this.sortColumn === field) {
+      this.sortDirection = this.sortDirection === 'desc' ? 'asc' : 'desc';
+    } else {
+      this.sortColumn = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
   }
 
   async ingresoDetails(ingreso: Ingreso) {

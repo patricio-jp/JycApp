@@ -121,6 +121,9 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
 
   filters: VentasFilter = {};
 
+  sortColumn: string = 'id';
+  sortDirection: 'desc' | 'asc' = 'desc';
+
   ngOnInit() {
     this.ventasService.getVentas(10, 1);
   }
@@ -168,6 +171,8 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
       condicion: this.condicionFilter,
       productos: this.productoFilter,
       mostrarEliminados: this.eliminadosFilter ? true : undefined,
+      orderBy: this.sortColumn,
+      orderDir: this.sortDirection,
     };
 
     // Remove undefined values from filters
@@ -176,7 +181,7 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
         ([_, v]) => v !== undefined && v !== '' && v !== 'undefined'
       )
     );
-    console.log(this.filters);
+    //console.log(this.filters);
     this.actualPage.set(1); // Reset to first page on new filter
     this.applyFiltersAndPagination();
   }
@@ -191,6 +196,16 @@ export class ListadoVentasPage implements OnInit, OnDestroy {
     this.filters = {};
     this.actualPage.set(1); // Reset to first page on clear filters
     this.applyFiltersAndPagination();
+  }
+
+  sortTable(field: string) {
+    if (this.sortColumn === field) {
+      this.sortDirection = this.sortDirection === 'desc' ? 'asc' : 'desc';
+    } else {
+      this.sortColumn = field;
+      this.sortDirection = 'asc';
+    }
+    this.applyFilters();
   }
 
   async clienteDetails(id?: number) {

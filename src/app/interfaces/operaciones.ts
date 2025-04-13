@@ -90,6 +90,8 @@ export interface VentasFilter {
   productos?: string;
   searchTerm?: string;
   mostrarEliminados?: boolean;
+  orderBy?: string;
+  orderDir?: 'asc' | 'desc';
 }
 
 export interface Compra extends Operacion {

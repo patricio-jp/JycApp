@@ -116,13 +116,33 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-300">
           <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700">
             <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">DNI</th>
-              <th scope="col" class="px-4 py-3 min-w-44">Apellido y Nombre</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('id')">
+                ID
+                <fa-icon *ngIf="sortColumn === 'id'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('dni')">
+                DNI
+                <fa-icon *ngIf="sortColumn === 'dni'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 min-w-44 cursor-pointer" (click)="sortTable('nombre')">
+                Apellido y Nombre
+                <fa-icon *ngIf="sortColumn === 'nombre'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Teléfonos</th>
               <th scope="col" class="px-4 py-3">Domicilio</th>
-              <th scope="col" class="px-4 py-3">Barrio</th>
-              <th scope="col" class="px-4 py-3">Localidad</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('barrio')">
+                Barrio
+                <fa-icon *ngIf="sortColumn === 'barrio'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('localidad')">
+                Localidad
+                <fa-icon *ngIf="sortColumn === 'localidad'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Estado</th>
               <th scope="col" class="px-4 py-3">Apariciones</th>
               <th scope="col" class="px-4 py-3"></th>

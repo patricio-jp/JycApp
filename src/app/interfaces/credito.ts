@@ -52,6 +52,8 @@ export interface CreditosFilter {
   fechaUltimoPago?: Date | string;
   searchTerm?: string;
   mostrarEliminados?: boolean;
+  orderBy?: string;
+  orderDir?: 'asc' | 'desc';
 }
 
 export interface CargarPagoDTO {

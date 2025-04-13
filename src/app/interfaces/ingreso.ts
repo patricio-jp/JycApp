@@ -34,6 +34,8 @@ export interface IngresosFilter {
   searchTerm?: string;
   mostrarEliminados?: boolean;
   counterQuery?: boolean;
+  orderBy?: string;
+  orderDir?: 'asc' | 'desc';
 }
 
 export interface CreateIngresoDTO {

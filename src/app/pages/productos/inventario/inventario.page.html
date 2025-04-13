@@ -86,12 +86,36 @@
         <table class="w-full text-sm text-left rtl:text-right text-gray-700 dark:text-gray-300">
           <thead class="text-xs uppercase bg-gray-200 dark:bg-gray-700 whitespace-nowrap text-center">
             <tr>
-              <th scope="col" class="px-4 py-3">ID</th>
-              <th scope="col" class="px-4 py-3">Código</th>
-              <th scope="col" class="px-4 py-3">Nombre</th>
-              <th scope="col" class="px-4 py-3">En Stock</th>
-              <th scope="col" class="px-4 py-3">Costo</th>
-              <th scope="col" class="px-4 py-3">Precio Lista</th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('id')">
+                ID
+                <fa-icon *ngIf="sortColumn === 'id'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('codigo')">
+                Código
+                <fa-icon *ngIf="sortColumn === 'codigo'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('nombre')">
+                Nombre
+                <fa-icon *ngIf="sortColumn === 'nombre'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('stock')">
+                En Stock
+                <fa-icon *ngIf="sortColumn === 'stock'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('costo')">
+                Costo
+                <fa-icon *ngIf="sortColumn === 'costo'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('precio')">
+                Precio Lista
+                <fa-icon *ngIf="sortColumn === 'precio'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <!-- <th scope="col" class="px-4 py-3">
               Estado
             </th> -->
