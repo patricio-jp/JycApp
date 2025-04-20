@@ -98,7 +98,7 @@ export class ListadoCreditosPage implements OnInit, OnDestroy {
     return Math.ceil(totalCreditos / this.pageSize);
   });
   arrayPages = computed(() => {
-    const range = 3;
+    const range = window.matchMedia('(max-width: 768px)').matches ? 1 : 3;
     const totalPages = this.totalPages();
     const currentPage = this.actualPage();
 

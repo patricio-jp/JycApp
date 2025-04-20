@@ -73,7 +73,7 @@ export class ListadoClientesPage implements OnInit, OnDestroy {
     return Math.ceil(totalVentas / this.pageSize);
   });
   arrayPages = computed(() => {
-    const range = 3;
+    const range = window.matchMedia('(max-width: 768px)').matches ? 1 : 3;
     const totalPages = this.totalPages();
     const currentPage = this.actualPage();
 

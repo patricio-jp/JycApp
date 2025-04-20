@@ -10,6 +10,7 @@ import {
   IonButtons,
   IonMenuButton,
   IonMenuToggle,
+  IonProgressBar,
   IonList,
   IonItem,
   IonLabel,
@@ -44,6 +45,8 @@ import {
 import { PopoverComponent } from '../components/popover/popover.component';
 import { navLinks } from '../constants/navigation';
 import { Rol } from '../interfaces/usuario';
+import { LoadingIndicatorService } from '../services/loading-indicator.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-layout',
@@ -51,6 +54,7 @@ import { Rol } from '../interfaces/usuario';
   styleUrls: ['layout.component.scss'],
   standalone: true,
   imports: [
+    CommonModule,
     IonIcon,
     IonButton,
     IonLabel,
@@ -59,6 +63,7 @@ import { Rol } from '../interfaces/usuario';
     IonHeader,
     IonToolbar,
     IonTitle,
+    IonProgressBar,
     IonContent,
     IonSplitPane,
     IonMenu,
@@ -96,12 +101,15 @@ export class LayoutComponent implements OnInit {
 
   private popoverCtrl = inject(PopoverController);
   private authService = inject(AuthService);
+  private loadingIndicartor = inject(LoadingIndicatorService);
 
   appPages = navLinks;
   selectedIndex: number = 0;
 
   user = computed(() => this.authService.user());
   userRoles = Rol;
+
+  isLoading = computed(() => this.loadingIndicartor.isLoading());
 
   ngOnInit(): void {
     //console.log(window.location.pathname);

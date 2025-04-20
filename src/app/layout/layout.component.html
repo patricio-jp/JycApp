@@ -54,6 +54,7 @@
             </ng-template>
           </ion-popover> -->
         </ion-buttons>
+        <ion-progress-bar *ngIf="isLoading()" type="indeterminate" color="primary"></ion-progress-bar>
       </ion-toolbar>
     </ion-header>
     <ion-router-outlet></ion-router-outlet>
