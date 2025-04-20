@@ -5,12 +5,19 @@ export enum FormaPago {
   Transferencia,
 }
 
+export enum EstadoIngreso {
+  Pendiente,
+  Recibido,
+  Anulado,
+}
+
 export interface Ingreso {
   id: number;
   fecha: Date;
   concepto: string;
   importe: number;
   formaPago: FormaPago;
+  estado: EstadoIngreso;
   recibo: Recibo;
   createdAt: Date;
   updatedAt: Date;
@@ -31,6 +38,7 @@ export interface IngresosFilter {
   fecha?: Date | string;
   cliente?: string;
   formaPago?: FormaPago;
+  estado?: EstadoIngreso;
   searchTerm?: string;
   mostrarEliminados?: boolean;
   counterQuery?: boolean;
@@ -43,6 +51,7 @@ export interface CreateIngresoDTO {
   concepto: string;
   importe: number;
   formaPago: FormaPago;
+  estado?: EstadoIngreso;
   cliente_id: number;
 }
 

@@ -53,7 +53,7 @@
                   <ion-content class="max-w-72 md:max-w-max ion-padding">
                     <p class="text-center font-bold mb-3">[EXPERIMENTAL] Los filtros no funcionan por el momento, o
                       pueden tener un comportamiento inadecuado. No utilizar</p>
-                    <section class="grid grid-cols-1 md:grid-cols-4 items-center gap-3">
+                    <section class="grid grid-cols-1 md:grid-cols-5 items-center gap-3">
                       <div>
                         <label for="clienteFilter"
                           class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cliente</label>
@@ -68,6 +68,17 @@
                           <option [value]="undefined">--- Todos ---</option>
                           <option value="0">Efectivo</option>
                           <option value="1">Transferencia</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label for="estado"
+                          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Estado</label>
+                        <select id="estado" [(ngModel)]="estadoFilter"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                          <option [value]="undefined">--- Todos ---</option>
+                          <option value="0">Pendiente</option>
+                          <option value="1">Recibido</option>
+                          <option value="2">Anulado</option>
                         </select>
                       </div>
                       <div>
@@ -143,6 +154,11 @@
                 <fa-icon *ngIf="sortColumn === 'formaPago'"
                   [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
               </th>
+              <th scope="col" class="px-4 py-3 cursor-pointer" (click)="sortTable('estado')">
+                Estado
+                <fa-icon *ngIf="sortColumn === 'estado'"
+                  [icon]="sortDirection === 'asc' ? ['fas', 'arrow-up'] : ['fas', 'arrow-down']"></fa-icon>
+              </th>
               <th scope="col" class="px-4 py-3">Cod. Recibo</th>
               <th scope="col" class="px-4 py-3"></th>
             </tr>
@@ -156,14 +172,19 @@
               <td class="px-4 py-3 whitespace-nowrap"><a class="underline underline-offset-2 hover:cursor-pointer"
                   (click)="clienteDetails(ingreso.recibo.cliente!.id)">{{ingreso.recibo.cliente.apellido + ", " +
                   ingreso.recibo.cliente.nombre}}</a></td>
-              <td class="px-4 py-3 whitespace-nowrap">{{ingreso.concepto}}</td>
+              <td class="px-4 py-3 whitespace-pre-line">{{ingreso.concepto}}</td>
               <td class="px-4 py-3 text-center">{{ingreso.importe| currency: 'ARS'}}</td>
               <td class="px-4 py-3">{{formasPago[ingreso.formaPago]}}</td>
+              <td class="px-4 py-3">{{estadosIngreso[ingreso.estado]}}</td>
               <td class="px-4 py-3 whitespace-nowrap">{{ingreso.recibo.uuid}}</td>
               <td class="p-2 space-x-2 whitespace-nowrap">
                 <button (click)="ingresoDetails(ingreso)" title="Ver Recibo"
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
+                </button>
+                <button (click)="askEditarIngreso(ingreso)" title="Editar"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'pencil']"></fa-icon>
                 </button>
                 @if (ingreso.deletedAt) {
                 <button (click)="restoreIngreso(ingreso)" title="Restaurar"

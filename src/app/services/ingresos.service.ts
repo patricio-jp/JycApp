@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment';
 import { LoadingIndicatorService } from './loading-indicator.service';
 import { NotificationsService } from './notifications.service';
 import {
+  CreateIngresoDTO,
   FormaPago,
   Ingreso,
   IngresoAPICounter,
@@ -213,6 +214,10 @@ export class IngresosService {
           throw error;
         })
       );
+  }
+
+  updateIngreso(id: number, ingresoDto: CreateIngresoDTO) {
+    return this.httpClient.patch<Ingreso>(this.apiEndpoint + id, ingresoDto);
   }
 
   deleteIngreso(id: number) {

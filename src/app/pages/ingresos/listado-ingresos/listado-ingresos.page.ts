@@ -25,9 +25,10 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { IngresosService } from 'src/app/services/ingresos.service';
-import { FormaPago, Ingreso, IngresosFilter } from 'src/app/interfaces/ingreso';
+import { EstadoIngreso, FormaPago, Ingreso, IngresosFilter } from 'src/app/interfaces/ingreso';
 import { ClienteInfoComponent } from '../../clientes/detalle-cliente/cliente-info/cliente-info.component';
 import { VerReciboComponent } from '../ver-recibo/ver-recibo.component';
+import { EditarIngresoComponent } from '../editar-ingreso/editar-ingreso.component';
 
 @Component({
   selector: 'app-listado-ingresos',
@@ -102,11 +103,13 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
   });
 
   formasPago = FormaPago;
+  estadosIngreso = EstadoIngreso;
 
   searchTerm?: string;
   dateFilter?: Date;
   clienteFilter?: string;
   formaPagoFilter?: FormaPago;
+  estadoFilter?: EstadoIngreso;
   elminadosFilter?: boolean;
 
   filters: IngresosFilter = {};
@@ -157,6 +160,7 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
       ...this.filters,
       cliente: this.clienteFilter,
       formaPago: this.formaPagoFilter,
+      estado: this.estadoFilter,
       fecha: this.dateFilter,
       mostrarEliminados: this.elminadosFilter ? true : undefined,
       orderBy: this.sortColumn,
@@ -177,6 +181,7 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
   clearFilters() {
     this.clienteFilter = undefined;
     this.formaPagoFilter = undefined;
+    this.estadoFilter = undefined;
     this.dateFilter = undefined;
     this.elminadosFilter = undefined;
     this.filters = {};
@@ -223,6 +228,77 @@ export class ListadoIngresosPage implements OnInit, OnDestroy {
     modal.present();
 
     const { data, role } = await modal.onWillDismiss();
+  }
+
+  async editarIngreso(ingreso: Ingreso, _fullEdit: boolean = true) {
+    const modal = await this.modalCtrl.create({
+      component: EditarIngresoComponent,
+      componentProps: {
+        ingreso: ingreso,
+        fullEdit: _fullEdit,
+      },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 1,
+    });
+    modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    console.log(data);
+    if (role === 'confirm' && data) {
+      this.subscriptions.add(
+        this.ingresosService
+          .updateIngreso(data.id, data)
+          .subscribe(async (ingreso) => {
+            if (ingreso) {
+              this.notificationsService.presentSuccessToast(
+                'Ingreso actualizado correctamente'
+              );
+              this.ingresosService.getIngresos();
+            }
+          })
+      );
+    }
+  }
+
+  async askEditarIngreso(ingreso: Ingreso) {
+    const sheet = await this.actionSheetCtrl.create({
+      header: `Que desea hacer con el ingreso ${ingreso.recibo.uuid}?`,
+      buttons: [
+        {
+          text: 'Modificar estado',
+          role: 'selected',
+          data: {
+            action: 'status-edit',
+          },
+        },
+        {
+          text: 'Modificar ingreso (completo)',
+          role: 'selected',
+          data: {
+            action: 'full-edit',
+          },
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await sheet.present();
+    const { data, role } = await sheet.onWillDismiss();
+
+    if (role === 'selected' && data.action) {
+      if (data.action === 'status-edit') {
+        this.editarIngreso(ingreso, false);
+      } else if (data.action === 'full-edit') {
+        this.editarIngreso(ingreso);
+      }
+    }
   }
 
   async deleteIngreso(ingreso: Ingreso) {

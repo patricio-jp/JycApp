@@ -29,6 +29,11 @@
       <p class="waterMark -rotate-45">ANULADO</p>
     </div>
     }
+    @if (recibo.ingreso.estado === 0) {
+    <div class="waterMarkContainer absolute w-full h-full flex justify-center items-center">
+      <p class="waterMark warningWatermark -rotate-45">PENDIENTE</p>
+    </div>
+    }
     <section class="reciboHeader w-full px-4 mt-8 grid grid-cols-10">
       <div class="col-span-4 text-center py-2 px-4 border border-black dark:border-gray-100">
         <h3 class="jycFont">JyC</h3>
@@ -59,7 +64,7 @@
         <h3 class="text-center">Detalle</h3>
       </div>
       <div class="w-full px-4 py-1 border border-black dark:border-gray-100">
-        <p><span class="font-bold">Concepto: </span>{{recibo.ingreso.concepto}}</p>
+        <p class="whitespace-pre-line"><span class="font-bold">Concepto: </span>{{recibo.ingreso.concepto}}</p>
       </div>
       <div class="w-full px-4 py-1 border border-t-0 border-black dark:border-gray-100">
         <p><span class="font-bold">Forma de pago: </span>{{formasPago[recibo.ingreso.formaPago]}}</p>
