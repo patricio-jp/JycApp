@@ -1,13 +1,145 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>nuevoUsuario</ion-title>
+    <ion-title>Nuevo Usuario</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">nuevoUsuario</ion-title>
+      <ion-title size="large">Nuevo Usuario</ion-title>
     </ion-toolbar>
   </ion-header>
+  <form [formGroup]="nuevoUsuario" class="p-4 grid gap-4 lg:grid-cols-2">
+    <div class="">
+      <label for="dni" class="block mb-2 font-medium text-gray-900 dark:text-white">DNI<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="number" id="dni" formControlName="dni"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="">
+      <label for="nombre" class="block mb-2 font-medium text-gray-900 dark:text-white">Nombre<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="text" id="nombre" formControlName="nombre"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="">
+      <label for="apellido" class="block mb-2 font-medium text-gray-900 dark:text-white">Apellido<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="text" id="apellido" formControlName="apellido"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="">
+      <label for="fechaNacimiento" class="block mb-2 font-medium text-gray-900 dark:text-white">Fecha de Nacimiento<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="date" id="fechaNacimiento" formControlName="fechaNacimiento"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="">
+      <label for="fechaInicio" class="block mb-2 font-medium text-gray-900 dark:text-white">Fecha de Inicio<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="date" id="fechaInicio" formControlName="fechaInicio"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div>
+      <label for="rol" class="block mb-2 font-medium text-gray-900 dark:text-white">Rol</label>
+      <select id="rol" formControlName="rol"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option value="0">Vendedor</option>
+        <option value="1">Cobrador</option>
+        <option value="2">Supervisor</option>
+        <option value="3">Administrador</option>
+      </select>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="">
+      <label for="password" class="block mb-2 font-medium text-gray-900 dark:text-white">Contraseña<span
+          class="ml-2 text-red-700">*</span></label>
+      <input type="password" id="password" formControlName="password"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <div class="">
+      <label for="confirmPassword" class="block mb-2 font-medium text-gray-900 dark:text-white">Confirmar
+        Contraseña<span class="ml-2 text-red-700">*</span></label>
+      <input type="password" id="confirmPassword" formControlName="confirmPassword"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="lg:col-span-2">
+      <div class="flex items-center space-x-3 mb-3">
+        <h3 class="font-bold">Teléfonos</h3>
+        <button type="button" (click)="addTelefono()"
+          class="ml-3 flex items-center text-blue-700 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+          <fa-icon class="mr-2" [icon]="['fas', 'plus']"></fa-icon>
+          Agregar Teléfono
+        </button>
+      </div>
+      <div formArrayName="telefonos" class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-4">
+        <div *ngFor="let telefono of telefonos.controls; let i = index" [formGroupName]="i">
+          <div class="flex space-x-3 items-center">
+            <label for="telefono" class="block font-medium text-gray-900 dark:text-white">Teléfono</label>
+            <input type="number" id="telefono" formControlName="telefono"
+              class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            <div>
+              <button (click)="telefonos.removeAt(i)"
+                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                <fa-icon [icon]="['fas', 'trash']" class="w-5 h-5"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="lg:col-span-2">
+      <div class="flex items-center space-x-3 mb-3">
+        <h3 class="font-bold">Domicilios</h3>
+        <button type="button" (click)="addDomicilio()"
+          class="ml-3 flex items-center text-blue-700 hover:text-white border border-blue-600 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center me-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800">
+          <fa-icon class="mr-2" [icon]="['fas', 'plus']"></fa-icon>
+          Agregar Domicilio
+        </button>
+      </div>
+      <div formArrayName="domicilios" class="space-y-4 lg:space-y-0 lg:grid lg:grid-cols-2 lg:gap-4">
+        <div *ngFor="let domicilio of domicilios.controls; let i = index" [formGroupName]="i">
+          <h4>Domicilio {{i + 1}}:</h4>
+          <div class="flex space-x-3 items-center">
+            <div class="flex flex-col space-y-4 w-full">
+              <div>
+                <label for="direccion" class="block font-medium text-gray-900 dark:text-white">Dirección</label>
+                <input type="text" id="direccion" formControlName="direccion"
+                  class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+              <div>
+                <label for="barrio" class="block font-medium text-gray-900 dark:text-white">Barrio</label>
+                <input type="text" id="barrio" formControlName="barrio"
+                  class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+              <div>
+                <label for="localidad" class="block font-medium text-gray-900 dark:text-white">Localidad</label>
+                <input type="text" id="localidad" formControlName="localidad"
+                  class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+              </div>
+            </div>
+            <div>
+              <button (click)="domicilios.removeAt(i)"
+                class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center me-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+                <fa-icon [icon]="['fas', 'trash']" class="w-5 h-5"></fa-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="my-4 lg:col-span-2">
+    <div class="lg:col-span-2">
+      <label for="observaciones" class="block font-medium text-gray-900 dark:text-white">Observaciones</label>
+      <textarea id="observaciones" formControlName="observaciones"
+        class="bg-gray-100 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"></textarea>
+    </div>
+    <button type="button" (click)="guardarUsuario()"
+      class="lg:col-span-2 flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+      Crear Usuario
+    </button>
+  </form>
 </ion-content>

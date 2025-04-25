@@ -12,11 +12,14 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent,
+  ActionSheetController,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { Login } from 'src/app/interfaces/login';
 import { Subscription } from 'rxjs';
+import { NotificationsService } from 'src/app/services/notifications.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +44,10 @@ export class LoginPage implements OnDestroy {
 
   router = inject(Router);
 
+  private notificationsService = inject(NotificationsService);
+  private actionSheetCtrl = inject(ActionSheetController);
   private authService = inject(AuthService);
+  private usersService = inject(UsuariosService);
   private readonly destroyRef = inject(DestroyRef);
 
   private subscriptions = new Subscription();
@@ -62,5 +68,40 @@ export class LoginPage implements OnDestroy {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe()
     );
+  }
+
+  async askToRestorePassword() {
+    const dni = this.loginForm.get('dni')?.value;
+    if (!dni) {
+      this.notificationsService.presentErrorToast(
+        'Por favor, complete el campo DNI'
+      );
+      return;
+    }
+
+    this.subscriptions.add(
+      this.usersService.askForPasswordReset(dni).subscribe()
+    );
+  }
+
+  async showActionSheet() {
+    const sheet = await this.actionSheetCtrl.create({
+      header: '¿Olvidaste tu contraseña?',
+      buttons: [
+        {
+          text: 'Restablecer contraseña',
+          role: 'confirm',
+        },
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+        },
+      ],
+    });
+    await sheet.present();
+
+    const { role } = await sheet.onWillDismiss();
+
+    if (role === 'confirm') this.askToRestorePassword();
   }
 }

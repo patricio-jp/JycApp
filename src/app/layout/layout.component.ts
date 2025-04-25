@@ -169,5 +169,6 @@ export class LayoutComponent implements OnInit {
 
   logOut() {
     this.authService.logout();
+    this.selectedIndex = 0;
   }
 }

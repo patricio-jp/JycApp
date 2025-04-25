@@ -110,11 +110,11 @@ export class AuthService {
       .pipe(
         catchError((error) => {
           if (error.status === 401) {
-            // Handle invalid credentials
+            // Handle invalid credentials and errors
             this.notificationsService.presentErrorToast(
-              'Credenciales inválidas'
+              error.error.message || 'Invalid credentials'
             );
-            console.error('Invalid credentials');
+            console.error(error.message);
           }
           return of();
         }),
@@ -168,6 +168,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
+    this.userSignal.set(null);
     if (!this.router.url.includes('/validarPago')) {
       this.router.navigate(['/login']);
     }

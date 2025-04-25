@@ -4,10 +4,40 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">usuariosDashboard</ion-title>
     </ion-toolbar>
   </ion-header>
+  <section class="grid md:grid-cols-3 gap-5 grid-rows-2 items-center justify-center">
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Cantidad de Usuarios totales</h4>
+      <p class="text-4xl text-right">{{cantUsuarios()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios Activos</h4>
+      <p class="text-4xl text-right">{{cantUsuariosActivos()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-warning-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios deshabilitados</h4>
+      <p class="text-4xl text-right">{{cantUsuariosDeshabilitados()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios Administradores</h4>
+      <p class="text-4xl text-right">{{cantUsuariosAdmin()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-danger-700 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios Supervisores</h4>
+      <p class="text-4xl text-right">{{cantUsuariosSupervisores()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-primary-400 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios Cobradores</h4>
+      <p class="text-4xl text-right">{{cantUsuariosCobradores()}}</p>
+    </div>
+    <div class="p-4 flex flex-col justify-between bg-success-600 rounded-lg">
+      <h4 class="font-bold mb-3 text-xl">Usuarios Vendedores</h4>
+      <p class="text-4xl text-right">{{cantUsuariosVendedores()}}</p>
+    </div>
+  </section>
 </ion-content>

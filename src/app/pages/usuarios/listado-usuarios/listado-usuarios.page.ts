@@ -15,6 +15,7 @@ import {
   IonPopover,
   ModalController,
   ActionSheetController,
+  ActionSheetButton,
 } from '@ionic/angular/standalone';
 
 import { Router, RouterModule } from '@angular/router';
@@ -23,7 +24,14 @@ import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
-import { Rol, Usuario, UsuariosFilter } from 'src/app/interfaces/usuario';
+import {
+  EstadoUsuario,
+  Rol,
+  Usuario,
+  UsuariosFilter,
+} from 'src/app/interfaces/usuario';
+import { RestorePasswordComponent } from '../restore-password/restore-password.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-listado-usuarios',
@@ -47,6 +55,7 @@ export class ListadoUsuariosPage implements OnInit, OnDestroy {
 
   private usuariosService = inject(UsuariosService);
   private notificationsService = inject(NotificationsService);
+  private authService = inject(AuthService);
   private router = inject(Router);
   private subscriptions = new Subscription();
 
@@ -56,7 +65,14 @@ export class ListadoUsuariosPage implements OnInit, OnDestroy {
   dataUsuarios = computed(() => this.usuariosService.dataUsuarios());
   listadoUsuarios = computed(() => this.usuariosService.listadoUsuarios());
 
+  loggedUser = computed(() => this.authService.user());
+  isAdmin = computed(() => {
+    const user = this.loggedUser();
+    return user && user.rol === Rol.Administrador;
+  });
+
   rolesUsuarios = Rol;
+  estadosUsuarios = EstadoUsuario;
 
   actualPage = signal(1);
   pageSize: number = 10;
@@ -189,32 +205,53 @@ export class ListadoUsuariosPage implements OnInit, OnDestroy {
       const { data, role } = await modal.onWillDismiss(); */
   }
 
+  async restorePassword(usuario: Usuario, _selfRestore: boolean = false) {
+    if (!usuario) return;
+    if (this.loggedUser() && this.loggedUser()?.id === usuario.id) {
+      _selfRestore = true;
+    }
+
+    const modal = await this.modalCtrl.create({
+      component: RestorePasswordComponent,
+      componentProps: { usuario: usuario, isSelfRestore: _selfRestore },
+      breakpoints: [0.5, 1],
+      initialBreakpoint: 0.5,
+    });
+
+    modal.present();
+  }
+
   async deleteUsuario(usuario: Usuario) {
+    const buttons: ActionSheetButton[] = [
+      this.loggedUser()?.id !== usuario.id
+        ? {
+            text: 'Si, eliminar',
+            role: 'destructive',
+            data: {
+              action: 'soft-delete',
+            },
+          }
+        : {},
+      this.isAdmin() && this.loggedUser()?.id !== usuario.id
+        ? {
+            text: 'Si, eliminar definitivamente',
+            role: 'destructive',
+            data: {
+              action: 'delete',
+            },
+          }
+        : {},
+      {
+        text: 'No, cancelar',
+        role: 'cancel',
+        data: {
+          action: 'cancel',
+        },
+      },
+    ];
     const sheet = await this.actionSheetCtrl.create({
       header: `Seguro desea eliminar el usuario ${usuario.apellido}, ${usuario.nombre}?`,
-      buttons: [
-        {
-          text: 'Si, eliminar',
-          role: 'destructive',
-          data: {
-            action: 'soft-delete',
-          },
-        },
-        {
-          text: 'Si, eliminar definitivamente',
-          role: 'destructive',
-          data: {
-            action: 'delete',
-          },
-        },
-        {
-          text: 'No, cancelar',
-          role: 'cancel',
-          data: {
-            action: 'cancel',
-          },
-        },
-      ],
+      buttons: buttons.filter((button) => Object.keys(button).length > 0),
     });
 
     await sheet.present();

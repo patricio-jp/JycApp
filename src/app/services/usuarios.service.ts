@@ -1,16 +1,19 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpContext } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
-import { catchError, Observable, of, take } from 'rxjs';
+import { catchError, Observable, of, take, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { LoadingIndicatorService } from './loading-indicator.service';
 import { NotificationsService } from './notifications.service';
 import {
+  CreateUsuarioDTO,
+  RestorePasswordDTO,
   Rol,
   Usuario,
   UsuarioAPICounter,
   UsuarioAPIResponse,
   UsuariosFilter,
 } from '../interfaces/usuario';
+import { IS_PUBLIC } from '../interceptors/jwt.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +27,11 @@ export class UsuariosService {
 
   private apiEndpoint = `${environment.apiBaseUrl}/usuarios/`;
 
+  private readonly CONTEXT = {
+    // Para solicitar el restablecimiento de contraseña
+    context: new HttpContext().set(IS_PUBLIC, true),
+  };
+
   dataUsuarios = signal<UsuarioAPIResponse>({
     count: 0,
     data: [],
@@ -35,6 +43,9 @@ export class UsuariosService {
   cantUsuariosSupervisores = signal<number>(0);
   cantUsuariosCobradores = signal<number>(0);
   cantUsuariosVendedores = signal<number>(0);
+
+  cantUsuariosActivos = signal<number>(0);
+  cantUsuariosDeshabilitados = signal<number>(0);
 
   getUsuarios(
     pageSize: number = 10,
@@ -117,6 +128,42 @@ export class UsuariosService {
 
   getUsuario(id: number): Observable<Usuario> {
     return this.httpClient.get<Usuario>(this.apiEndpoint + id);
+  }
+
+  createUsuario(usuario: CreateUsuarioDTO): Observable<Usuario> {
+    return this.httpClient.post<Usuario>(this.apiEndpoint, usuario);
+  }
+
+  restorePassword(
+    idUser: number,
+    passwordDto: RestorePasswordDTO
+  ): Observable<Usuario> {
+    return this.httpClient.patch<Usuario>(
+      this.apiEndpoint + idUser + '/restorePassword',
+      passwordDto
+    );
+  }
+
+  askForPasswordReset(dni: number): Observable<Usuario> {
+    return this.httpClient
+      .post<Usuario>(
+        this.apiEndpoint + 'restorePassword',
+        {
+          dni,
+        },
+        this.CONTEXT
+      )
+      .pipe(
+        catchError((error) => {
+          this.notificationsService.presentErrorToast(error.error.message);
+          return of();
+        }),
+        tap(() => {
+          this.notificationsService.presentSuccessToast(
+            'Se ha solicitado el restablecimiento de contraseña. Espere que un administrador restablezca su contraseña.'
+          );
+        })
+      );
   }
 
   updateCliente(id: number, usuario: Usuario): Observable<Usuario> {

@@ -111,6 +111,7 @@
               <th scope="col" class="px-4 py-3">Barrio</th>
               <th scope="col" class="px-4 py-3">Localidad</th>
               <th scope="col" class="px-4 py-3">Rol</th>
+              <th scope="col" class="px-4 py-3">Estado</th>
               <th scope="col" class="px-4 py-3"></th>
             </tr>
           </thead>
@@ -142,6 +143,7 @@
                 }
               </td>
               <td class="px-4 py-3">{{rolesUsuarios[usuario.rol]}}</td>
+              <td class="px-4 py-3">{{estadosUsuarios[usuario.estado]}}</td>
               <td class="p-2 space-x-2 whitespace-nowrap">
                 <button
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block lg:hidden"
@@ -152,6 +154,12 @@
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 hidden lg:inline-block">
                   <fa-icon [icon]="['fas', 'circle-info']"></fa-icon>
                 </button>
+                @if (isAdmin()) {
+                <button (click)="restorePassword(usuario)"
+                  class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">
+                  <fa-icon [icon]="['fas', 'key']"></fa-icon>
+                </button>
+                }
                 @if (usuario.deletedAt) {
                 <button (click)="restoreUsuario(usuario)"
                   class="bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-lg p-2 inline-block">

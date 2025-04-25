@@ -1,12 +1,17 @@
 import { Cliente } from './cliente';
-import { Domicilio } from './domicilio';
-import { Telefono } from './telefono';
+import { CreateDomicilioDTO, Domicilio } from './domicilio';
+import { CreateTelefonoDTO, Telefono } from './telefono';
 
 export enum Rol {
   Vendedor,
   Cobrador,
   Supervisor,
   Administrador,
+}
+
+export enum EstadoUsuario {
+  Normal,
+  Deshabilitado,
 }
 
 export interface Usuario {
@@ -20,6 +25,7 @@ export interface Usuario {
   telefonos?: Telefono[];
   fechaInicio: Date;
   rol: Rol;
+  estado: EstadoUsuario;
   comision?: number;
   saldo?: number;
   observaciones?: string;
@@ -35,14 +41,26 @@ export interface CreateUsuarioDTO {
   nombre: string;
   apellido: string;
   password: string;
+  confirmPassword: string;
   fechaNacimiento: Date;
-  domicilios?: Domicilio[];
-  telefonos?: Telefono[];
+  domicilios?: CreateDomicilioDTO[];
+  telefonos?: CreateTelefonoDTO[];
   fechaInicio: Date;
   rol: Rol;
+  estado?: EstadoUsuario;
   comision?: number;
   saldo?: number;
   observaciones?: string;
+}
+
+export interface RestorePasswordDTO {
+  user_dni?: number;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface SelfRestorePasswordDTO extends RestorePasswordDTO {
+  oldPassword: string;
 }
 
 export interface UsuarioAPIResponse {
