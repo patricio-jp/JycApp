@@ -3,13 +3,13 @@
     <ion-title>Planilla Mensual</ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
+<ion-content [fullscreen]="true" id="planillaMensual" class="print-scale">
+  <ion-header collapse="condense" class="print:hidden">
     <ion-toolbar>
       <ion-title size="large">Planilla Mensual</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div class="relative overflow-hidden pt-4 px-4">
+  <div class="relative overflow-hidden pt-4 px-4 print:max-w-[297mm]">
     <div class="relative bg-gray-100 shadow-md dark:bg-gray-800 sm:rounded-lg">
       <div class="relative print:hidden shadow-md sm:rounded-lg">
         <div class="flex flex-col items-center justify-between p-4 space-y-3 md:flex-row md:space-y-0 md:space-x-4">
@@ -33,7 +33,7 @@
           </div>
           <div
             class="flex flex-col items-stretch justify-end w-full space-y-2 md:w-2/3 md:flex-row md:space-y-0 md:items-center md:space-x-3">
-            <button type="button"
+            <button type="button" (click)="print()"
               class="flex items-center justify-center px-4 py-2 text-sm font-medium text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
               <fa-icon class="mr-2" [icon]="['fas', 'print']"></fa-icon>
               Imprimir

@@ -89,6 +89,82 @@ export class PlanillaMensualPage implements OnInit, OnDestroy {
     this.searchTerm.set(event.target.value);
   }
 
+  print() {
+    const printContent = document.getElementById('planillaMensual');
+    if (!printContent) return;
+
+    // Obtener el nombre dinámico del archivo CSS de Angular
+    const styles = Array.from(document.head.getElementsByTagName('link'))
+      .filter(
+        (link) => link.rel === 'stylesheet' && link.href.includes('styles')
+      )
+      .map((link) => `<link rel="stylesheet" href="${link.href}">`)
+      .join('');
+
+    // CSS para impresión en horizontal
+    const landscapeStyle = `
+      <style>
+        @media print {
+          @page {
+            size: A4 landscape;
+            margin: 5mm;
+          }
+          body {
+            margin: 0;
+            padding: 0;
+          }
+          table {
+            width: 100% !important;
+            font-size: 11px !important;
+          }
+          th, td {
+            padding: 4px !important;
+            word-break: break-word !important;
+            overflow-wrap: break-word !important;
+          }
+          th {
+            text-align: center !important;
+            word-break: no-break !important;
+          }
+          th:first-child, td:first-child {
+            width: 35px !important;
+            min-width: 30px !important;
+            max-width: 40px !important;
+            text-align: center !important;
+          }
+          th:last-child, td:last-child {
+            min-width: 90px !important;
+            text-align: right !important;
+          }
+          /* Opcional: escala si sigue desbordando */
+          .print-scale {
+            transform: scale(0.95);
+            transform-origin: top left;
+            width: 105%;
+          }
+        }
+      </style>
+    `;
+
+    const popup = window.open('', '_blank', 'width=800, height=600');
+    if (popup) {
+      popup.document.open();
+      popup.document.write(`
+        <html class="hydrated">
+          <head>
+            <title>Planilla Mensual</title>
+            ${styles}
+            ${landscapeStyle}
+          </head>
+          <body class="relative overflow-y-auto max-w-[297mm] mx-auto" onload="window.print();window.close()">
+            ${printContent.innerHTML}
+          </body>
+        </html>
+      `);
+      popup.document.close();
+    }
+  }
+
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
