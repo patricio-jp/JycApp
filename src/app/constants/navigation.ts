@@ -43,4 +43,10 @@ export const navLinks: NavLink[] = [
     icon_md: 'hammer',
     icon_ios: 'hammer-outline',
   },
+  {
+    title: 'Reportes',
+    url: '/reportes',
+    icon_md: 'bar-chart',
+    icon_ios: 'bar-chart-outline',
+  },
 ];

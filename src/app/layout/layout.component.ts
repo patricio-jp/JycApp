@@ -41,6 +41,8 @@ import {
   pricetagsOutline,
   wallet,
   walletOutline,
+  barChart,
+  barChartOutline,
 } from 'ionicons/icons';
 import { PopoverComponent } from '../components/popover/popover.component';
 import { navLinks } from '../constants/navigation';
@@ -96,6 +98,8 @@ export class LayoutComponent implements OnInit {
       closeOutline,
       wallet,
       walletOutline,
+      barChart,
+      barChartOutline,
     });
   }
 

@@ -306,6 +306,21 @@ export const routes: Routes = [
         canActivate: [roleGuard],
         data: { roles: [Rol.Administrador, Rol.Supervisor] },
       },
+      {
+        path: 'reportes',
+        loadComponent: () =>
+          import('./pages/reportes/reportes.page').then((m) => m.ReportesPage),
+        children: [
+          {
+            path: 'planilla-mensual',
+            loadComponent: () =>
+              import(
+                './pages/reportes/planilla-mensual/planilla-mensual.page'
+              ).then((m) => m.PlanillaMensualPage),
+            title: 'Planilla Mensual - JyC Amoblamientos',
+          },
+        ],
+      },
     ],
     canActivate: [AuthGuardService],
   },
