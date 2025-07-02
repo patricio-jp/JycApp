@@ -78,11 +78,48 @@ export class PlanillaMensualPage implements OnInit, OnDestroy {
 
   periodos = Periodo;
 
+  months = [
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Octubre',
+    'Noviembre',
+    'Diciembre',
+  ];
+  years: number[] = [];
+  selectedMonth: number = 1;
+  selectedYear: number = 2024;
+  totalMes = computed(() =>
+    this.filteredData().reduce((acc, cliente) => acc + cliente.totalMes, 0)
+  );
+
   ngOnInit() {
     const now = new Date();
     const month = now.getMonth() + 1; // getMonth() is zero-based
     const year = now.getFullYear();
-    this.reportesService.getPlanillaClientesMensual(month, year);
+    // Rango de años: 5 años atrás y 2 adelante
+    for (let y = year - 5; y <= year + 2; y++) {
+      this.years.push(y);
+    }
+    this.selectedMonth = month;
+    this.selectedYear = year;
+    this.reportesService.getPlanillaClientesMensual(
+      this.selectedMonth,
+      this.selectedYear
+    );
+  }
+
+  onMonthYearChange() {
+    this.reportesService.getPlanillaClientesMensual(
+      this.selectedMonth,
+      this.selectedYear
+    );
   }
 
   searchClientes(event: any) {

@@ -16,7 +16,7 @@ export class ReportesService {
   private loadingIndicator = inject(LoadingIndicatorService);
   private notificationsService = inject(NotificationsService);
 
-  private apiEndpoint = `${environment.apiBaseUrl}/clientes/`;
+  private apiEndpoint = `${environment.apiBaseUrl}/reportes/`;
 
   dataPlanillaMensual = signal<InfoClienteMensual[]>([]);
 
