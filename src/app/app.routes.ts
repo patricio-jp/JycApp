@@ -319,6 +319,14 @@ export const routes: Routes = [
               ).then((m) => m.PlanillaMensualPage),
             title: 'Planilla Mensual - JyC Amoblamientos',
           },
+          {
+            path: 'planilla-semanal',
+            loadComponent: () =>
+              import(
+                './pages/reportes/planilla-semanal/planilla-semanal.page'
+              ).then((m) => m.PlanillaSemanalPage),
+            title: 'Planilla Semanal - JyC Amoblamientos',
+          },
         ],
       },
     ],
